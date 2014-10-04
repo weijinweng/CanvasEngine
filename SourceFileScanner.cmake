@@ -165,7 +165,7 @@ if( MSVC )
 endif()
 
 #------ need linker language flag for header only static libraries -----
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C++)
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 endfunction(create_project mode)
 
 
@@ -244,5 +244,5 @@ if( MSVC )
 endif()
 
 #------ need linker language flag for header only static libraries -----
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C++)
+SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 endfunction(create_project_ex mode linkDirectories linLibraries)
