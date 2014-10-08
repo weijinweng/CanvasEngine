@@ -87,6 +87,27 @@ endfunction(parse_directory_name PROJECT_NAME)
 function(setup_solution PROJECT_NAME)
 	file(GLOB_RECURSE allProjects ${CMAKE_SOURCE_DIR}/ CMakeLists.txt)
 	list(REMOVE_ITEM allProjects ${CMAKE_SOURCE_DIR}/CMakeLists.txt)
+			
+	#Pre cache include dirs prior to adding subdirectory
+	FOREACH(curFile ${allProjects})
+		get_filename_component(fileDir ${curFile} DIRECTORY)
+		
+		file(GLOB_RECURSE MY_HEADERS ${fileDir}/ *.h *.inl)
+		if( NOT MY_HEADERS STREQUAL "" )
+		create_source_group("" "${fileDir}/" ${MY_HEADERS})
+		endif()
+		
+		set (CURRENT_INCLUDE_DIRS "")
+		foreach (_headerFile ${MY_HEADERS})
+			get_filename_component(_dir ${_headerFile} PATH)
+			list (APPEND CURRENT_INCLUDE_DIRS ${_dir})
+		endforeach()
+		list(REMOVE_DUPLICATES CURRENT_INCLUDE_DIRS)
+		include_directories( ${CURRENT_INCLUDE_DIRS} )
+		set(${PROJECT_NAME}_INCLUDE_DIRS "${CURRENT_INCLUDE_DIRS}" CACHE STRING "")
+	ENDFOREACH(curFile ${allProjects})
+
+	#Include sub directories now
 	FOREACH(curFile ${allProjects})
 		get_filename_component(fileDir ${curFile} DIRECTORY)
 		add_subdirectory( ${fileDir} )
@@ -188,17 +209,6 @@ endif()
 if( (MY_SRC STREQUAL "") AND (MY_HEADERS STREQUAL "") )
 message(FATAL_ERROR "Please insert at least one .cpp or .h file in to either src or include directory respectively.")
 endif()
-
-set (CURRENT_INCLUDE_DIRS "")
-foreach (_headerFile ${MY_HEADERS})
-	get_filename_component(_dir ${_headerFile} PATH)
-	list (APPEND CURRENT_INCLUDE_DIRS ${_dir})
-endforeach()
-list(REMOVE_DUPLICATES CURRENT_INCLUDE_DIRS)
-include_directories( ${CURRENT_INCLUDE_DIRS} )
-
-set(${PROJECT_NAME}_INCLUDE_DIRS "${CURRENT_INCLUDE_DIRS}" CACHE STRING "")
-include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
 
 #------ RCC++ Include dirs -----
 FOREACH(currentDir ${CURRENT_INCLUDE_DIRS})
