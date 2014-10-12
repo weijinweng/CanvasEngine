@@ -87,6 +87,7 @@ struct CVS_Layout{
 
 /*Cvs gui parent*/
 struct CVS_Gui{
+	std::vector<CVS_Button> buttons;
 	CVS_Frame frame;
 	bool MouseDown;
 	CVS_Gui(CVS_Window* window);

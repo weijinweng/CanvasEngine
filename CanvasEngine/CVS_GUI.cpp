@@ -70,7 +70,7 @@ void CVS_Button::Render(CVS_2DTools* tools)
 	tools->drawRect(color, rect.x, rect.y, rect.w, rect.h);
 }
 
-CVS_Frame::CVS_Frame(CVS_Window* window)
+CVS_Frame::CVS_Frame(CVS_Window* window):
 {
 	area.w = window->width;
 }
