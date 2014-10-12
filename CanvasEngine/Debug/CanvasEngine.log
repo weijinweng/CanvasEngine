@@ -1,23 +1,20 @@
-﻿Build started 10/12/2014 2:23:06 AM.
-     1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine0.3\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
+﻿Build started 10/12/2014 5:15:42 PM.
+     1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt CVS_GUI.cpp CVS_Window.cpp Canvas.cpp
-         CVS_GUI.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Canvas.cpp CVS_GUI.cpp CVS_Window.cpp main.cpp
+         main.cpp
          GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine0.3\canvasengine\canvasengine\cvs_gui.cpp(69): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
          CVS_Window.cpp
          GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine0.3\canvasengine\canvasengine\cvs_rendersystem.h(4): fatal error C1083: Cannot open include file: 'CVS_RenderContext.h': No such file or directory
-         Generating Code...
-         Compiling...
+         CVS_GUI.cpp
+         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(70): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(74): error C2512: 'CVS_Button' : no appropriate default constructor available
          Canvas.cpp
          GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine0.3\canvasengine\canvasengine\cvs_rendersystem.h(4): fatal error C1083: Cannot open include file: 'CVS_RenderContext.h': No such file or directory
          Generating Code...
-     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine0.3\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)) -- FAILED.
+     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:07.82
+Time Elapsed 00:00:10.57
