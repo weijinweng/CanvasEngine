@@ -3,8 +3,9 @@
 
 struct CVS_SubSystem{
 public:
-	virtual bool Initialize();
-	virtual bool End();
+	virtual bool Initialize(){ return true;}
+	virtual bool Update() {return true;}
+	virtual bool End() {return true;}
 };
 
 #endif

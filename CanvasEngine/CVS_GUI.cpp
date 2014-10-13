@@ -65,12 +65,54 @@ void CVS_Button::setOnClickFunction( void function(void* bundle), void* data)
 
 void CVS_Button::Render(CVS_2DTools* tools)
 {
-	CVS_IRECT rect = {0,0,0,0};
-	rect = tools->ConvertToScreenCoords(rect);
+	CVS_FRECT rect = {0,0,0,0};
+	rect = tools->ConvertToScreenCoords(this->rect);
 	tools->drawRect(color, rect.x, rect.y, rect.w, rect.h);
 }
 
-CVS_Frame::CVS_Frame(CVS_Window* window):
+CVS_Gui::CVS_Gui(CVS_Window* window):window(window)
 {
-	area.w = window->width;
+}
+
+CVSButtonHandle CVS_Gui::addButton(int x, int y, int w, int h, void (function)(void* bundle), void* bundle)
+{
+	this->buttons.push_back(CVS_Button(x, y, w, h));
+	buttons.back().setOnClickFunction(function, bundle);
+	return buttons.size()-1;
+}
+
+void CVS_Gui::Update()
+{
+	for(int i = 0; i < buttons.size(); ++i)
+	{
+		buttons[i].Render(window->renderer->tools);
+	}
+}
+
+void CVS_Gui::ParseInputs(SDL_Event e)
+{
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	if(e.type == SDL_MOUSEBUTTONDOWN)
+	{
+		for(int i = 0; i < buttons.size(); ++i)
+		{
+			buttons[i].getMouseDown(x,y);
+		}
+	}
+	else if(e.type == SDL_MOUSEBUTTONUP)
+	{
+		for(int i = 0; i < buttons.size(); ++i)
+		{
+			buttons[i].getMouseUp(x,y);
+		}
+	}
+	else if(e.type == SDL_MOUSEMOTION)
+	{
+		for(int i = 0; i < buttons.size(); ++i)
+		{
+			buttons[i].onHover(x,y);
+		}
+	}
+
 }

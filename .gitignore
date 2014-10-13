@@ -10,6 +10,7 @@ $RECYCLE.BIN/
 
 #OpenSDF files
 */App_Data/*.opensdf
+*.opensdf
 CanvasEngine/Debug/
 
 

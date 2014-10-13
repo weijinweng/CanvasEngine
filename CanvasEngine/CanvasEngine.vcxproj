@@ -67,7 +67,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="CVS_2DTools.cpp" />
     <ClCompile Include="CVS_GUI.cpp" />
+    <ClCompile Include="CVS_RenderProgram.cpp" />
+    <ClCompile Include="CVS_RenderSystem.cpp" />
     <ClCompile Include="CVS_Window.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

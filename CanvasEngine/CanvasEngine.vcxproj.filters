@@ -36,6 +36,15 @@
     <ClCompile Include="Canvas.cpp">
       <Filter>Source Files\Src</Filter>
     </ClCompile>
+    <ClCompile Include="CVS_RenderSystem.cpp">
+      <Filter>Source Files\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_2DTools.cpp">
+      <Filter>Source Files\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RenderProgram.cpp">
+      <Filter>Source Files\Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CVS_Precompiled.h">

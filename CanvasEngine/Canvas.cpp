@@ -3,6 +3,24 @@
 bool CVS_Initialized = false;
 CVS_StateMachine GLOBALSTATEMACHINE;
 
+GLenum convertToGLEnum(CVS_Enum enumerator){
+	switch(enumerator)
+	{
+	case CVS_FLOAT:
+		return GL_FLOAT;
+	case CVS_UINT:
+		return GL_UNSIGNED_INT;
+	case CVS_INT:
+		return GL_INT;
+	case CVS_STATIC_DRAW:
+		return GL_STATIC_DRAW;
+	case CVS_ARRAY_BUFFER:
+		return GL_ARRAY_BUFFER;
+	default :
+		return GL_FALSE;
+	}
+}
+
 bool CVS_StateMachine::initialize()
 {
 	if(!m_RenderSub.Initialize())

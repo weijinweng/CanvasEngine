@@ -16,6 +16,7 @@ public:
 	CVS_WindowSystem m_WindowSub;
 	//CVS_GameSystem m_GameSub;
 	bool initialize();
+	void update();
 };
 
 

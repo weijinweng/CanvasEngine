@@ -44,12 +44,23 @@
 
 
 
-enum CV_Enum{
+enum CVS_Enum{
 	CVS_NULL = 0,
 	CVS_RDS_DEFERRED = 3,
 	CVS_RDS_FORWARD = 5,
 	CVS_RDS_NONE = 6,
-	CVS_RDS_
+	CVS_FLOAT = 7,
+	CVS_UINT = 9,
+	CVS_INT = 10,
+	CVS_STATIC_DRAW = 11,
+	CVS_ARRAY_BUFFER = 13,
 };
+
+GLenum convertToGLEnum(CVS_Enum enumerator);
+
+typedef glm::vec4 cvec4;
+typedef glm::mat4 cmat4;
+typedef glm::simdVec4 fcvec4;
+typedef glm::simdMat4 fcmat4;
 
 #endif

@@ -13,7 +13,7 @@ struct CVS_RenderProgram{
 	GLuint ProgramName;
 	std::string vertPath;
 	std::string fragPath;
-	CVS_RenderProgram(std::string name);
+	CVS_RenderProgram();
 	bool loadFile(char* vertpath, char* fragpath);
 };
 

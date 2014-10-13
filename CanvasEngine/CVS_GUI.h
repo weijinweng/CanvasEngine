@@ -6,9 +6,15 @@
 struct CVS_Window;
 struct CVS_2DTools;
 
+typedef unsigned int CVSButtonHandle;
+
 //GUI rectangle
 struct CVS_IRECT{
 	int x, y, w, h;
+};
+
+struct CVS_FRECT{
+	float x,y,w,h;
 };
 
 //Vector2 data
@@ -88,10 +94,11 @@ struct CVS_Layout{
 /*Cvs gui parent*/
 struct CVS_Gui{
 	std::vector<CVS_Button> buttons;
-	CVS_Frame frame;
-	bool MouseDown;
+	//CVS_Frame frame;
+	CVS_Window* window;
 	CVS_Gui(CVS_Window* window);
-	void ParseInputs();
+	CVSButtonHandle addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
+	void ParseInputs(SDL_Event e);
 	void Update();
 };
 
