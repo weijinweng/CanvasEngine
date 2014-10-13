@@ -8,7 +8,7 @@ CVS_2DTools::CVS_2DTools(CVS_Window* window):window(window)
 {
 	this->drawingProgram = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("2D_Color_Shader", "./shaders/2D.vert", "./shaders/2Drect.frag");
 
-	CVS_Buffer vertexBuffer;
+	CVS_Buffer vertexBuffer(CVS_ARRAY_BUFFER);
 
 }
 
