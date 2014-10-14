@@ -23,14 +23,14 @@ public:
 
 class CVS_App{
 public:
-	CVS_App();
-	bool Initialize();
-	bool Run();
-	bool End();
+	virtual bool Initialize() = 0;
+	virtual bool Run() = 0;
+	virtual bool End() = 0;
 };
 
 class Editor:public CVS_App{
 public:
+	CVS_Window* m_MainWindow;
 	bool Initialize();
 	bool Run();
 	bool End();

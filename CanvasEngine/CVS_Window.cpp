@@ -3,10 +3,11 @@
 
 extern CVS_StateMachine GLOBALSTATEMACHINE;
 
-CVS_Window::CVS_Window(std::string header, int x, int y, int w, int h, CVS_WindowSystem* system)
+CVS_Window::CVS_Window(std::string header, int x, int y, int w, int h, CVS_WindowSystem* system):gui(NULL)
 {
 	window = SDL_CreateWindow(header.c_str(), x, y, w, h, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN|SDL_WINDOW_BORDERLESS );
 	this->system = system;
+	gui = new CVS_Gui(this);
 }
 
 void CVS_Window::getEvent(SDL_Event e)
@@ -31,7 +32,8 @@ void CVS_Window::getEvent(SDL_Event e)
 void CVS_Window::UpdateScreen()
 {
 	renderer->Clear();
-	gui->Update();
+	if(gui!=NULL)
+		gui->Update();
 	renderer->SwapFrameBuffer();
 }
 

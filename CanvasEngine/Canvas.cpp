@@ -16,6 +16,8 @@ GLenum convertToGLEnum(CVS_Enum enumerator){
 		return GL_STATIC_DRAW;
 	case CVS_ARRAY_BUFFER:
 		return GL_ARRAY_BUFFER;
+	case CVS_TRIANGLES:
+		return GL_TRIANGLES;
 	default :
 		return GL_FALSE;
 	}
@@ -57,5 +59,27 @@ bool CVS_Initialize()
 
 	CVS_Initialized = true;
 	printf("Initialized CVS\n");
+	return true;
+}
+
+
+
+bool Editor::Initialize()
+{
+	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
+	return true;
+}
+
+bool Editor::Run()
+{
+	while(true)
+	{
+		GLOBALSTATEMACHINE.m_WindowSub.Update();
+	}
+	return true;
+}
+
+bool Editor::End()
+{
 	return true;
 }

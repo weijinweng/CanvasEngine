@@ -85,6 +85,54 @@ CVS_RenderProgram::CVS_RenderProgram()
 bool CVS_RenderProgram::loadFile(char* vertpath, char* fragpath)
 {
 	this->ProgramName = compileProgram(vertpath, fragpath);
+
+	int count;
+
+	glGetProgramiv(ProgramName, GL_ACTIVE_UNIFORMS, &count);
+
+	GLint maxAttribNameLength = 0;
+	glGetProgramiv(ProgramName, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxAttribNameLength);
+
+	char* name = new char[maxAttribNameLength];
+	for(int i = 0; i < count; ++i)
+	{
+		int arraySize = 0;
+		GLenum type = GL_FALSE;
+		GLsizei actualLength = 0;
+		glGetActiveUniform(ProgramName, i, maxAttribNameLength, &actualLength, &arraySize, &type, name);
+		CVS_UniformLocation loc = {std::string(name), type, i};
+		uniforms.push_back(loc);
+	}
+
 	return true;
 }
 
+int CVS_RenderProgram::getUniformHash(std::string name)
+{
+	for(int i = 0; i < uniforms.size(); ++i)
+	{
+		if(uniforms[i].name == name)
+		{
+			return uniforms[i].location;
+		}
+	}
+	printf("Error, location not found, returning invalid uniform -1\n");
+	return -1;
+}
+
+void CVS_RenderProgram::bindVec4v(int hash, float* vector)
+{
+	glUniform4fv(hash, 1, vector);
+}
+
+void CVS_RenderProgram::bindMat4v(int hash, float* pointer)
+{
+	glUniformMatrix4fv(hash, 1, GL_FALSE, pointer);
+}
+
+void CVS_RenderProgram::setAsCurrentProgram()
+{
+	glUseProgram(ProgramName);
+
+
+}
