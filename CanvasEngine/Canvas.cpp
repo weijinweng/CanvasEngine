@@ -18,6 +18,8 @@ GLenum convertToGLEnum(CVS_Enum enumerator){
 		return GL_ARRAY_BUFFER;
 	case CVS_TRIANGLES:
 		return GL_TRIANGLES;
+	case CVS_ELEMENT_BUFFER:
+		return GL_ELEMENT_ARRAY_BUFFER;
 	default :
 		return GL_FALSE;
 	}
@@ -67,6 +69,9 @@ bool CVS_Initialize()
 bool Editor::Initialize()
 {
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
+
+	m_MainWindow->gui->addButton(0,0,200,200);
+
 	return true;
 }
 

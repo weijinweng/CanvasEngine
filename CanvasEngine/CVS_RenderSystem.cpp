@@ -22,6 +22,11 @@ void CVS_Buffer::BufferData(unsigned int size, void* data)
 	glBufferData(target, size, data, GL_STATIC_DRAW);
 }
 
+CVS_Buffer::~CVS_Buffer()
+{
+	glDeleteBuffers(1, &buffer);
+}
+
 CVS_VertexObject::CVS_VertexObject():VAO(0)
 {
 	glGenVertexArrays(1, &VAO);
@@ -59,8 +64,17 @@ void CVS_VertexObject::bindArrayBuffer( CVS_Buffer* buffer, unsigned int locatio
 	buffer->bindBuffer();
 
 	glEnableVertexAttribArray(location);
-	glVertexAttribPointer(0,size, convertToGLEnum(type), normalize ? GL_TRUE:GL_FALSE, stride, (void*)offset);
+	glVertexAttribPointer(location,size, convertToGLEnum(type), normalize ? GL_TRUE:GL_FALSE, stride, (void*)offset);
 	
+}
+
+void CVS_VertexObject::bindElementBuffer(unsigned int size, void* data, CVS_Enum usage)
+{
+	bindVAO();
+	CVS_Buffer buffer(CVS_ELEMENT_BUFFER);
+	buffer.BufferData(size, data);
+	buffer.bindBuffer();
+	unBind();
 }
 
 void CVS_VertexObject::drawElements(CVS_Enum type, unsigned int vertCount, unsigned int offset)
@@ -74,6 +88,7 @@ CVS_Renderer::CVS_Renderer(CVS_Window* window):window(window)
 {
 	Clear();
 	SwapFrameBuffer();
+	this->tools = new CVS_2DTools(window);
 }
 
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)

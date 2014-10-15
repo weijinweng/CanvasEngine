@@ -55,6 +55,7 @@ enum CVS_Enum{
 	CVS_STATIC_DRAW = 11,
 	CVS_ARRAY_BUFFER = 13,
 	CVS_TRIANGLES = 14,
+	CVS_ELEMENT_BUFFER = 15
 };
 
 GLenum convertToGLEnum(CVS_Enum enumerator);

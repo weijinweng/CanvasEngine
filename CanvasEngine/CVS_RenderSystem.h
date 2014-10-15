@@ -26,6 +26,7 @@ struct CVS_Buffer{
 	CVS_Buffer(CVS_Enum target);
 	void bindBuffer();
 	void BufferData(unsigned int size, void* data);
+	~CVS_Buffer();
 };
 
 struct CVS_Renderer{

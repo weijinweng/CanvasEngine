@@ -7,14 +7,21 @@ CVS_Window::CVS_Window(std::string header, int x, int y, int w, int h, CVS_Windo
 {
 	window = SDL_CreateWindow(header.c_str(), x, y, w, h, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN|SDL_WINDOW_BORDERLESS );
 	this->system = system;
+	width = w;
+	height = h;
+	this->x = x;
+	this-> y = y;
 	gui = new CVS_Gui(this);
+	windowID = SDL_GetWindowID(window);
 }
 
 void CVS_Window::getEvent(SDL_Event e)
 {
 
+
 	if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
 	{
+
 		if(e.button.windowID == windowID)
 		{
 			gui->ParseInputs(e);
@@ -63,6 +70,7 @@ bool CVS_WindowSystem::Update()
 	}
 	for(int i = 0; i < windows.size(); ++i)
 	{
+	
 		windows[i]->UpdateScreen();
 	}
 	return true;

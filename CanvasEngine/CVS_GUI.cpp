@@ -35,12 +35,14 @@ bool CVS_Button::getMouseUp(int x, int y)
 {
 	if(getMouseOver(rect, x, y))
 	{
-		if(mouseDown)
+		if(mouseDown && callBack != NULL)
 		{
 			(*callBack)(bundle);
 		}
+
 	}
 	mouseDown = false;
+	color.r = 0.5f;
 	return mouseDown;
 }
 
@@ -49,12 +51,14 @@ void CVS_Button::onHover(int x, int y)
 	if(getMouseOver(rect, x, y))
 	{
 		color.r = 0.5f;
+	printf("parsing\n");
 	} else offHover();
 }
 
 void CVS_Button::offHover()
 {
 	color.r = 0.0f;
+	printf("offhover\n");
 }
 
 void CVS_Button::setOnClickFunction( void function(void* bundle), void* data)
@@ -93,6 +97,7 @@ void CVS_Gui::ParseInputs(SDL_Event e)
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
+
 	if(e.type == SDL_MOUSEBUTTONDOWN)
 	{
 		for(int i = 0; i < buttons.size(); ++i)

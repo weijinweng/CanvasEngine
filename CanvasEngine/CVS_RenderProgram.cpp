@@ -101,6 +101,7 @@ bool CVS_RenderProgram::loadFile(char* vertpath, char* fragpath)
 		GLsizei actualLength = 0;
 		glGetActiveUniform(ProgramName, i, maxAttribNameLength, &actualLength, &arraySize, &type, name);
 		CVS_UniformLocation loc = {std::string(name), type, i};
+		printf("New uniform found %s\n", name);
 		uniforms.push_back(loc);
 	}
 
