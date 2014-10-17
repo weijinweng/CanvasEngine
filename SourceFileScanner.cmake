@@ -73,135 +73,70 @@ endfunction(create_source_group)
 #
 #
 #
-function(parse_directory_name PROJECT_NAME)
+function(parse_directory_name OUT_NAME)
 string(REPLACE "/" ";" p2list "${CMAKE_CURRENT_SOURCE_DIR}")
 list(REVERSE p2list)
 list(GET p2list 0 temp)
-set(PROJECT_NAME "${temp}" PARENT_SCOPE)
-endfunction(parse_directory_name PROJECT_NAME)
+set(${OUT_NAME} "${temp}" PARENT_SCOPE)
+endfunction(parse_directory_name OUT_NAME)
 
 #
 #
 #
 #
-function(setup_solution PROJECT_NAME)
-	file(GLOB_RECURSE allProjects ${CMAKE_SOURCE_DIR}/ CMakeLists.txt)
+function(setup_solution SOLUTION_NAME)
+	#find all cmakelists files
+	file(GLOB_RECURSE allProjects ${CMAKE_SOURCE_DIR}/CMakeLists.txt)
 	list(REMOVE_ITEM allProjects ${CMAKE_SOURCE_DIR}/CMakeLists.txt)
 			
 	#Pre cache include dirs prior to adding subdirectory
 	FOREACH(curFile ${allProjects})
+		#get the directory of the cmakelists
 		get_filename_component(fileDir ${curFile} DIRECTORY)
 		
-		file(GLOB_RECURSE MY_HEADERS ${fileDir}/ *.h *.inl)
+		#parse the directory name for caching project specific include dirs
+		string(REPLACE "/" ";" p2list "${fileDir}")
+		list(REVERSE p2list)
+		list(GET p2list 0 PROJECT_NAME)
+		
+		#scan all headers
+		file(GLOB_RECURSE MY_HEADERS ${fileDir}/*.h ${fileDir}/*.inl)
 		if( NOT MY_HEADERS STREQUAL "" )
 		create_source_group("" "${fileDir}/" ${MY_HEADERS})
 		endif()
 		
-		set (CURRENT_INCLUDE_DIRS "")
+		#remove duplicates and parse directories
+		set(CURRENT_INCLUDE_DIRS "")
+		set(_headerFile "")
 		foreach (_headerFile ${MY_HEADERS})
 			get_filename_component(_dir ${_headerFile} PATH)
 			list (APPEND CURRENT_INCLUDE_DIRS ${_dir})
 		endforeach()
 		list(REMOVE_DUPLICATES CURRENT_INCLUDE_DIRS)
-		include_directories( ${CURRENT_INCLUDE_DIRS} )
+		#include current include dirs and cache the content
 		set(${PROJECT_NAME}_INCLUDE_DIRS "${CURRENT_INCLUDE_DIRS}" CACHE STRING "")
+		
 	ENDFOREACH(curFile ${allProjects})
 
 	#Include sub directories now
 	FOREACH(curFile ${allProjects})
 		get_filename_component(fileDir ${curFile} DIRECTORY)
 		add_subdirectory( ${fileDir} )
-		message(STATUS "Included: " ${fileDir})
+		message(STATUS "Project Added: " ${fileDir})
 	ENDFOREACH(curFile ${allProjects})
-endfunction(setup_solution PROJECT_NAME)
-#
-#
-#
-#
-function(create_project mode)
-
-file(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ *.cpp *.c)
-if( NOT MY_SRC STREQUAL "" )
-create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SRC})
-endif()
-
-file(GLOB_RECURSE MY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/ *.h *.inl)
-if( NOT MY_HEADERS STREQUAL "" )
-create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_HEADERS})
-endif()
-
-if( (MY_SRC STREQUAL "") AND (MY_HEADERS STREQUAL "") )
-message(FATAL_ERROR "Please insert at least one .cpp or .h file in to either src or include directory respectively.")
-endif()
-
-set (CURRENT_INCLUDE_DIRS "")
-foreach (_headerFile ${MY_HEADERS})
-	get_filename_component(_dir ${_headerFile} PATH)
-	list (APPEND CURRENT_INCLUDE_DIRS ${_dir})
-endforeach()
-list(REMOVE_DUPLICATES CURRENT_INCLUDE_DIRS)
-include_directories( ${CURRENT_INCLUDE_DIRS} )
-
-set(${PROJECT_NAME}_INCLUDE_DIRS "${CURRENT_INCLUDE_DIRS}" CACHE STRING "")
-include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
-
-
-
-FOREACH(currentDir ${CURRENT_INCLUDE_DIRS})
-list(APPEND RCC++_IncludeDirs "${currentDir}\@") 
-ENDFOREACH(currentDir ${CURRENT_INCLUDE_DIRS})
-
-#message(${RCC++_IncludeDirs})
-string(REPLACE "/" "\\\\" WINDOWS_FORMAT_CURRENT_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
-add_definitions("-DCURRENT_INCLUDE_DIRS=${WINDOWS_FORMAT_CURRENT_DIRS}")
-
-#------ set target -----
-include(GenerateVcxprojUserSettings)
-
-if(${mode} STREQUAL "STATIC")
-	add_library (${PROJECT_NAME} STATIC ${MY_SRC} ${MY_HEADERS})
-elseif(${mode} STREQUAL "DYNAMIC")
-	add_library (${PROJECT_NAME} SHARED ${MY_SRC} ${MY_HEADERS})
-elseif(${mode} STREQUAL "CONSOLE")
-	add_executable (${PROJECT_NAME} ${MY_SRC} ${MY_HEADERS})
-elseif(${mode} STREQUAL "WIN32")
-	add_executable (${PROJECT_NAME} WIN32 ${MY_SRC} ${MY_HEADERS})
-endif()
-
-#------ set filter directory -----
-string(REPLACE "/" ";" sourceDirList "${CMAKE_SOURCE_DIR}")
-string(REPLACE "/" ";" currSourceDirList "${CMAKE_CURRENT_SOURCE_DIR}")
-list(REVERSE currSourceDirList)
-list(REMOVE_AT currSourceDirList 0)
-list(REVERSE currSourceDirList)
-foreach(sourceDir ${sourceDirList})
-list(REMOVE_AT currSourceDirList 0)
-endforeach()
-list(LENGTH currSourceDirList listLength)
-string(REPLACE ";" "/" filterDir "${currSourceDirList}")
-
-if( MSVC )
-	SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
-	SET_PROPERTY(TARGET ${PROJECT_NAME}		PROPERTY FOLDER ${filterDir})
-endif()
-
-#------ need linker language flag for header only static libraries -----
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-endfunction(create_project mode)
-
-
+endfunction(setup_solution SOLUTION_NAME)
 #
 #
 #
 #
 function(create_project_ex mode includeDirs linkDirs linkLibs)
 
-file(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/ *.cpp *.c)
+file(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 if( NOT MY_SRC STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SRC})
 endif()
 
-file(GLOB_RECURSE MY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/ *.h *.inl)
+file(GLOB_RECURSE MY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h ${CMAKE_CURRENT_SOURCE_DIR}/*.inl)
 if( NOT MY_HEADERS STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_HEADERS})
 endif()
@@ -222,7 +157,8 @@ add_definitions("-DCURRENT_INCLUDE_DIRS=${WINDOWS_FORMAT_CURRENT_DIRS}")
 #------ set target -----
 include(GenerateVcxprojUserSettings)
 
-include_directories(${includeDirs})
+include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
+#include_directories(${includeDirs})
 link_directories(${linkDirs})
 link_libraries(${linkLibs})
 
