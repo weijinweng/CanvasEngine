@@ -3,6 +3,18 @@
 bool CVS_Initialized = false;
 CVS_StateMachine GLOBALSTATEMACHINE;
 
+void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to)
+{
+	to[0][0] = (GLfloat)from->a1; to[1][0] = (GLfloat)from->a2;
+    to[2][0] = (GLfloat)from->a3; to[3][0] = (GLfloat)from->a4;
+    to[0][1] = (GLfloat)from->b1; to[1][1] = (GLfloat)from->b2;
+    to[2][1] = (GLfloat)from->b3; to[3][1] = (GLfloat)from->b4;
+    to[0][2] = (GLfloat)from->c1; to[1][2] = (GLfloat)from->c2;
+    to[2][2] = (GLfloat)from->c3; to[3][2] = (GLfloat)from->c4;
+    to[0][3] = (GLfloat)from->d1; to[1][3] = (GLfloat)from->d2;
+    to[2][3] = (GLfloat)from->d3; to[3][3] = (GLfloat)from->d4;
+}
+
 GLenum convertToGLEnum(CVS_Enum enumerator){
 	switch(enumerator)
 	{
@@ -34,6 +46,11 @@ bool CVS_StateMachine::initialize()
 	return m_WindowSub.Initialize();
 }
 
+void testButtonFunction(void* lol)
+{
+	printf("Pressed!\n");
+}
+
 bool CVS_Initialize()
 {
 	printf("Initialize CVS\n");
@@ -58,6 +75,15 @@ bool CVS_Initialize()
 	{
 		return false;
 	}
+	FT_Library lib;
+	if(FT_Init_FreeType(&lib)){
+		printf("Error initialized font\n");
+		return false;
+	}
+
+	GLOBALSTATEMACHINE.m_RenderSub.lib = lib;
+
+	GLOBALSTATEMACHINE.m_RenderSub.loadFont("Default", "Fonts/ChaletParisNineteenSixty.ttf");
 
 	CVS_Initialized = true;
 	printf("Initialized CVS\n");
@@ -68,9 +94,13 @@ bool CVS_Initialize()
 
 bool Editor::Initialize()
 {
+	if(!CVS_Initialized)
+	{
+		return false;
+	}
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
 
-	m_MainWindow->gui->addButton(0,0,200,200);
+	m_MainWindow->gui->addButton(0,0,200,200,testButtonFunction);
 
 	return true;
 }

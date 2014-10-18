@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Src">
       <UniqueIdentifier>{af093a47-a462-4a26-a095-38a5431f4bab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\WORLDSYSTEMS">
+      <UniqueIdentifier>{7327f5b5-2fad-41da-a470-98a50f6b460b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GAMESYSTEMS">
+      <UniqueIdentifier>{96ff00bd-8fb5-4171-9f59-d147870b83af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -44,6 +50,12 @@
     </ClCompile>
     <ClCompile Include="CVS_RenderProgram.cpp">
       <Filter>Source Files\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RenderComponent.cpp">
+      <Filter>Source Files\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_World.cpp">
+      <Filter>Source Files\Src\GAMESYSTEMS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +81,18 @@
       <Filter>Header Files\RENDERSYSTEMS</Filter>
     </ClInclude>
     <ClInclude Include="CVS_RenderProgram.h">
+      <Filter>Header Files\RENDERSYSTEMS</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_World.h">
+      <Filter>Header Files\WORLDSYSTEMS</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_Transform.h">
+      <Filter>Header Files\WORLDSYSTEMS</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_RenderComponents.h">
+      <Filter>Header Files\RENDERSYSTEMS</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_Light.h">
       <Filter>Header Files\RENDERSYSTEMS</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,6 @@
 #include "CVS_WindowSystem.h"
 #include "Canvas.h"
 
-extern CVS_StateMachine GLOBALSTATEMACHINE;
 
 CVS_2DTools::CVS_2DTools(CVS_Window* window):window(window)
 {

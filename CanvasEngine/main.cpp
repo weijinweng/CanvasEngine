@@ -3,6 +3,7 @@
 
 int main(int argv, char* argc[])
 {
+	CVS_Initialize();
 	Editor app;
 	app.Initialize();
 	app.Run();

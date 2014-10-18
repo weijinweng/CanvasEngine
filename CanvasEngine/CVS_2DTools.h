@@ -9,6 +9,7 @@ struct CVS_VertexObject;
 
 struct CVS_2DTools{
 	CVS_RenderProgram* drawingProgram;
+	CVS_RenderProgram* textProgram;
 	CVS_VertexObject* VAO;
 	CVS_Window* window;
 	CVS_2DTools(CVS_Window* window);
@@ -18,6 +19,7 @@ struct CVS_2DTools{
 	CVS_FRECT ConvertToScreenCoords(CVS_IRECT rectangle);
 	void drawRect(CVS_ColorRGBA color, float x, float y, float w, float h);
 	void drawTextureRect(CVS_Texture2D* texture, float x, float y, float w, float h);
+	void drawText(std::string text, float x, float y, float w, float h);
 };
 
 #endif

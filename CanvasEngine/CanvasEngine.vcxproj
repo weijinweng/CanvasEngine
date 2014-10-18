@@ -48,7 +48,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;Dwmapi.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;Dwmapi.lib;libfbxsdk.lib;freetype240MT_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,17 +72,23 @@
     <ClCompile Include="CVS_RenderProgram.cpp" />
     <ClCompile Include="CVS_RenderSystem.cpp" />
     <ClCompile Include="CVS_Window.cpp" />
+    <ClCompile Include="CVS_World.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="CVS_RenderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="CVS_2DTools.h" />
+    <ClInclude Include="CVS_Light.h" />
     <ClInclude Include="CVS_Precompiled.h" />
     <ClInclude Include="CVS_RenderProgram.h" />
+    <ClInclude Include="CVS_RenderComponents.h" />
     <ClInclude Include="CVS_RenderSystem.h" />
     <ClInclude Include="CVS_SubSystem.h" />
     <ClInclude Include="CVS_WindowSystem.h" />
     <ClInclude Include="CVS_GUI.h" />
+    <ClInclude Include="CVS_World.h" />
+    <ClInclude Include="CVS_Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

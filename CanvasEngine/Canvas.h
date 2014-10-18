@@ -3,6 +3,7 @@
 
 #include "CVS_Precompiled.h"
 #include "CVS_WindowSystem.h"
+#include "CVS_World.h"
 
 /***********************************
 *Canvas singleton state machine, used
@@ -14,6 +15,7 @@ struct CVS_StateMachine{
 public:
 	CVS_RenderSystem m_RenderSub;
 	CVS_WindowSystem m_WindowSub;
+	CVS_WorldSystem m_GameSub;
 	//CVS_GameSystem m_GameSub;
 	bool initialize();
 	void update();
@@ -37,5 +39,7 @@ public:
 };
 
 bool CVS_Initialize();
+
+extern CVS_StateMachine GLOBALSTATEMACHINE;
 
 #endif

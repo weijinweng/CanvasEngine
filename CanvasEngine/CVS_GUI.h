@@ -7,6 +7,7 @@ struct CVS_Window;
 struct CVS_2DTools;
 
 typedef unsigned int CVSButtonHandle;
+typedef unsigned short CVSFontHandle;
 
 //GUI rectangle
 struct CVS_IRECT{
@@ -29,16 +30,28 @@ struct CVS_ColorRGBA{
 //Animation data, objects that can be animated inherits from this.
 struct CVS_GUI_OBJ{
 	CVS_IRECT rect;
-	CVS_IVEC2 location;
 	CVS_ColorRGBA color;
+	CVSFontHandle font;
+};
+
+struct CVS_TextNode{
+	std::string text;
+	CVSFontHandle font;
+	CVS_IVEC2 size;
+	CVS_TextNode(CVSFontHandle font);
+	bool addChar(char letter);
+	bool setText(std::string text);
+	void renderText(int x, int y);
 };
 
 struct CVS_Button:public CVS_GUI_OBJ{
+	std::vector<CVS_TextNode> text;
 	CVS_Button(int x, int y, int w, int h);
 	//GUI callback bundle
 	void (*callBack)(void* databundle);
 	void* bundle;
 	bool mouseDown;
+	void setText(std::string text);
 	bool getMouseDown(int x, int y);
 	bool getMouseUp(int x, int y);
 	void offHover();

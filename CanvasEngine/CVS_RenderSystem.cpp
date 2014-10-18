@@ -4,6 +4,105 @@
 //For checking for current vao to reduce calls to VAO bindings
 GLuint currentVAO = 0;
 
+void CVS_RenderPackage::setUp()
+{
+}
+
+void CVS_RenderPackage::Render(CVS_Camera* cam, CVS_RenderScene* scene)
+{
+}
+
+CVS_DeferredRenderPackage::CVS_DeferredRenderPackage(CVS_RenderSystem* renderSystem):system(renderSystem)
+{
+	
+}
+
+void CVS_DeferredRenderPackage::setUp()
+{
+	printf("Setting up deferred shading\n");
+	glGenFramebuffers(1, &frameBuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
+
+	glGenTextures(1, &colorText);
+	glGenTextures(1, &normalText);
+	glGenTextures(1, &uvText);
+	glGenTextures(1, &posText);
+
+	glBindTexture(GL_TEXTURE_2D, colorText);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 1600, 900, 0, GL_RGB, GL_FLOAT, NULL);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorText, 0);
+
+	glBindTexture(GL_TEXTURE_2D, colorText);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 1600, 900, 0, GL_RGB, GL_FLOAT, NULL);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, uvText, 0);
+
+	glBindTexture(GL_TEXTURE_2D, colorText);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 1600, 900, 0, GL_RGB, GL_FLOAT, NULL);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, normalText, 0);
+
+	glBindTexture(GL_TEXTURE_2D, colorText);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, 1600, 900, 0, GL_RGB, GL_FLOAT, NULL);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, posText, 0);
+
+	glBindTexture(GL_TEXTURE_2D, depthText);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, 1600, 900, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthText, 0);
+
+	GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+	glDrawBuffers(4, DrawBuffers);
+	
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if(Status != GL_FRAMEBUFFER_COMPLETE){
+		printf("Framebuffer error! Deferred shader unable to initialize\n");
+		return;
+	}
+
+	//Unbind framebuffer
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+}
+
+void CVS_DeferredRenderPackage::Render(CVS_Camera* cam, CVS_RenderScene* scene)
+{
+	//Bind framebuffer for drawing.
+	glBindFramebuffer(GL_DRAW_BUFFER, frameBuffer);
+
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	GeometryPass(cam, scene);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	LightingPass(cam, scene);
+}
+
+void CVS_DeferredRenderPackage::GeometryPass(CVS_Camera* cam, CVS_RenderScene* scene)
+{
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
+
+	for(int i = 0, e = scene->programs.size(); i < e; ++i)
+	{
+		scene->programs[i].Render(cam);
+	}
+}
+
+void CVS_DeferredRenderPackage::LightingPass(CVS_Camera* cam, CVS_RenderScene* scene)
+{
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + 0);
+	glBlitFramebuffer(0,0,1600, 900, 0, 0, 800, 450, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + 1);
+	glBlitFramebuffer(0,0,1600, 900, 0, 450, 800, 450, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + 2);
+	glBlitFramebuffer(0,0,1600, 900, 800, 450, 800, 450, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+	glReadBuffer(GL_COLOR_ATTACHMENT0 + 3);
+	glBlitFramebuffer(0,0,1600, 900, 800, 0, 800, 450, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+}
+
 CVS_Buffer::CVS_Buffer(CVS_Enum target)
 {
 	this->target = convertToGLEnum(target);
@@ -93,7 +192,7 @@ CVS_Renderer::CVS_Renderer(CVS_Window* window):window(window)
 
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
 {
-
+	renderMode = new CVS_DeferredRenderPackage(this);
 }
 
 bool CVS_RenderSystem::Initialize()
@@ -172,4 +271,41 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(CVS_Window* window)
 	newRenderer->m_glContext = m_glContext;
 	renderers.push_back(newRenderer);
 	return newRenderer;
+}
+
+CVS_IVEC2 CVS_RenderSystem::getGlyphSize(char character, unsigned int font)
+{
+	if(FT_Load_Char(fonts[font].face, character, FT_LOAD_DEFAULT)){
+		printf("Error getting haracter\n");
+		CVS_IVEC2 vec = {0,0};
+		return vec;
+	}
+	CVS_IVEC2 vec = {fonts[font].face->glyph->bitmap.width, fonts[font].face->glyph->bitmap.rows};
+	return vec;
+}
+
+bool CVS_RenderSystem::loadFont(std::string name, char* fontPath)
+{
+	FT_Face face;
+
+	if(FT_New_Face(lib, fontPath, fonts.size(), &face))
+	{
+		printf("Error could not open font\n");
+		return false;
+	}
+	
+	CVS_Font font = {face, name};
+	fonts.push_back(font);
+	return true;
+}
+
+std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromaiScene(const aiScene* scene)
+{
+	std::vector<CVS_Mesh*> meshlist;
+	for(int i = 0, e = scene->mNumMeshes; i<e; ++i)
+	{
+		CVS_Mesh* newMesh = new CVS_Mesh();
+		newMesh->initializeFromAiMesh(scene->mMeshes[i]);
+		meshlist.push_back(newMesh);
+	}
 }

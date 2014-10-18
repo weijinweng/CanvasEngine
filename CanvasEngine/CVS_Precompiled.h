@@ -42,6 +42,9 @@
 //FBX for autodesk formats.
 #include <fbxsdk.h>
 
+//Freetype for openglText
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 
 enum CVS_Enum{
@@ -59,10 +62,14 @@ enum CVS_Enum{
 };
 
 GLenum convertToGLEnum(CVS_Enum enumerator);
+void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to);
 
+typedef glm::vec3 cvec3;
 typedef glm::vec4 cvec4;
 typedef glm::mat4 cmat4;
 typedef glm::simdVec4 fcvec4;
 typedef glm::simdMat4 fcmat4;
+typedef glm::fquat cquat;
+typedef glm::vec2 cvec2;
 
 #endif

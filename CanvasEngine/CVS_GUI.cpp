@@ -1,6 +1,9 @@
+#include "Canvas.h"
 #include "CVS_GUI.h"
 #include "CVS_2DTools.h"
 #include "CVS_WindowSystem.h"
+
+extern CVS_StateMachine GLOBALSTATEMACHINE;
 
 bool getMouseOver(CVS_IRECT rect, int x, int y)
 {
@@ -12,12 +15,46 @@ bool getMouseOver(CVS_IRECT rect, int x, int y)
 	return true;
 }
 
+CVS_TextNode::CVS_TextNode(CVSFontHandle handle):font(handle)
+{
+	size.x = 0;
+	size.y = 0;
+}
+
+bool CVS_TextNode::addChar(char letter)
+{
+	if(letter != ' ')
+	{
+		text += letter;
+
+
+		
+		
+	}
+	return true;
+}
+
 CVS_Button::CVS_Button(int x, int y, int w, int h):callBack(NULL),bundle(NULL),mouseDown(false)
 {
 	rect.x = x;
 	rect.y = y;
 	rect.w = w;
 	rect.h = h;
+	font = 0;
+}
+
+void CVS_Button::setText(std::string text)
+{
+	this->text.clear();
+	for(const char* p = text.c_str(); *p;)
+	{
+		CVS_TextNode node(this->font);
+		while(node.addChar(*p))
+		{
+			this->text.push_back(node);
+			p++;
+		}
+	}
 }
 
 bool CVS_Button::getMouseDown(int x, int y)
