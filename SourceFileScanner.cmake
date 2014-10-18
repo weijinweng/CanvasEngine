@@ -100,7 +100,7 @@ function(setup_solution SOLUTION_NAME)
 		list(GET p2list 0 PROJECT_NAME)
 		
 		#scan all headers
-		file(GLOB_RECURSE MY_HEADERS ${fileDir}/*.h ${fileDir}/*.inl)
+		file(GLOB_RECURSE MY_HEADERS ${fileDir}/*.h ${fileDir}/*.hpp ${fileDir}/*.inl)
 		if( NOT MY_HEADERS STREQUAL "" )
 		create_source_group("" "${fileDir}/" ${MY_HEADERS})
 		endif()
@@ -136,7 +136,7 @@ if( NOT MY_SRC STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SRC})
 endif()
 
-file(GLOB_RECURSE MY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h ${CMAKE_CURRENT_SOURCE_DIR}/*.inl)
+file(GLOB_RECURSE MY_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/*.inl)
 if( NOT MY_HEADERS STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_HEADERS})
 endif()
@@ -158,7 +158,7 @@ add_definitions("-DCURRENT_INCLUDE_DIRS=${WINDOWS_FORMAT_CURRENT_DIRS}")
 include(GenerateVcxprojUserSettings)
 
 include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
-#include_directories(${includeDirs})
+include_directories(${includeDirs})
 link_directories(${linkDirs})
 link_libraries(${linkLibs})
 
