@@ -308,4 +308,10 @@ std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromaiScene(const aiScene* sce
 		newMesh->initializeFromAiMesh(scene->mMeshes[i]);
 		meshlist.push_back(newMesh);
 	}
+	return meshlist;
+}
+
+CVS_RenderProgram* CVS_RenderSystem::getRenderProgram(std::string name)
+{
+	return programs[name];
 }

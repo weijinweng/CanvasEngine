@@ -1,33 +1,13 @@
-﻿Build started 10/17/2014 7:53:37 PM.
+﻿Build started 10/17/2014 8:12:41 PM.
      1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt CVS_2DTools.cpp CVS_GUI.cpp CVS_RenderComponent.cpp CVS_RenderSystem.cpp CVS_Window.cpp CVS_World.cpp Canvas.cpp main.cpp
-         CVS_World.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-         Generating Code...
-         Compiling...
-         main.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-         Canvas.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-         CVS_Window.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_window.cpp(66): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_window.cpp(71): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_window.cpp(81): warning C4018: '<' : signed/unsigned mismatch
-         CVS_RenderComponent.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt CVS_GUI.cpp
          CVS_GUI.cpp
          GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(127): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(140): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(147): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(154): warning C4018: '<' : signed/unsigned mismatch
-         CVS_2DTools.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         CVS_RenderSystem.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(126): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(139): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(146): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(153): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib glew32.lib opengl32.lib glu32.lib assimp.lib Dwmapi.lib libfbxsdk.lib freetype240MT_D.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.lib" /MACHINE:X86 Debug\Canvas.obj
          Debug\CVS_2DTools.obj
@@ -38,12 +18,9 @@
          Debug\CVS_World.obj
          Debug\main.obj
          Debug\CVS_RenderComponent.obj
-     1>LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
-     1>CVS_World.obj : error LNK2019: unresolved external symbol "public: struct CVS_RenderNode * __thiscall CVS_RenderScene::createNewNode(void)" (?createNewNode@CVS_RenderScene@@QAEPAUCVS_RenderNode@@XZ) referenced in function "public: __thiscall CVS_RenderComponent::CVS_RenderComponent(class CVS_GameObject *,struct CVS_RenderScene *)" (??0CVS_RenderComponent@@QAE@PAVCVS_GameObject@@PAUCVS_RenderScene@@@Z)
-     1>CVS_World.obj : error LNK2019: unresolved external symbol "public: class std::vector<struct CVS_Mesh *,class std::allocator<struct CVS_Mesh *> > __thiscall CVS_RenderSystem::addMeshesFromaiScene(struct aiScene const *)" (?addMeshesFromaiScene@CVS_RenderSystem@@QAE?AV?$vector@PAUCVS_Mesh@@V?$allocator@PAUCVS_Mesh@@@std@@@std@@PBUaiScene@@@Z) referenced in function "public: bool __thiscall CVS_Scene::loadFile(char *)" (?loadFile@CVS_Scene@@QAE_NPAD@Z)
-     1>C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe : fatal error LNK1120: 2 unresolved externals
-     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)) -- FAILED.
+         CanvasEngine.vcxproj -> C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe
+     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:23.05
+Time Elapsed 00:00:04.35

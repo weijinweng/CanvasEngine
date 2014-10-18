@@ -88,7 +88,6 @@ void CVS_Button::onHover(int x, int y)
 	if(getMouseOver(rect, x, y))
 	{
 		color.r = 0.5f;
-	printf("parsing\n");
 	} else offHover();
 }
 

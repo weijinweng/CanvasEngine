@@ -58,6 +58,26 @@ void CVS_RenderProgramInstance::Render(CVS_Camera* cam)
 {
 }
 
+void CVS_RenderProgramInstance::addChild(CVS_RenderNode* node)
+{
+	node->parent = this;
+}
+
+CVS_RenderNode::CVS_RenderNode(CVS_RenderProgramInstance* program)
+{
+	program->addChild(this);
+}
+
 void CVS_RenderNode::Render(CVS_Camera* cam)
 {
+}
+
+CVS_RenderScene::CVS_RenderScene()
+{
+	GLOBALSTATEMACHINE.m_RenderSub.getRenderProgram("Default");
+}
+
+CVS_RenderNode* CVS_RenderScene::createNewNode()
+{
+	return new CVS_RenderNode(&programs[0]);
 }

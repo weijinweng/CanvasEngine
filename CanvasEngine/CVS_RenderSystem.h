@@ -92,8 +92,10 @@ public:
 	CVS_RenderSystem();
 	bool Initialize();
 	bool End();
-	CVS_Buffer* generateNewBuffer();
-	CVS_Buffer* generateElementBuffer();
+
+	//
+	CVS_RenderProgram* getRenderProgram(std::string name);
+
 	CVS_Renderer* createNewRenderer(CVS_Window* window);
 	CVS_RenderProgram* createNewShader(std::string name, char* vertpath, char* fragpath);
 	CVS_VertexObject* createNewVertexObject();

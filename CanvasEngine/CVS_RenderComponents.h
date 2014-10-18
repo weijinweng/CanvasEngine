@@ -63,7 +63,7 @@ struct CVS_RenderScene{
 	std::vector<CVS_RenderNode*> nodes;
 	std::vector<CVS_RenderProgramInstance> programs;
 	std::vector<CVS_Light> lights;
-	CVS_RenderScene(CVS_RenderSystem* system);
+	CVS_RenderScene();
 	CVS_RenderNode* createNewNode();
 	void addProgram(std::string name);
 	void Render(int index);
