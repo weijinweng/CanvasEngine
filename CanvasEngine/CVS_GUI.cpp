@@ -76,10 +76,10 @@ bool CVS_Button::getMouseUp(int x, int y)
 		{
 			(*callBack)(bundle);
 		}
-
+		color.r = 0.5f;
 	}
 	mouseDown = false;
-	color.r = 0.5f;
+
 	return mouseDown;
 }
 
