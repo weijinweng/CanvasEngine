@@ -94,7 +94,6 @@ void CVS_Button::onHover(int x, int y)
 void CVS_Button::offHover()
 {
 	color.r = 0.0f;
-	printf("offhover\n");
 }
 
 void CVS_Button::setOnClickFunction( void function(void* bundle), void* data)
