@@ -77,37 +77,57 @@ bool CVS_Initialize()
 	}
 	FT_Library lib;
 	if(FT_Init_FreeType(&lib)){
-		printf("Error initialized font\n");
+		printf("Error initializing font\n");
+		return false;
+	}
+
+	if(TTF_Init() == -1)
+	{
+		printf("Error initializing ttf\n");
 		return false;
 	}
 
 	GLOBALSTATEMACHINE.m_RenderSub.lib = lib;
 
-	GLOBALSTATEMACHINE.m_RenderSub.loadFont("Default", "Fonts/ChaletParisNineteenSixty.ttf");
+	GLOBALSTATEMACHINE.m_RenderSub.loadFont("Default", "ChaletParisNineteenSixty.ttf");
 
 	CVS_Initialized = true;
 	printf("Initialized CVS\n");
 	return true;
 }
 
-
+void boolToggle(void* data)
+{
+	*(bool*) data = !*(bool*)data;
+}
 
 bool Editor::Initialize()
 {
+	quit = false;
 	if(!CVS_Initialized)
 	{
 		return false;
 	}
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
 
-	m_MainWindow->gui->addButton(0,0,200,200,testButtonFunction);
+	m_MainWindow->gui->addButton(0,700,200,200,boolToggle, &quit);
+
+	m_MainWindow->gui->mainCell.Divide(true, 400);
+
+	m_MainWindow->gui->mainCell.cell1->debugColor = RED;
+
+	m_MainWindow->gui->mainCell.cell2->debugColor = BLUE;
+
+	m_MainWindow->gui->mainCell.cell1->Divide(true, 100);
+
+	m_MainWindow->gui->mainCell.cell1->cell1->debugColor = GREEN;
 
 	return true;
 }
 
 bool Editor::Run()
 {
-	while(true)
+	while(!quit)
 	{
 		GLOBALSTATEMACHINE.m_WindowSub.Update();
 	}

@@ -3,10 +3,17 @@
 #include "CVS_Precompiled.h"
 
 struct CVS_Texture2D{
+	int w, h;
+	std::string filePath;
+	CVS_Enum type;
 	GLuint texture;
+	GLuint activeLocation;
 	CVS_Texture2D();
 	bool loadData(int width, int height, int mipmap, void* data);
 	bool loadFile(char* filepath);
+	void loadSDL_Surface(SDL_Surface* surface);
+	void setActive(int slot);
+	void bindToLocation(int x);
 };
 
 struct CVS_UniformLocation{

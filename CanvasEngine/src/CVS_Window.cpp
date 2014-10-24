@@ -39,8 +39,10 @@ void CVS_Window::getEvent(SDL_Event e)
 void CVS_Window::UpdateScreen()
 {
 	renderer->Clear();
+	glDisable(GL_DEPTH_TEST);
 	if(gui!=NULL)
 		gui->Update();
+	glEnable(GL_DEPTH_TEST);
 	renderer->SwapFrameBuffer();
 }
 

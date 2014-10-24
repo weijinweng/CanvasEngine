@@ -5,10 +5,13 @@
 
 CVS_2DTools::CVS_2DTools(CVS_Window* window):window(window)
 {
+	
+	this->textProgram = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("2D_Texture", "./shaders/2DDrawTools/2D.vert", "./shaders/2DDrawTools/2Dtexture.frag");
 	this->drawingProgram = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("2D_Color_Shader", "./shaders/2DDrawTools/2D.vert", "./shaders/2DDrawTools/2D.frag");
 
 	rectLoc = drawingProgram->getUniformHash("rect");
 	colorLoc = drawingProgram->getUniformHash("color");
+	textureLoc = textProgram->getUniformHash("myTexture");
 
 	//Rectangle vertex data
 	float vertexData[] = {
@@ -62,7 +65,7 @@ CVS_FRECT CVS_2DTools::ConvertToScreenCoords(CVS_IRECT rect)
 {
 	CVS_FRECT rectangle = {0,0,0,0};
 	float screenWidth = ((float)window->width);
-	float screenHeight = ((float)window->width);
+	float screenHeight = ((float)window->height);
 	rectangle.x = (2.0f * ( (float)rect.x/screenWidth)) - 1.0f;
 	rectangle.y = (2.0f * ( (float)rect.y/screenHeight)) - 1.0f;
 	rectangle.w = 2.0f*((float)rect.w/(float)window->width);
@@ -80,4 +83,12 @@ void CVS_2DTools::drawRect(CVS_ColorRGBA color, float x, float y, float w, float
 	cvec4 vcolor(color.r,color.g, color.b, color.a);
 	drawingProgram->bindVec4v(colorLoc, glm::value_ptr(vcolor));
 	VAO->drawElements(CVS_TRIANGLES, 6);
+}
+
+void CVS_2DTools::drawTextureRect(CVS_Texture2D* texture, float x, float y, float w, float h)
+{
+	textProgram->setAsCurrentProgram();
+
+	texture->setActive(0);
+	texture->bindToLocation(textureLoc);
 }

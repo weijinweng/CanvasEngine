@@ -12,9 +12,11 @@ struct CVS_2DTools{
 	CVS_RenderProgram* textProgram;
 	CVS_VertexObject* VAO;
 	CVS_Window* window;
+	TTF_Font* font;
 	CVS_2DTools(CVS_Window* window);
 	int rectLoc;
 	int colorLoc;
+	int textureLoc;
 	//Convert a IRECT specified in pixels to OpenGL screen coords
 	CVS_FRECT ConvertToScreenCoords(CVS_IRECT rectangle);
 	void drawRect(CVS_ColorRGBA color, float x, float y, float w, float h);

@@ -273,22 +273,11 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(CVS_Window* window)
 	return newRenderer;
 }
 
-CVS_IVEC2 CVS_RenderSystem::getGlyphSize(char character, unsigned int font)
-{
-	if(FT_Load_Char(fonts[font].face, character, FT_LOAD_DEFAULT)){
-		printf("Error getting haracter\n");
-		CVS_IVEC2 vec = {0,0};
-		return vec;
-	}
-	CVS_IVEC2 vec = {fonts[font].face->glyph->bitmap.width, fonts[font].face->glyph->bitmap.rows};
-	return vec;
-}
-
 bool CVS_RenderSystem::loadFont(std::string name, char* fontPath)
 {
-	FT_Face face;
+	TTF_Font* face = TTF_OpenFont(fontPath, 72);
 
-	if(FT_New_Face(lib, fontPath, fonts.size(), &face))
+	if(face == NULL)
 	{
 		printf("Error could not open font\n");
 		return false;
@@ -314,4 +303,10 @@ std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromaiScene(const aiScene* sce
 CVS_RenderProgram* CVS_RenderSystem::getRenderProgram(std::string name)
 {
 	return programs[name];
+}
+
+CVS_Texture2D* CVS_RenderSystem::generateNewTexture()
+{
+	textures.push_back(new CVS_Texture2D());
+	return textures.back();
 }

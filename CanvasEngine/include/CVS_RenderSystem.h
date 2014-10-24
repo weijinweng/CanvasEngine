@@ -69,7 +69,7 @@ public:
 };
 
 struct CVS_Font{
-	FT_Face face;
+	TTF_Font* face;
 	std::string fontName;
 };
 
@@ -86,7 +86,7 @@ public:
 	//storage for 3D related data types
 	std::vector<CVS_RenderScene*> scenes;
 	std::vector<CVS_Mesh*> meshes;
-	std::vector<CVS_Texture2D> textures;
+	std::vector<CVS_Texture2D*> textures;
 
 	CVS_RenderPackage* renderMode;
 	CVS_RenderSystem();
@@ -99,6 +99,7 @@ public:
 	CVS_Renderer* createNewRenderer(CVS_Window* window);
 	CVS_RenderProgram* createNewShader(std::string name, char* vertpath, char* fragpath);
 	CVS_VertexObject* createNewVertexObject();
+	CVS_Texture2D* generateNewTexture();
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);

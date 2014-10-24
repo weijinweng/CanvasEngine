@@ -32,6 +32,7 @@ public:
 
 class Editor:public CVS_App{
 public:
+	bool quit;
 	CVS_Window* m_MainWindow;
 	bool Initialize();
 	bool Run();
