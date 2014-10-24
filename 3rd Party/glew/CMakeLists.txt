@@ -1,5 +1,7 @@
 cmake_minimum_required( VERSION 2.8 )
 
+ADD_DEFINITIONS("-DGLEW_STATIC")
+
 SET( INCLUDE_DIRS
 )
 SET( LINK_DIRS

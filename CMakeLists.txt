@@ -12,18 +12,21 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
 else()
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 endif()
-
-include(SetOutputDirectories)
+include(SetOutputDirectories )
 include(SourceFileScanner)
-
-# Add compile flags and preprocessor definitions
-add_definitions( "-D_CRT_SECURE_NO_WARNINGS" "/FC")
 
 #create solution
 parse_directory_name(SOLUTION_NAME)
 project( ${SOLUTION_NAME} )
+
+# Add compile flags and preprocessor definitions
+add_definitions( "-D_CRT_SECURE_NO_WARNINGS" "/FC")
+# Enable Unicode
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /UMBCS /D_UNICODE /DUNICODE")
+
+# directx sdk 
+find_package(DirectX REQUIRED)
+
+#At last, cache include dirs and scan source files
 setup_solution(SOLUTION_NAME)
-##----------------------------------------
-## End of manual configuration section
-## try to minimize tampering with code below unless you know how CMake works
-##----------------------------------------
+#EOF
