@@ -26,6 +26,7 @@ glew
 glm
 zlib
 libpng
+jpeg
 )
 
 parse_directory_name(PROJECT_NAME)
