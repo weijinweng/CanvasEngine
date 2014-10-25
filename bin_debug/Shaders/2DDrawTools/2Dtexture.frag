@@ -10,5 +10,5 @@ in vec2 uvC;
 
 void main()
 {
-	fragColor = texture2D(myTexture, uvC).rgba;
+	fragColor = texture(myTexture, uvC).rgba;
 }

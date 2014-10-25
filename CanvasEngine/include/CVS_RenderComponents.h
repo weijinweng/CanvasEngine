@@ -31,16 +31,25 @@ struct CVS_Mesh{
 
 struct CVS_Camera{
 	CVS_Transform transform;
-	void getPerspective();
-	void getView();
+	float FOV;
+	float aspectRatio;
+	float NearZ;
+	float FarZ;
+	CVS_Camera();
+	cmat4 getPerspective();
+	cmat4 getView();
 };
 
 struct CVS_RenderProgramInstance{
 	CVS_RenderProgram* program;
+	int ViewLoc;
+	int ModelLoc;
+	int MVPLoc;
 	std::vector<CVS_RenderNode*> children;
-	CVS_RenderProgramInstance(CVS_RenderProgramInstance* program);
+	CVS_RenderProgramInstance(CVS_RenderProgram* program);
 	void addChild(CVS_RenderNode* node);
 	void Render(CVS_Camera* cam);
+	void remove(CVS_RenderNode* node);
 };
 
 struct CVS_TextureReference{

@@ -40,9 +40,12 @@ void CVS_Window::UpdateScreen()
 {
 	renderer->Clear();
 	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if(gui!=NULL)
 		gui->Update();
 	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
 	renderer->SwapFrameBuffer();
 }
 

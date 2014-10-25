@@ -101,6 +101,11 @@ void boolToggle(void* data)
 	*(bool*) data = !*(bool*)data;
 }
 
+void Minimize(void* window)
+{
+	SDL_MinimizeWindow((SDL_Window*) window);
+}
+
 bool Editor::Initialize()
 {
 	quit = false;
@@ -110,17 +115,42 @@ bool Editor::Initialize()
 	}
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
 
-	m_MainWindow->gui->addButton(0,700,200,200,boolToggle, &quit);
+	CVS_Button* closeButton = m_MainWindow->gui->addButton(0,0,50,30,boolToggle, &quit);
 
-	m_MainWindow->gui->mainCell.Divide(true, 400);
+	closeButton->offHoverColor = CVS_ColorRGBA(0.9,0.9,0.9,1.0);
+	closeButton->onHoverColor = CVS_ColorRGBA(1.0, 1.0, 1.0, 1.0);
+	closeButton->mouseDownColor = CVS_ColorRGBA(0.0,0.23137254,0.70588,1.0);
+	closeButton->mouseUpColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
+	closeButton->bitColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
+	closeButton->addBitmap("./bitmap/close.png");
 
-	m_MainWindow->gui->mainCell.cell1->debugColor = RED;
+	CVS_Button* minimizeButton = m_MainWindow->gui->addButton(50,0,50,30,Minimize, m_MainWindow->window);
+	minimizeButton->onHoverColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
+	minimizeButton->mouseDownColor = CVS_ColorRGBA(1.0,0.0,0.0,1.0);
+	minimizeButton->mouseUpColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
+	minimizeButton->offHoverColor = CVS_ColorRGBA(0.9,0.9,0.9,1.0);
+	minimizeButton->addBitmap("./bitmap/minimize.png");
 
-	m_MainWindow->gui->mainCell.cell2->debugColor = BLUE;
+	m_MainWindow->gui->mainCell.Divide(true, 30);
 
-	m_MainWindow->gui->mainCell.cell1->Divide(true, 100);
+	m_MainWindow->gui->mainCell.bar.active = false;
 
-	m_MainWindow->gui->mainCell.cell1->cell1->debugColor = GREEN;
+	m_MainWindow->gui->mainCell.cell1->debugColor = CVS_ColorRGBA(0.9,0.9,0.9,1.0f);
+
+	m_MainWindow->gui->mainCell.cell2->Divide(true, 200);
+
+	m_MainWindow->gui->mainCell.cell2->cell1->debugColor = CVS_ColorRGBA(0.85,0.85,0.85,1.0f);
+
+	m_MainWindow->gui->mainCell.cell2->bar.active = false;
+
+	m_MainWindow->gui->mainCell.cell2->cell2->Divide(false,200);
+
+	m_MainWindow->gui->mainCell.cell2->cell2->setHandleBarMin(200);
+
+	m_MainWindow->gui->mainCell.cell2->cell2->setHandleBarMax(300);
+
+	CVS_Gui_SceneRenderer* renderer = new CVS_Gui_SceneRenderer(0,0, 400,400, NULL, m_MainWindow);
+	m_MainWindow->gui->buttons.push_back(renderer);
 
 	return true;
 }

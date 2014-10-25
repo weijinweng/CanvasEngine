@@ -88,6 +88,7 @@ void CVS_DeferredRenderPackage::GeometryPass(CVS_Camera* cam, CVS_RenderScene* s
 	}
 }
 
+//CurrentTestMode
 void CVS_DeferredRenderPackage::LightingPass(CVS_Camera* cam, CVS_RenderScene* scene)
 {
 	glReadBuffer(GL_COLOR_ATTACHMENT0 + 0);
@@ -192,7 +193,6 @@ CVS_Renderer::CVS_Renderer(CVS_Window* window):window(window)
 
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
 {
-	renderMode = new CVS_DeferredRenderPackage(this);
 }
 
 bool CVS_RenderSystem::Initialize()
@@ -266,6 +266,8 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(CVS_Window* window)
 			}
 		}
 		glClearColor( 1.0f, 1.0f, 1.0f, 1.0f);
+		renderMode = new CVS_DeferredRenderPackage(this);
+		renderMode->setUp();
 	}
 	CVS_Renderer* newRenderer =  new CVS_Renderer(window);
 	newRenderer->m_glContext = m_glContext;

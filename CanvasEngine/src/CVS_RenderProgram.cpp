@@ -12,9 +12,12 @@ bool CVS_Texture2D::loadFile(char* filepath)
 
 	if(img == NULL)
 	{
-		printf("Error loading image %s\n", filepath);
+		printf("Error loading image %s\n", filePath);
 		return false;
 	}
+
+	glGenTextures(1, &this->texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
 	int Mode = GL_RGB;
 
@@ -25,8 +28,6 @@ bool CVS_Texture2D::loadFile(char* filepath)
 		Mode = GL_RGBA;
 	}
 	
-	glBindTexture(GL_TEXTURE_2D, texture);
-
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img->w, img->h, 0, GL_RGB, GL_UNSIGNED_BYTE, img->pixels);
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -34,8 +35,7 @@ bool CVS_Texture2D::loadFile(char* filepath)
 
 	this->w = img->w;
 	this->h = img->h;
-	this->filePath = filePath;
-	this->type = Mode == GL_RGBA? CVS_TXT_RGBA:CVS_TXT_RGB;
+
 	return true;
 }
 
@@ -73,6 +73,7 @@ void CVS_Texture2D::setActive(int loc)
 
 void CVS_Texture2D::bindToLocation(int location)
 {
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(location, activeLocation);
 }
 

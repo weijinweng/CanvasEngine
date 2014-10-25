@@ -3,6 +3,9 @@
 
 #include "CVS_Precompiled.h"
 
+struct CVS_RenderScene;
+struct CVS_Texture2D;
+
 struct CVS_Window;
 struct CVS_2DTools;
 
@@ -53,11 +56,17 @@ struct CVS_GUI_OBJ{
 	CVS_ColorRGBA offHoverColor;
 	CVSFontHandle font;
 	CVS_Enum posType;
+	CVS_Texture2D* texture;
+	bool bit;
+	CVS_ColorRGBA bitColor;
+	CVS_GUI_OBJ();
 	virtual void Render(CVS_2DTools* tools) = 0;
 	virtual bool getMouseDown(int x, int y) = 0;
 	virtual bool getMouseUp(int x, int y) = 0;
 	virtual void offHover() = 0;
 	virtual void onHover(int x, int y) = 0;
+	virtual void onResize();
+	void addBitmap(char* filePath);
 };
 
 struct CVS_TextNode{
@@ -74,10 +83,6 @@ struct CVS_TextNode{
 
 struct CVS_Button:public CVS_GUI_OBJ{
 	std::vector<CVS_TextNode> text;
-	//Icon that can be given to a button
-	CVS_Texture2D* icon;
-	//if the icon is a bit mask or not.
-	bool bit;
 	CVS_Button(int x, int y, int w, int h);
 	//GUI callback bundle
 	void (*callBack)(void* databundle);
@@ -146,14 +151,17 @@ struct handleBar{
 	int mouseX, mouseY;
 	bool horizontal;
 	bool initialized;
+	bool active;
 	bool mouseDown;
 	int value;
+	int max;
+	int min;
 	int* v1, *v2;
 	handleBar(CVS_Gui_Cell* parent);
 	void initialize(bool horizontal, int location);
 	bool getMouseDown(int x, int y);
 	bool getMouseUp(int x, int y);
-	void onHover(int x, int y);
+	bool onHover(int x, int y);
 	void offHover();
 	void sync();
 	void Render(CVS_2DTools* tools);
@@ -174,11 +182,25 @@ struct CVS_Gui_Cell:public CVS_GUI_OBJ{
 	virtual bool getMouseUp(int x, int y);
 	virtual void offHover();
 	virtual void onHover(int x, int y);
+	void setHandleBarMin(int min);
+	void setHandleBarMax(int max);
 	void onResize();
 	void Divide(bool horizontal, int loc);
 	void UpdatePos();
 	CVSButtonHandle addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
 };
+
+struct CVS_Gui_SceneRenderer:public CVS_GUI_OBJ{
+	CVS_RenderScene* scene;
+	CVS_Window* parent;
+	CVS_Gui_SceneRenderer(int x, int y, int w, int h, CVS_RenderScene* scene, CVS_Window* parent);
+	virtual void Render(CVS_2DTools* tools);
+	virtual bool getMouseDown(int x, int y);
+	virtual bool getMouseUp(int x, int y);
+	virtual void offHover();
+	virtual void onHover(int x, int y);
+};
+
 
 /*Cvs gui parent*/
 struct CVS_Gui{
@@ -187,7 +209,7 @@ struct CVS_Gui{
 	//CVS_Frame frame;
 	CVS_Window* window;
 	CVS_Gui(CVS_Window* window);
-	CVSButtonHandle addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
+	CVS_Button* addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
 	void ParseInputs(SDL_Event e);
 	void Update();
 };

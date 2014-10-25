@@ -54,13 +54,57 @@ void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
 	return;
 }
 
+cmat4 CVS_Camera::getPerspective()
+{
+	return glm::perspective(FOV, aspectRatio, NearZ, FarZ);
+}
+
+cmat4 CVS_Camera::getView()
+{
+	cvec3 euler = glm::eulerAngles(transform.orientation);
+}
+
+CVS_RenderProgramInstance::CVS_RenderProgramInstance(CVS_RenderProgram* program)
+{
+	this->program = program;
+	
+	ViewLoc = program->getUniformHash("V");
+	ModelLoc = program->getUniformHash("M");
+	MVPLoc = program->getUniformHash("MVP");
+}
+
+void CVS_RenderProgramInstance::remove(CVS_RenderNode* node)
+{
+	for(auto it = children.begin(), et = children.end(); it != et; it++)
+	{
+		if((*it) == node)
+		{
+			children.erase(it);
+		}
+	}
+}
+
 void CVS_RenderProgramInstance::Render(CVS_Camera* cam)
 {
+	program->setAsCurrentProgram();
+	for(int i = 0, e = children.size(); i < e; ++i)
+	{
+		cmat4 V = cam->getView();
+		cmat4 M = children[i]->modelMatrix;
+		cmat4 P = cam->getPerspective();
+		
+		
+	}
 }
 
 void CVS_RenderProgramInstance::addChild(CVS_RenderNode* node)
 {
+	if(node->parent)
+	{
+		node->parent->remove(node);
+	}
 	node->parent = this;
+	children.push_back(node);
 }
 
 CVS_RenderNode::CVS_RenderNode(CVS_RenderProgramInstance* program)

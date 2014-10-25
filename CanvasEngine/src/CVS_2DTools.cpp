@@ -8,10 +8,14 @@ CVS_2DTools::CVS_2DTools(CVS_Window* window):window(window)
 	
 	this->textProgram = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("2D_Texture", "./shaders/2DDrawTools/2D.vert", "./shaders/2DDrawTools/2Dtexture.frag");
 	this->drawingProgram = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("2D_Color_Shader", "./shaders/2DDrawTools/2D.vert", "./shaders/2DDrawTools/2D.frag");
+	this->bitProgram = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("2D_Bit", "./shaders/2DDrawTools/2D.vert", "./shaders/2DDrawTools/2Dbit.frag");
 
 	rectLoc = drawingProgram->getUniformHash("rect");
 	colorLoc = drawingProgram->getUniformHash("color");
 	textureLoc = textProgram->getUniformHash("myTexture");
+
+	bitColorLoc = bitProgram->getUniformHash("color");
+	bitTextureLoc = bitProgram->getUniformHash("myTexture");
 
 	//Rectangle vertex data
 	float vertexData[] = {
@@ -91,4 +95,26 @@ void CVS_2DTools::drawTextureRect(CVS_Texture2D* texture, float x, float y, floa
 
 	texture->setActive(0);
 	texture->bindToLocation(textureLoc);
+
+	cvec4 rect(x,y,w,h);
+	//Bind data
+	drawingProgram->bindVec4v(rectLoc, glm::value_ptr(rect));
+
+	VAO->drawElements(CVS_TRIANGLES, 6);
+}
+
+void CVS_2DTools::drawBit(CVS_Texture2D* texture, CVS_ColorRGBA color, float x, float y, float w, float h)
+{
+	bitProgram->setAsCurrentProgram();
+
+	texture->setActive(0);
+	texture->bindToLocation(bitTextureLoc);
+
+	cvec4 rect(x,y,w,h);
+	//Bind data
+	drawingProgram->bindVec4v(rectLoc, glm::value_ptr(rect));
+	cvec4 vcolor(color.r,color.g, color.b, color.a);
+	drawingProgram->bindVec4v(bitColorLoc, glm::value_ptr(vcolor));
+
+	VAO->drawElements(CVS_TRIANGLES, 6);
 }
