@@ -520,21 +520,13 @@ CVSButtonHandle CVS_Gui_Cell::addButton(int x, int y, int w, int h,  void functi
 	return children.size()-1;
 }
 
-CVS_Gui::CVS_Gui(CVS_Window* window):window(window),mainCell(this)
-{
-	mainCell.rect.h = window->height;
-	mainCell.rect.w = window->width;
-	mainCell.rect.x = 0;
-	mainCell.rect.y = 0;
-}
-
 CVS_Gui_SceneRenderer::CVS_Gui_SceneRenderer(int x, int y, int w, int h, CVS_RenderScene* scene, CVS_Window* parent)
 {
 	rect.x = x;
 	rect.y = y;
 	rect.w = w;
 	rect.h = h;
-
+	this->posType = CVS_POS_RELATIVE;
 	this->scene = scene;
 	this->parent = parent;
 }
@@ -584,13 +576,27 @@ CVS_Button* CVS_Gui::addButton(int x, int y, int w, int h, void (function)(void*
 	return (CVS_Button*)buttons.back();
 }
 
+CVS_Gui::CVS_Gui(CVS_Window* window):window(window),mainCell(this),Scene(NULL)
+{
+	mainCell.rect.h = window->height;
+	mainCell.rect.w = window->width;
+	mainCell.rect.x = 0;
+	mainCell.rect.y = 0;
+}
+
+void CVS_Gui::setScene(CVS_Scene* scene)
+{
+	Scene = scene;
+}
 
 void CVS_Gui::Update()
 {
-	mainCell.Render(window->renderer->tools);
-	for(int i = 0; i < buttons.size(); ++i)
+
+	if(Scene)
 	{
-		buttons[i]->Render(window->renderer->tools);
+		Scene->scene->cameras[0].Update();
+		Scene->scene->Render();
+		SDL_WarpMouseInWindow(this->window->window, this->window->width/2, this->window->height/2);
 	}
 }
 
@@ -598,6 +604,11 @@ void CVS_Gui::ParseInputs(SDL_Event e)
 {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
+
+	if(Scene)
+	{
+		Scene->scene->cameras[0].parseInputs(e);
+	}
 
 	if(e.type == SDL_MOUSEBUTTONDOWN)
 	{

@@ -1,20 +1,33 @@
 #include "CVS_RenderSystem.h"
 #include "CVS_WindowSystem.h"
+#include "Canvas.h"
 
 //For checking for current vao to reduce calls to VAO bindings
 GLuint currentVAO = 0;
+GLuint currentBuffer = 0;
 
 void CVS_RenderPackage::setUp()
 {
+	GLOBALSTATEMACHINE.m_RenderSub.createNewShader("Default", "./Shaders/3DForward/First.vert", "./Shaders/3DForward/First.frag");
 }
 
 void CVS_RenderPackage::Render(CVS_Camera* cam, CVS_RenderScene* scene)
 {
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glClearColor(0.0,0.0,1.0,1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	for(int i = 0; i < scene->programs.size();++i)
+	{
+		scene->programs[i].Render(cam);
+	}
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 }
 
 CVS_DeferredRenderPackage::CVS_DeferredRenderPackage(CVS_RenderSystem* renderSystem):system(renderSystem)
 {
-	
+
 }
 
 void CVS_DeferredRenderPackage::setUp()
@@ -60,28 +73,41 @@ void CVS_DeferredRenderPackage::setUp()
 
 	//Unbind framebuffer
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	system->createNewShader("Default", "./Shaders/3DDeferred/Deferred.vert", "./Shaders/3DDeferred/Deferred.frag");
+	CVS_Texture2D* texture = system->generateNewTexture();
+	texture->loadFile("./Textures/Default.png");
 }
 
 void CVS_DeferredRenderPackage::Render(CVS_Camera* cam, CVS_RenderScene* scene)
 {
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+
+
+
 	//Bind framebuffer for drawing.
 	glBindFramebuffer(GL_DRAW_BUFFER, frameBuffer);
+	glClearColor(0.0,0.0,1.0,1.0);
 
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	GeometryPass(cam, scene);
 
+	glClearColor(1.0,1.0,1.0,1.0);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+	glBindFramebuffer(GL_READ_BUFFER, frameBuffer);
+
 	LightingPass(cam, scene);
+
 }
 
 void CVS_DeferredRenderPackage::GeometryPass(CVS_Camera* cam, CVS_RenderScene* scene)
 {
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
-
 	for(int i = 0, e = scene->programs.size(); i < e; ++i)
 	{
 		scene->programs[i].Render(cam);
@@ -113,7 +139,10 @@ CVS_Buffer::CVS_Buffer(CVS_Enum target)
 
 void CVS_Buffer::bindBuffer()
 {
+	if(currentBuffer == buffer)
+		return;
 	glBindBuffer(this->target, buffer);
+	currentBuffer == buffer;
 }
 
 void CVS_Buffer::BufferData(unsigned int size, void* data)
@@ -161,7 +190,6 @@ void CVS_VertexObject::bindArrayBuffer( CVS_Buffer* buffer, unsigned int locatio
 		printf("Invalid Buffer used!\n");
 		return ;
 	}
-	buffer->bindBuffer();
 
 	glEnableVertexAttribArray(location);
 	glVertexAttribPointer(location,size, convertToGLEnum(type), normalize ? GL_TRUE:GL_FALSE, stride, (void*)offset);
@@ -266,12 +294,16 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(CVS_Window* window)
 			}
 		}
 		glClearColor( 1.0f, 1.0f, 1.0f, 1.0f);
-		renderMode = new CVS_DeferredRenderPackage(this);
+		renderMode = new CVS_RenderPackage();
 		renderMode->setUp();
 	}
 	CVS_Renderer* newRenderer =  new CVS_Renderer(window);
 	newRenderer->m_glContext = m_glContext;
 	renderers.push_back(newRenderer);
+	CVS_Texture2D* texture = generateNewTexture();
+
+	texture->loadFile("./Textures/Default.png");
+
 	return newRenderer;
 }
 
@@ -304,11 +336,23 @@ std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromaiScene(const aiScene* sce
 
 CVS_RenderProgram* CVS_RenderSystem::getRenderProgram(std::string name)
 {
-	return programs[name];
+	if(programs.find(name) == programs.end())
+	{
+		return NULL;
+	} else{
+		printf("Got one?");
+		return programs[name];
+	}
 }
 
 CVS_Texture2D* CVS_RenderSystem::generateNewTexture()
 {
 	textures.push_back(new CVS_Texture2D());
 	return textures.back();
+}
+
+CVS_RenderScene* CVS_RenderSystem::createNewScene()
+{
+	scenes.push_back(new CVS_RenderScene());
+	return scenes.back();
 }

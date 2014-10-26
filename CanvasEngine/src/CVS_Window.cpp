@@ -18,34 +18,14 @@ CVS_Window::CVS_Window(std::string header, int x, int y, int w, int h, CVS_Windo
 void CVS_Window::getEvent(SDL_Event e)
 {
 
-
-	if(e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP)
-	{
-
-		if(e.button.windowID == windowID)
-		{
-			gui->ParseInputs(e);
-		}
-	}
-	else if(e.type == SDL_MOUSEMOTION)
-	{
-		if(e.motion.windowID == windowID)
-		{
-			gui->ParseInputs(e);
-		}
-	}
+	gui->ParseInputs(e);
 }
 
 void CVS_Window::UpdateScreen()
 {
 	renderer->Clear();
-	glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if(gui!=NULL)
 		gui->Update();
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_BLEND);
 	renderer->SwapFrameBuffer();
 }
 
@@ -73,11 +53,12 @@ bool CVS_WindowSystem::Update()
 			windows[i]->getEvent(e);
 		}
 	}
+
 	for(int i = 0; i < windows.size(); ++i)
 	{
-	
 		windows[i]->UpdateScreen();
 	}
+
 	return true;
 }
 

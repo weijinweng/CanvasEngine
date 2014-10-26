@@ -16,6 +16,7 @@ struct CVS_GameComponent{
 };
 
 struct CVS_CameraComponent:public CVS_GameComponent{
+	CVS_Camera* cam;
 	CVS_CameraComponent(CVS_GameObject* object, CVS_Camera* cam);
 };
 

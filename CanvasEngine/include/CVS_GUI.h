@@ -3,6 +3,8 @@
 
 #include "CVS_Precompiled.h"
 
+struct CVS_Scene;
+
 struct CVS_RenderScene;
 struct CVS_Texture2D;
 
@@ -169,6 +171,8 @@ struct handleBar{
 
 struct CVS_Gui_Cell:public CVS_GUI_OBJ{
 	CVS_ColorRGBA debugColor;
+	//For debuggined scenes;
+
 	std::vector<CVS_GUI_OBJ*> children;
 	CVS_Gui* gui;
 	CVS_Gui_Cell* parent;
@@ -204,6 +208,7 @@ struct CVS_Gui_SceneRenderer:public CVS_GUI_OBJ{
 
 /*Cvs gui parent*/
 struct CVS_Gui{
+	CVS_Scene* Scene;
 	std::vector<CVS_GUI_OBJ*> buttons;
 	CVS_Gui_Cell mainCell;
 	//CVS_Frame frame;
@@ -212,6 +217,7 @@ struct CVS_Gui{
 	CVS_Button* addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
 	void ParseInputs(SDL_Event e);
 	void Update();
+	void setScene(CVS_Scene* scene);
 };
 
 #endif
