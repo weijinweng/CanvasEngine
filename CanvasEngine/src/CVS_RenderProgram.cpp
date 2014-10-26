@@ -180,10 +180,6 @@ bool CVS_RenderProgram::loadFile(char* vertpath, char* fragpath)
 		glGetActiveUniform(ProgramName, i, 200, &actualLength, &arraySize, &type, name);
 		CVS_UniformLocation loc = {std::string(name), type, i};
 		printf("New uniform found %s\n", loc.name.c_str());
-		if(type == GL_SAMPLER_2D)
-		{
-			printf("And its a texture!\n");
-		}
 		uniforms.push_back(loc);
 	}
 
@@ -199,7 +195,7 @@ int CVS_RenderProgram::getUniformHash(std::string name)
 			return uniforms[i].location;
 		}
 	}
-	printf("Error, location not found, returning invalid uniform -1 %s\n", name.c_str());
+	printf("Error, location not found, returning invalid uniform -1\n");
 	return -1;
 }
 

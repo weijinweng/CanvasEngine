@@ -100,7 +100,6 @@ public:
 	CVS_RenderProgram* createNewShader(std::string name, char* vertpath, char* fragpath);
 	CVS_VertexObject* createNewVertexObject();
 	CVS_Texture2D* generateNewTexture();
-	CVS_RenderScene* createNewScene();
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);

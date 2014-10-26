@@ -106,8 +106,6 @@ void Minimize(void* window)
 	SDL_MinimizeWindow((SDL_Window*) window);
 }
 
-CVS_Scene* newScene;
-
 bool Editor::Initialize()
 {
 	quit = false;
@@ -152,13 +150,7 @@ bool Editor::Initialize()
 	m_MainWindow->gui->mainCell.cell2->cell2->setHandleBarMax(300);
 
 	CVS_Gui_SceneRenderer* renderer = new CVS_Gui_SceneRenderer(0,0, 400,400, NULL, m_MainWindow);
-	m_MainWindow->gui->mainCell.cell2->cell2->cell2->children.push_back(renderer);
-
-	newScene = GLOBALSTATEMACHINE.m_GameSub.createnewScene();
-
-	newScene->loadFile("suzanne.obj");
-
-	m_MainWindow->gui->setScene(newScene);
+	m_MainWindow->gui->buttons.push_back(renderer);
 
 	return true;
 }

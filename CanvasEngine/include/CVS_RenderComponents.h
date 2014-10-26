@@ -11,18 +11,10 @@ struct CVS_RenderNode;
 struct CVS_RenderPackage;
 struct CVS_RenderSystem;
 
-//Debug uses only
-struct CAM_CTRL{
-public:
-	bool Up , Down, Left, Right, accelerate, ShiftUp, ShiftDown;
-	float horAngle, vertAngle;
-	CAM_CTRL();
-};
-
 struct Vertex{
 	cvec3 position;
-	cvec2 uv;
 	cvec3 normal;
+	cvec2 uv;
 	Vertex(cvec3 position, cvec2 uv, cvec3 normal);
 };
 
@@ -33,24 +25,19 @@ struct CVS_Mesh{
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	CVS_VertexObject* vertexArray;
-	GLuint TestVAO;
 	void initialize();
 	void initializeFromAiMesh(const aiMesh* mesh);
-	void draw();
 };
 
-struct CVS_Camera:public CAM_CTRL{
+struct CVS_Camera{
 	CVS_Transform transform;
 	float FOV;
 	float aspectRatio;
 	float NearZ;
 	float FarZ;
-	cvec3 position;
-	CVS_Camera(float FOV = 45.0f, float aspectRatio = 16.0f/9.0f, float nearZ = 0.1f, float farZ = 100.0f);
+	CVS_Camera();
 	cmat4 getPerspective();
 	cmat4 getView();
-	void parseInputs(SDL_Event e);
-	void Update();
 };
 
 struct CVS_RenderProgramInstance{
@@ -68,8 +55,6 @@ struct CVS_RenderProgramInstance{
 struct CVS_TextureReference{
 	CVS_Texture2D* texture;
 	std::string name;
-	GLuint uniformLoc;
-	void bind();
 };
 
 struct CVS_RenderNode{
@@ -79,8 +64,6 @@ struct CVS_RenderNode{
 	std::vector<CVS_TextureReference> textures;
 	cmat4 modelMatrix;
 	CVS_RenderNode(CVS_RenderProgramInstance* parent);
-	void getTextures(CVS_RenderProgram* program);
-	void bindTextures();
 	void Render(CVS_Camera* cam);
 	void setMesh(CVS_Mesh* mesh);
 };
@@ -89,10 +72,9 @@ struct CVS_RenderScene{
 	std::vector<CVS_RenderNode*> nodes;
 	std::vector<CVS_RenderProgramInstance> programs;
 	std::vector<CVS_Light> lights;
-	std::vector<CVS_Camera> cameras;
 	CVS_RenderScene();
 	CVS_RenderNode* createNewNode();
-	void loadRenderProgram(std::string name);
+	void addProgram(std::string name);
 	void Render(int index);
 	void Render();
 };
