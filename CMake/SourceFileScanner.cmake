@@ -114,6 +114,7 @@ function(setup_solution SOLUTION_NAME)
 		endforeach()
 		list(REMOVE_DUPLICATES CURRENT_INCLUDE_DIRS)
 		#include current include dirs and cache the content
+		unset(${PROJECT_NAME}_INCLUDE_DIRS CACHE)
 		set(${PROJECT_NAME}_INCLUDE_DIRS "${CURRENT_INCLUDE_DIRS}" CACHE STRING "")
 		
 	ENDFOREACH(curFile ${allProjects})
@@ -131,6 +132,7 @@ endfunction(setup_solution SOLUTION_NAME)
 #
 function(create_project_ex mode includeDirs linkDirs linkLibs)
 
+#----- Scan source -----
 file(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 if( NOT MY_SRC STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SRC})
@@ -143,6 +145,19 @@ endif()
 
 if( (MY_SRC STREQUAL "") AND (MY_HEADERS STREQUAL "") )
 message(FATAL_ERROR "Please insert at least one .cpp or .h file in to either src or include directory respectively.")
+endif()
+
+#----- Miscellaneous ------
+#----- add glsl shader files to solution -----
+file(GLOB_RECURSE
+	MY_SHADERS
+	${CMAKE_CURRENT_SOURCE_DIR}/*.vert
+	${CMAKE_CURRENT_SOURCE_DIR}/*.frag
+	${CMAKE_CURRENT_SOURCE_DIR}/*.glsl
+	)
+	
+if( NOT MY_SHADERS STREQUAL "" )
+create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SHADERS})
 endif()
 
 #------ RCC++ Include dirs -----
@@ -164,12 +179,12 @@ link_libraries(${linkLibs})
 
 if(${mode} STREQUAL "STATIC")
 	add_library (${PROJECT_NAME} STATIC ${MY_SRC} ${MY_HEADERS})
-elseif(${mode} STREQUAL "DYNAMIC")
+elseif(${mode} STREQUAL "DYNAMIC" OR ${mode} STREQUAL "SHARED" )
 	add_library (${PROJECT_NAME} SHARED ${MY_SRC} ${MY_HEADERS})
 elseif(${mode} STREQUAL "CONSOLE")
-	add_executable (${PROJECT_NAME} ${MY_SRC} ${MY_HEADERS})
+	add_executable (${PROJECT_NAME} ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS})
 elseif(${mode} STREQUAL "WIN32")
-	add_executable (${PROJECT_NAME} WIN32 ${MY_SRC} ${MY_HEADERS})
+	add_executable (${PROJECT_NAME} WIN32 ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS})
 endif()
 
 #------ set filter directory -----
@@ -183,6 +198,45 @@ list(REMOVE_AT currSourceDirList 0)
 endforeach()
 list(LENGTH currSourceDirList listLength)
 string(REPLACE ";" "/" filterDir "${currSourceDirList}")
+
+#----- copy command for shaders -----
+#[[
+if( NOT MY_SHADERS STREQUAL "" )
+add_custom_target(copy)
+foreach(ShaderFile ${MY_SHADERS})
+	add_custom_command(TARGET copy PRE_BUILD
+	COMMAND ${CMAKE_COMMAND} -E
+	copy ${ShaderFile} $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endforeach()
+endif()
+]]#
+
+#[[
+IF(FORCE_GLOBAL_GENERATE)
+	FILE(WRITE "${CMAKE_CURRENT_BINARY_DIR}/some_file" "whatever")
+	SET(FORCE_GLOBAL_GENERATE OFF BOOL "" FORCE)
+ENDIF(FORCE_GLOBAL_GENERATE)
+IF(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/some_file)
+	CONFIGURE_FILE(${CMAKE_CURRENT_BINARY_DIR}/some_file
+	${CMAKE_CURRENT_BINARY_DIR}/some_file.done)
+ENDIF(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/some_file)
+]]#
+
+if( NOT MY_SHADERS STREQUAL "" )
+	add_custom_target(CopyResource ALL
+		COMMAND ${CMAKE_COMMAND}
+		-DSrcDir=${CMAKE_CURRENT_SOURCE_DIR}
+		-DDestDir=${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}
+		-P ${CMAKE_MODULE_PATH}/CopyResource.cmake
+		COMMENT "Copying resource files to the binary output directory")
+		
+	add_dependencies(${PROJECT_NAME} CopyResource)
+		
+	if( MSVC )
+		SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)
+		SET_PROPERTY(TARGET CopyResource		PROPERTY FOLDER CMakePredefinedTargets)
+	endif()
+endif()
 
 if( MSVC )
 	SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS ON)

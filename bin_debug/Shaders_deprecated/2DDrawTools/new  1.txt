@@ -1,0 +1,341 @@
+package lab2;
+
+/**
+ * A hash table mapping Strings to their positions in the pattern sequence.
+ *
+ * Fill in the methods for this class.
+ */
+ 
+class Slot{
+	//Bool for marking deletion
+	boolean filled;
+	//Data
+	Record record;
+	//Our precomputed hashkey.
+	int cacheKey;
+	
+	Slot()
+	{
+		filled = false;
+	}
+	boolean addRecord(Record s, int hashValue)
+	{
+		filled = true;
+		record = s;
+		cacheKey = toHashKey(s.getKey());
+		return true;
+	}
+	void clean()
+	{
+		filled = false;
+	}
+	Record getRecord()
+	{
+			if(filled)
+				return record;
+			else return null;
+	}
+	
+    int toHashKey(String s) {
+        int A = 1952786893;
+        int B = 367253;
+        int v = B;
+        for (int j = 0; j < s.length(); j++) {
+            char c = s.charAt(j);
+            v = A * (v + (int) c + j) + B;
+        }
+
+        if (v < 0) {
+            v = -v;
+        }
+        return v;
+    }
+}
+ 
+public class StringTable {
+
+
+	Slot Table[];
+	int loadSize;
+	int numElements;
+    /**
+     * Create an empty table of size n
+     *
+     * @param n size of the table
+     */
+    public StringTable(int n) {
+        // TODO: implement this method
+		loadSize = n;
+		
+		double divisor = n;
+		
+		int power = 0;
+		
+		while(divisor > 1)
+		{
+			divisor /= 2;
+			power++;
+		}
+
+		int tableSize = (int)Math.pow(2.0, power);
+		Table = new Slot[tableSize];
+    }
+
+    /**
+     * Create an empty table.  You should use this construction when you are
+     * implementing the doubling procedure.
+     */
+    public StringTable() {
+        // TODO: implement this method
+		Table = new Slot[8];
+		loadSize = 8;
+		Table = new Slot[8];
+    }
+
+    /**
+     * Insert a Record r into the table.
+     *
+     * If you get two insertions with the same key value, return false.
+     *
+     * @param r Record to insert into the table.
+     * @return boolean true if the insertion succeeded, false otherwise
+     */
+    public boolean insert(Record r) {
+		if((double)numElements/(double)Table.length >= 0.25)
+		{
+			resize();
+		}
+	
+        // TODO: implement this method
+		int key = hash(r.getKey());
+		
+		//Hashtable overflowed return false.
+		if(key == -1) 
+		{
+			System.out.println("Error Overflow");
+			return false;
+		}
+		
+		//Check Table, if it does not have slot, add one
+		if(Table[key] == null)
+		{
+			Table[key] = new Slot();
+			Table[key].addRecord(r, key);
+			numElements ++;
+			if(find(r.getKey()) != r)
+			{
+				System.out.println("Error Cannot find");
+			}
+			return true;
+		}
+		
+		else {
+			//if it is a deleted one, set its record straight.
+			if(Table[key].filled == false)
+			{
+				Table[key].addRecord(r, key);
+				numElements ++;
+				return true;
+			}
+			//Something on the exact same key is already inserted, return false
+			return false;
+		}
+    }
+
+    /**
+     * Delete a record from the table.
+     *
+     * Note: You'll have to find the record first unless you keep some
+     * extra information in the Record structure.
+     *
+     * @param r Record to remove from the table.
+     */
+    public void remove(Record r) {
+        // TODO: implement this method
+		int key = hash(r.getKey());
+		if( key != -1 && Table[key] != null)
+		{
+			Table[key].filled = false;
+			numElements--;
+		}
+    }
+
+    /**
+     * Find a record with a key matching the input.
+     *
+     * @param key to find
+     * @return the matched Record or null if no match exists.
+     */
+    public Record find(String key) {
+        // TODO: implement this method
+       int ikey = hash(key);
+	   
+	   if( ikey != -1 && Table[ikey] != null)
+	   {
+			if(Table[ikey].filled)
+			{
+				return Table[ikey].record;
+			}
+	   }
+	   return null;
+    }
+
+    /**
+     * Return the size of the hash table (i.e. the number of elements
+     * this table can hold)
+     *
+     * @return the size of the table
+     */
+    public int size() {
+        // TODO: implement this method
+       return loadSize;
+    }
+
+    /**
+     * Return the hash position of this key.  If it is in the table, return
+     * the postion.  If it isn't in the table, return the position it would
+     * be put in.  This value should always be smaller than the size of the
+     * hash table.
+     *
+     * @param key to hash
+     * @return the int hash
+     */
+    public int hash(String key) {
+        // TODO: implement this method
+		int ikey = toHashKey(key);
+		
+		int m = Table.length;
+		
+		int probe = baseHash(ikey);
+		int probeOffset = stepHash(ikey);
+		
+		int probeRecursive = probe;
+		
+		int delPos = -1;
+		
+		
+		//If probe has a null in table, its an empty slot and we break loop
+		//if probe == probeResursive, there is a hashtable overflow
+		while(Table[probe] != null )
+		{
+			//We found our similar key check if key are the same
+			if (Table[probe].cacheKey == ikey && Table[probe].filled)
+			{
+				if(Table[probe].record.getKey().equals(key))
+				{
+					//Found answer
+					return probe;
+				}
+			}
+			else {
+				if( !Table[probe].filled && delPos == -1)
+				{
+					delPos = probe;
+				}
+			}
+			probe = (probe + probeOffset) % m;
+			//If i is equal to m, immediately return del pos.
+			//if (probe == probeRecursive)
+			//{	System.out.println("Overflow?");
+			//	return delPos;
+			//}
+		}
+		//If we have a deleted position already, we return that
+		if(delPos != -1)
+		{
+			return delPos;
+		}
+		//Otherwise we just return our probe for insertion
+		return probe;
+	}
+
+    /**
+     * Convert a String key into an integer that serves as input to hash functions.
+     * This mapping is based on the idea of a linear-congruential pseuodorandom
+     * number generator, in which successive values r_i are generated by computing
+     *    r_i = (A * r_(i-1) + B) mod M
+     * A is a large prime number, while B is a small increment thrown in so that
+     * we don't just compute successive powers of A mod M.
+     *
+     * We modify the above generator by perturbing each r_i, adding in the ith
+     * character of the string and its offset, to alter the pseudorandom
+     * sequence.
+     *
+     * @param s String to hash
+     * @return int hash
+     */
+    int toHashKey(String s) {
+        int A = 1952786893;
+        int B = 367253;
+        int v = B;
+
+        for (int j = 0; j < s.length(); j++) {
+            char c = s.charAt(j);
+            v = A * (v + (int) c + j) + B;
+        }
+
+        if (v < 0) {
+            v = -v;
+        }
+        return v;
+    }
+
+    /**
+     * Computes the base hash of a hash key
+     *
+     * @param hashKey
+     * @return int base hash
+     */
+    int baseHash(int hashKey) {
+        // TODO: implement this method
+		double a = (Math.sqrt(5) - 1)/2;
+		double fp = (hashKey * a) - (int) (hashKey * a);
+		
+        return (int) (Table.length * fp);
+    }
+
+    /**
+     * Computes the step hash of a hash key
+     *
+     * @param hashKey
+     * @return int step hash
+     */
+    int stepHash(int hashKey) {
+        // TODO: implement this method
+		int s = (hashKey & (Table.length - 1));
+		if(s % 2 == 0)
+		{
+			return s +1;
+		}
+		else 
+		{
+			return s;
+		}
+    }
+	
+	
+	
+	void resize(){
+		StringTable temp = new StringTable(loadSize * 2);
+		for(int i = 0; i < Table.length; ++i)
+		{
+			if(Table[i] != null)
+			{
+				if(Table[i].filled)
+				{
+					temp.insert(Table[i].record);
+				}
+			}
+		}
+
+		Table = new Slot[temp.Table.length];
+		
+		for(int i = 0; i < Table.length; ++i)
+		{
+			Table[i] = temp.Table[i];
+		}
+		
+		loadSize = temp.loadSize;
+		numElements = temp.numElements;
+	}
+}
