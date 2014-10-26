@@ -69,6 +69,9 @@ enum CVS_Enum{
 
 GLenum convertToGLEnum(CVS_Enum enumerator);
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to);
+float fClamp(float value, float min, float max);
+
+const float PI = 3.14159265;
 
 typedef glm::vec3 cvec3;
 typedef glm::vec4 cvec4;

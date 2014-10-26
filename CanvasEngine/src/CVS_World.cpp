@@ -9,7 +9,12 @@ CVS_RenderComponent::CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene
 {
 	//Lower priority will use enum later.
 	priority = 10;
+	if(scene == NULL)
+	{
+		printf("Okay so wtf is going on\n");
+	}
 	node = scene->createNewNode();
+	object->addComponent(this);
 }
 
 void CVS_RenderComponent::Update()
@@ -23,6 +28,11 @@ CVS_GameObject::CVS_GameObject(std::string name):name(name)
 
 void CVS_GameObject::addComponent(CVS_GameComponent* component)
 {
+	if(components.begin() == components.end())
+	{
+		components.push_back(component);
+		return;
+	}
 	//Insert components by priority. Priority are used to determin update time.
 	//E.g physics should update first, then rendernode should get the transform.
 	for(auto it = components.begin(), et = components.end(); it!=et; it++)
@@ -33,6 +43,7 @@ void CVS_GameObject::addComponent(CVS_GameComponent* component)
 			return;
 		}
 	}
+	components.push_back(component);
 }
 
 void CVS_GameObject::addChildren(CVS_GameObject* child)
@@ -56,9 +67,12 @@ bool CVS_Scene::loadFile(char* filepath)
 
 CVS_GameObject* CVS_Scene::createGameObjectsFromaiNodes(const aiNode* node, std::vector<CVS_Mesh*> meshes)
 {
+	printf("Creating game objects %s\n", node->mName.data);
 	CVS_GameObject* newObject = new CVS_GameObject();
-	CVS_RenderComponent* newComponent = new CVS_RenderComponent(newObject, scene);
-
+	newObject->name = std::string(node->mName.data);
+	CVS_RenderComponent* newComponent = new CVS_RenderComponent(newObject, this->scene);
+	printf("memory initialized\n");
+	newComponent->node->setMesh(meshes[node->mMeshes[0]]);
 	for(int i = 0, e = node->mNumChildren; i < e; ++i)
 	{
 		newObject->addChildren(this->createGameObjectsFromaiNodes(node->mChildren[i], meshes));
@@ -119,6 +133,7 @@ CVS_GameObject* CVS_Scene::createGameObjectsFromaiNodes(const aiNode* node, std:
 
 bool CVS_Scene::initializeGameObjectsFromaiScene(const aiScene* scene, std::vector<CVS_Mesh*> meshes)
 {
+	printf("Loading scene\n");
 	for(int i = 0, e = scene->mRootNode->mNumChildren; i < e; ++i)
 	{
 		objects.push_back(createGameObjectsFromaiNodes(scene->mRootNode->mChildren[i], meshes));
@@ -131,6 +146,14 @@ CVS_Scene::CVS_Scene(CVS_WorldSystem* system, CVS_RenderScene* Scene):system(sys
 
 }
 
+void CVS_Scene::Update()
+{
+	for(int i = 0, e = this->objects.size(); i < e; ++i)
+	{
+
+	}
+}
+
 bool CVS_WorldSystem::Initialize()
 {
 	return true;
@@ -138,10 +161,26 @@ bool CVS_WorldSystem::Initialize()
 
 bool CVS_WorldSystem::Update()
 {
+	for(int i = 0; i < scenes.size(); ++i)
+	{
+		scenes[i]->Update();
+	}
+	
 	return true;
 }
 
 bool CVS_WorldSystem::End()
 {
 	return true;
+}
+
+CVS_Scene* CVS_WorldSystem::createnewScene()
+{
+	CVS_RenderScene* render = GLOBALSTATEMACHINE.m_RenderSub.createNewScene();
+	if(render == NULL)
+	{
+		printf("Error CREATING NEW SCENE\n");
+	}
+	scenes.push_back(new CVS_Scene(this, render));
+	return scenes.back();
 }
