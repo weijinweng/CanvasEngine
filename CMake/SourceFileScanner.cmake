@@ -143,6 +143,11 @@ if( NOT MY_HEADERS STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_HEADERS})
 endif()
 
+file(GLOB_RECURSE MY_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.rc)
+if( NOT MY_RESOURCES STREQUAL "" )
+create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_RESOURCES})
+endif()
+
 if( (MY_SRC STREQUAL "") AND (MY_HEADERS STREQUAL "") )
 message(FATAL_ERROR "Please insert at least one .cpp or .h file in to either src or include directory respectively.")
 endif()
@@ -182,9 +187,9 @@ if(${mode} STREQUAL "STATIC")
 elseif(${mode} STREQUAL "DYNAMIC" OR ${mode} STREQUAL "SHARED" )
 	add_library (${PROJECT_NAME} SHARED ${MY_SRC} ${MY_HEADERS})
 elseif(${mode} STREQUAL "CONSOLE")
-	add_executable (${PROJECT_NAME} ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS})
+	add_executable (${PROJECT_NAME} ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS} ${MY_RESOURCES})
 elseif(${mode} STREQUAL "WIN32")
-	add_executable (${PROJECT_NAME} WIN32 ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS})
+	add_executable (${PROJECT_NAME} WIN32 ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS} ${MY_RESOURCES})
 endif()
 
 #------ set filter directory -----
