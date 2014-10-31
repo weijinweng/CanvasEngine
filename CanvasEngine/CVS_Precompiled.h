@@ -1,7 +1,7 @@
 #ifndef CVS_PRECOMPILED
 #define CVS_PRECOMPILED
 
-//SDL for window creation and Event handling.
+
 //STL externals
 #include <stdio.h>
 #include <fstream>
@@ -10,18 +10,15 @@
 #include <vector>
 #include <map>
 
-//SDL supplements and extensions
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_thread.h>
-#include <SDL_syswm.h>
-#undef main
+
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 	//Windows only API
 	#include <Windows.h>
 	#include <dwmapi.h>
+	#include <gdiplus.h>
+	#include <strsafe.h>
+#define CVS_WIN32 100
 #endif
 
 //GLEW for opengl
@@ -46,7 +43,12 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+//Window flag Declaration
+#define CVS_WINDOW_MDI 2
+#define CVS_WINDOW 4
+#define CVS_WINDOW_MDI_CHILD 8
 
+//CVS enumerators
 enum CVS_Enum{
 	CVS_NULL = 0,
 	CVS_RDS_DEFERRED = 3,
@@ -58,11 +60,12 @@ enum CVS_Enum{
 	CVS_STATIC_DRAW = 11,
 	CVS_ARRAY_BUFFER = 13,
 	CVS_TRIANGLES = 14,
-	CVS_ELEMENT_BUFFER = 15
+	CVS_ELEMENT_BUFFER = 15,
 };
 
 GLenum convertToGLEnum(CVS_Enum enumerator);
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to);
+int iClamp(int value, int min, int max);
 
 typedef glm::vec3 cvec3;
 typedef glm::vec4 cvec4;

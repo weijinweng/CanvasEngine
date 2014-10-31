@@ -5,6 +5,7 @@
 
 struct CVS_Window;
 struct CVS_2DTools;
+struct CVS_Gui;
 
 typedef unsigned int CVSButtonHandle;
 typedef unsigned short CVSFontHandle;
@@ -27,7 +28,7 @@ struct CVS_ColorRGBA{
 	float r,g,b,a;
 };
 
-//Animation data, objects that can be animated inherits from this.
+/*//Animation data, objects that can be animated inherits from this.
 struct CVS_GUI_OBJ{
 	CVS_IRECT rect;
 	CVS_ColorRGBA color;
@@ -79,12 +80,19 @@ struct CVS_TabContent{
 	std::vector<CVS_Button> buttons;
 	void addButton(CVS_Button);
 };
+*/
+struct CVS_GUI_OBJ{
+	HWND hWnd;
+	CVS_Window* parent;
+};
 
-struct CVS_Tab{
-	CVS_TabContent content;
+struct CVS_Tab:CVS_GUI_OBJ{
+	CVS_Tab(CVS_Window* window, int x, int  y, int w, int h);
 	void getMouseDown(int x, int y);
 	void getHover(int x, int y);
 	void Render(CVS_2DTools* tools);
+	//Need to add more stuff
+	void addTab(std::string tab, int index);
 };
 
 struct CVS_ToolBar{
@@ -104,14 +112,18 @@ struct CVS_Layout{
 	void Render(CVS_2DTools* tools);
 };
 
+struct CVS_Menu{
+	int type;
+	HMENU hMenu;
+};
+
 /*Cvs gui parent*/
 struct CVS_Gui{
-	std::vector<CVS_Button> buttons;
+	std::vector<CVS_GUI_OBJ*> objects;
 	//CVS_Frame frame;
 	CVS_Window* window;
 	CVS_Gui(CVS_Window* window);
 	CVSButtonHandle addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
-	void ParseInputs(SDL_Event e);
 	void Update();
 };
 

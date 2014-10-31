@@ -57,7 +57,6 @@ struct CVS_Buffer{
 
 struct CVS_Renderer{
 public:
-	SDL_GLContext m_glContext;
 	CVS_Window* window;
 	CVS_2DTools* tools;
 	CVS_RenderSystem* renderSystem;
@@ -76,7 +75,7 @@ struct CVS_Font{
 struct CVS_RenderSystem:public CVS_SubSystem{
 public:
 	int renderWidth, renderHeight;
-	SDL_GLContext m_glContext;
+
 	FT_Library lib;
 	std::vector<CVS_Renderer*> renderers;
 	std::map<std::string, CVS_RenderProgram*> programs;

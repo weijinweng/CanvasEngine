@@ -3,6 +3,11 @@
 bool CVS_Initialized = false;
 CVS_StateMachine GLOBALSTATEMACHINE;
 
+HINSTANCE CVS_AppInstance;
+HINSTANCE CVS_AppPrevInstance;
+int CVS_CmdShow;
+LPSTR CVS_CmdLine;
+
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to)
 {
 	to[0][0] = (GLfloat)from->a1; to[1][0] = (GLfloat)from->a2;
@@ -13,6 +18,15 @@ void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to)
     to[2][2] = (GLfloat)from->c3; to[3][2] = (GLfloat)from->c4;
     to[0][3] = (GLfloat)from->d1; to[1][3] = (GLfloat)from->d2;
     to[2][3] = (GLfloat)from->d3; to[3][3] = (GLfloat)from->d4;
+}
+
+int iClamp(int value, int min, int max)
+{
+	if(value > max)
+		return max;
+	if(value < min)
+		return min;
+	return value;
 }
 
 GLenum convertToGLEnum(CVS_Enum enumerator){
@@ -53,43 +67,89 @@ void testButtonFunction(void* lol)
 
 bool CVS_Initialize()
 {
-	printf("Initialize CVS\n");
-	if(CVS_Initialized)
-		return true;
+	return true;
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+}
+
+LRESULT CALLBACK CVS_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return GLOBALSTATEMACHINE.m_WindowSub.WndProc(hWnd, msg, wParam, lParam);
+}
+
+LRESULT CALLBACK CVS_WndProcMDI(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return GLOBALSTATEMACHINE.m_WindowSub.WndProc_MDI(hWnd, msg, wParam, lParam);
+}
+
+LRESULT CALLBACK CVS_WndProcMDIChild(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return GLOBALSTATEMACHINE.m_WindowSub.WndProc_MDIChild(hWnd, msg, wParam, lParam);
+}
+
+bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR mCmdLine, int mCmdNum)
+{
+	//Register Default window class
+	WNDCLASSEX wc;
+
+    wc.cbSize        = sizeof(WNDCLASSEX);
+    wc.style         = 0;
+    wc.lpfnWndProc   = CVS_WndProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = hInstance;
+    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+    wc.lpszMenuName  = NULL;
+	wc.lpszClassName = GLOBALSTATEMACHINE.m_WindowSub.className;
+	wc.hIconSm       = LoadIcon(hInstance, MAKEINTRESOURCE(CVS_ICON));
+
+    if(!RegisterClassEx(&wc))
+    {
+        MessageBox(NULL, "Window Registration Failed!", "Error!",
+            MB_ICONEXCLAMATION | MB_OK);
+        return 0;
+    }
+
+	//Register MDI window class
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = GLOBALSTATEMACHINE.m_WindowSub.className_MDI;
+	wc.lpfnWndProc = CVS_WndProcMDI;
+
+	if(!RegisterClassEx(&wc))
 	{
-		return false;
+		MessageBox(NULL, "Window MDI Registration Failed!", "Error!",
+			MB_ICONEXCLAMATION | MB_OK);
+		return 0;
 	}
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1);
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);	
 
-	int imgFlags = IMG_INIT_PNG;
+	wc.lpfnWndProc = CVS_WndProcMDIChild;
+	wc.lpszClassName = GLOBALSTATEMACHINE.m_WindowSub.className_MDIChild;
+	wc.lpszMenuName = (LPCTSTR) NULL;
 
-	if( !(IMG_Init( imgFlags ) & imgFlags))
+	if(!RegisterClassEx(&wc))
 	{
-		return false;
+		MessageBox(NULL, "Window MDI Child Registration Failed!", "Error!",
+			MB_ICONEXCLAMATION | MB_OK);
+		return 0;
 	}
+	
+
+	//Register MDI child class
+	CVS_AppInstance = hInstance;
+	CVS_AppPrevInstance = hPrevInstance;
+	CVS_CmdLine = mCmdLine;
+	CVS_CmdShow = mCmdNum;
+
+
 	if(!GLOBALSTATEMACHINE.initialize())
 	{
 		return false;
 	}
-	FT_Library lib;
-	if(FT_Init_FreeType(&lib)){
-		printf("Error initialized font\n");
-		return false;
-	}
-
-	GLOBALSTATEMACHINE.m_RenderSub.lib = lib;
-
-	GLOBALSTATEMACHINE.m_RenderSub.loadFont("Default", "Fonts/ChaletParisNineteenSixty.ttf");
 
 	CVS_Initialized = true;
-	printf("Initialized CVS\n");
 	return true;
 }
-
 
 
 bool Editor::Initialize()
@@ -98,20 +158,38 @@ bool Editor::Initialize()
 	{
 		return false;
 	}
-	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
-
-	m_MainWindow->gui->addButton(0,0,200,200,testButtonFunction);
-
+	GLOBALSTATEMACHINE.m_App = this;
+	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", 0,0, 1600, 900, CVS_NULL);
+	m_MainWindow->CreateMenuMain();
+	CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,0,400,900);
+	tab->addTab("hello", 0);
+	tab->addTab("Second", 1);
 	return true;
 }
 
 bool Editor::Run()
 {
-	while(true)
+	if(!CVS_Initialized)
+		return false;
+	MSG Msg;
+	bool quit = false;
+	while(m_MainWindow->m_Active)
 	{
-		GLOBALSTATEMACHINE.m_WindowSub.Update();
+		//Non blocking message transfer
+		while(PeekMessage(&Msg, NULL, 0,0, PM_REMOVE))
+		{
+			TranslateMessage(&Msg);
+			DispatchMessage(&Msg);
+		}
+
 	}
 	return true;
+}
+
+int Editor::FileOpen(void* data)
+{
+	MessageBox(NULL, (char*) data, "File opened", MB_OK);
+	return 1;
 }
 
 bool Editor::End()
