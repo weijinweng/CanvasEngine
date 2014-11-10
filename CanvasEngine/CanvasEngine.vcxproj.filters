@@ -68,9 +68,6 @@
     <ClInclude Include="CVS_SubSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CVS_RenderSystem.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
     <ClInclude Include="CVS_WindowSystem.h">
       <Filter>Header Files\WINDOWSYSTEM</Filter>
     </ClInclude>
@@ -101,6 +98,12 @@
     <ClInclude Include="Manifest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CVS_RenderSystem.h">
+      <Filter>Header Files\RENDERSYSTEMS</Filter>
+    </ClInclude>
+    <ClInclude Include="wglext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CanvasEngine.rc">
@@ -109,6 +112,18 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Arrow.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="MoveTool.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Rotate.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bitmap1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

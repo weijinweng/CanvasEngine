@@ -11,28 +11,9 @@ struct CVS_RenderSystem;
 struct CVS_Window;
 struct CVS_Buffer;
 
-struct CVS_RenderPackage{
-	//Set up the render package for rendering.
-	virtual void setUp();
-	//Last set after all renderings are down. This step does not do anything in\
-	//forward shading, only useful for deferred tactices.
-	virtual void Render(CVS_Camera* cam, CVS_RenderScene* scenes);
-};
-
-struct CVS_DeferredRenderPackage:public CVS_RenderPackage{
-	//Unlike most rendering aspects, render packages need to be implementation specific
-	GLuint colorText;
-	GLuint normalText;
-	GLuint uvText;
-	GLuint posText;
-	GLuint depthText;
-	GLuint frameBuffer;
-	CVS_RenderSystem* system;
-	CVS_DeferredRenderPackage(CVS_RenderSystem* system);
-	void setUp();
-	void Render(CVS_Camera* cam, CVS_RenderScene* scene);
-	void GeometryPass(CVS_Camera* cam, CVS_RenderScene* scene);
-	void LightingPass(CVS_Camera* cam, CVS_RenderScene* scene);
+struct CVS_RenderPipeline{
+	void SetUp();
+	void Render(CVS_RenderScene* scene, CVS_View view);
 };
 
 struct CVS_VertexObject{
@@ -57,13 +38,15 @@ struct CVS_Buffer{
 
 struct CVS_Renderer{
 public:
-	CVS_Window* window;
 	CVS_2DTools* tools;
+	HGLRC m_glContext;
+	HDC m_ParentHDC;
 	CVS_RenderSystem* renderSystem;
-	CVS_Renderer(CVS_Window* window);
+	CVS_Renderer(HDC);
 	void Clear();
 	void SwapFrameBuffer();
 	void setScene(CVS_RenderScene* scene);
+	void Render(CVS_RenderScene* scene, CVS_View view);
 	//CVS_Renderer* createChildRenderer();
 };
 
@@ -75,19 +58,28 @@ struct CVS_Font{
 struct CVS_RenderSystem:public CVS_SubSystem{
 public:
 	int renderWidth, renderHeight;
+	int m_GridNum;
+	GLint m_GridMVP;
 
 	FT_Library lib;
+	CVS_RenderProgram* m_GridDraw;
+	GLuint gridVAO;
+	CVS_RenderProgram* m_DefaultProgram;
+	CVS_Texture2D* m_DefaultTexture;
 	std::vector<CVS_Renderer*> renderers;
 	std::map<std::string, CVS_RenderProgram*> programs;
 	std::vector<CVS_VertexObject*> vertexArrays;
 	std::vector<CVS_Font> fonts;
+
+	HGLRC m_glContext;
+
+	CVS_RenderPipeline* pipeline;
 
 	//storage for 3D related data types
 	std::vector<CVS_RenderScene*> scenes;
 	std::vector<CVS_Mesh*> meshes;
 	std::vector<CVS_Texture2D> textures;
 
-	CVS_RenderPackage* renderMode;
 	CVS_RenderSystem();
 	bool Initialize();
 	bool End();
@@ -95,9 +87,11 @@ public:
 	//
 	CVS_RenderProgram* getRenderProgram(std::string name);
 
-	CVS_Renderer* createNewRenderer(CVS_Window* window);
+
+	CVS_Renderer* createNewRenderer(HDC view);
 	CVS_RenderProgram* createNewShader(std::string name, char* vertpath, char* fragpath);
 	CVS_VertexObject* createNewVertexObject();
+	CVS_RenderScene* createNewScene();
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);

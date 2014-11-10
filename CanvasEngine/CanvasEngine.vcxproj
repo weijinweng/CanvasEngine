@@ -92,12 +92,17 @@
     <ClInclude Include="CVS_Transform.h" />
     <ClInclude Include="Manifest.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="wglext.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CanvasEngine.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Arrow.bmp" />
+    <Image Include="bitmap1.bmp" />
     <Image Include="icon1.ico" />
+    <Image Include="MoveTool.bmp" />
+    <Image Include="Rotate.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

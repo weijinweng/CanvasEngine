@@ -6,6 +6,7 @@
 
 class CVS_GameObject;
 struct CVS_WorldSystem;
+struct CVS_Scene;
 
 struct CVS_GameComponent{
 	std::string name;
@@ -13,6 +14,15 @@ struct CVS_GameComponent{
 	CVS_GameObject* object;
 	CVS_GameComponent(CVS_GameObject* object);
 	virtual void Update() = 0;
+};
+
+struct CVS_SceneComponent{
+	std::string name;
+	int priority;
+	CVS_GameObject* object;
+	CVS_SceneComponent(CVS_Scene* scene);
+	virtual void Update() = 0;
+	virtual void onMerge(CVS_Scene* other) = 0;
 };
 
 struct CVS_CameraComponent:public CVS_GameComponent{
@@ -56,7 +66,7 @@ public:
 	bool Initialize();
 	bool Update();
 	bool End();
-	CVS_Scene* createnewScene();
+	CVS_Scene* createNewScene();
 };
 
 #endif

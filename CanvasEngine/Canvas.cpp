@@ -86,6 +86,8 @@ LRESULT CALLBACK CVS_WndProcMDIChild(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 	return GLOBALSTATEMACHINE.m_WindowSub.WndProc_MDIChild(hWnd, msg, wParam, lParam);
 }
 
+ULONG_PTR gdiToken;
+
 bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR mCmdLine, int mCmdNum)
 {
 	//Register Default window class
@@ -133,6 +135,25 @@ bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR mCmdLine
 			MB_ICONEXCLAMATION | MB_OK);
 		return 0;
 	}
+
+	wc.lpfnWndProc = CVS_WndProc;
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; 
+	wc.lpszClassName = "OpenGL";
+
+	if(!RegisterClassEx(&wc))
+	{
+		MessageBox(NULL, "Windows OPENGL Child Registration Failed!", "Error!",
+			MB_ICONEXCLAMATION | MB_OK);
+		return 0;
+	}
+
+
+	Gdiplus::GdiplusStartupInput gdiInput;
+
+	Gdiplus::GdiplusStartupOutput gdiOutput;
+
+	GdiplusStartup(&gdiToken, &gdiInput, &gdiOutput);
+
 	
 
 	//Register MDI child class
@@ -159,11 +180,25 @@ bool Editor::Initialize()
 		return false;
 	}
 	GLOBALSTATEMACHINE.m_App = this;
+	
+
+	
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", 0,0, 1600, 900, CVS_NULL);
+	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
 	m_MainWindow->CreateMenuMain();
-	CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,0,400,900);
+	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
+	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);
+
 	tab->addTab("hello", 0);
 	tab->addTab("Second", 1);
+
+	tab->m_Slots[0]->content->AddButton("Hello", 10,10,100,100);
+
+
+	CVS_ToolBar* hello = new CVS_ToolBar(m_MainWindow->gui, 0, 0, 100, 30);
+
+	hello->AddButton(CVS_ARROW, 0, 0, 25, 25);
+	*/
 	return true;
 }
 
@@ -181,9 +216,18 @@ bool Editor::Run()
 			TranslateMessage(&Msg);
 			DispatchMessage(&Msg);
 		}
+		for(int i = 0, e = updatables.size(); i < e; ++i)
+		{
+			updatables[i]->Render();
+		}
 
 	}
 	return true;
+}
+
+void Editor::AddToUpdate(CVS_SceneView* view)
+{
+	updatables.push_back(view);
 }
 
 int Editor::FileOpen(void* data)

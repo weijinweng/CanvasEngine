@@ -43,6 +43,8 @@ CVS_Window::CVS_Window(std::string name, int x, int y, int w, int h, int FLAGS):
 			UpdateWindow(hWnd);
 		}
 	}
+	width = w;
+	height = h;
 
 #endif
 }
@@ -78,6 +80,14 @@ CVS_Window::CVS_Window(std::string name, int x, int y, int w, int h, int Flags, 
 		return;
 	}
 	printf("Success!\n");
+	width = w;
+	height = h;
+
+	DWMNCRENDERINGPOLICY policy = DWMNCRP_DISABLED; // DWMNCRP_DISABLED to toggle back
+	DwmSetWindowAttribute(hWnd, 
+                      DWMWA_NCRENDERING_POLICY, 
+                      (void*)&policy, 
+                      sizeof(DWMNCRENDERINGPOLICY));
 }
 
 void CVS_Window::CreateMenuMain()
@@ -86,6 +96,10 @@ void CVS_Window::CreateMenuMain()
 
 	HMENU FILE_SUB = CreatePopupMenu();
 	HMENU FILE_NEW_SUB = CreatePopupMenu();
+
+	HMENU EDIT_SUB = CreatePopupMenu();
+
+	HMENU CREATE_SUB = CreatePopupMenu();
 
 	int CHILD_FLAG = MF_OWNERDRAW | MF_STRING;
 	int SUB_FLAG = MF_OWNERDRAW | MF_STRING | MF_POPUP;
@@ -98,15 +112,27 @@ void CVS_Window::CreateMenuMain()
 	AppendMenu(FILE_NEW_SUB, CHILD_FLAG, CVS_FILE_NEW_PROJECT, "Project");
 	AppendMenu(FILE_NEW_SUB, CHILD_FLAG, CVS_FILE_NEW_SCENE, "Scene");
 	AppendMenu(FILE_SUB, SUB_FLAG, (UINT) FILE_NEW_SUB, "New");
-	AppendMenu(hMenu, SUB_FLAG, (UINT) FILE_SUB, "File");
+
 
 	AppendMenu(FILE_SUB, CHILD_FLAG, CVS_FILE_OPEN40030, "Open");
 	AppendMenu(FILE_SUB, CHILD_FLAG, CVS_FILE_SAVE40031, "Save");
 	AppendMenu(FILE_SUB, CHILD_FLAG, CVS_FILE_SAVEAS40032, "Save As...");
 	AppendMenu(FILE_SUB, CHILD_FLAG, CVS_FILE_EXIT, "Exit");
+	AppendMenu(hMenu, SUB_FLAG, (UINT) FILE_SUB, "File");
 	BarID.push_back((UINT)FILE_SUB);
-
-
+	
+	//Edit Menu
+	AppendMenu(EDIT_SUB, CHILD_FLAG, CVS_EDIT_COPY, "Copy");
+	AppendMenu(EDIT_SUB, CHILD_FLAG, CVS_EDIT_PASTE, "Paste");
+	AppendMenu(EDIT_SUB, CHILD_FLAG, CVS_EDIT_CUT, "Cut");
+	AppendMenu(hMenu, SUB_FLAG, (UINT)  EDIT_SUB, "Edit");
+	
+	AppendMenu(CREATE_SUB, CHILD_FLAG, CVS_CREATE_SHADER, "New Shader...");
+	AppendMenu(CREATE_SUB, CHILD_FLAG, CVS_CREATE_MODEL, "New Model...");
+	AppendMenu(CREATE_SUB, CHILD_FLAG, CVS_CREATE_SCENE, "New Scene...");
+	AppendMenu(hMenu, SUB_FLAG, (UINT) CREATE_SUB, "Create");
+	BarID.push_back((UINT)CREATE_SUB);
+	BarID.push_back((UINT)EDIT_SUB);
 
 	MENUINFO info;
 
@@ -275,14 +301,60 @@ bool CVS_Window::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 	//Switches
 	switch(msg)
 	{	
-	case WM_INITMENUPOPUP:
+	case WM_NCCALCSIZE:
+		{
+			if((UINT)wParam == 1)
+			{
+		   // Calculate new NCCALCSIZE_PARAMS based on custom NCA inset.
+			NCCALCSIZE_PARAMS *pncsp = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
 
+			pncsp->rgrc[0].left   = pncsp->rgrc[0].left   + 0;
+			pncsp->rgrc[0].top    = pncsp->rgrc[0].top    + 0;
+			pncsp->rgrc[0].right  = pncsp->rgrc[0].right  - 0;
+			pncsp->rgrc[0].bottom = pncsp->rgrc[0].bottom - 0;
+
+
+				printf("Calc size\n");
+				return 0;
+			}
+		}
+		break;
+	case WM_NCACTIVATE:
+		{
+
+		}
+		break;
+	case WM_NCPAINT:
+
+		break;
+	case WM_INITMENUPOPUP:
+		
+		break;
+	case WM_PAINT:
+		{
+
+		}
+		break;
+	case WM_SIZE:
+		{
+			if(gui->Layout!= NULL)
+			{
+				gui->Layout->onResize();
+			}
+		}
 		break;
 	//Response to commands from menu
 	case WM_COMMAND:
 		switch(LOWORD(wParam))
 		{
-
+		case CVS_FILE_NEW_SCENE:
+			OpenFile();
+			break;
+		case CVS_FILE_OPEN40030:
+			OpenFile();
+			break;
+		case CVS_FILE_EXIT:
+			Close();
 			return true;
 		}
 		return true;
@@ -293,15 +365,23 @@ bool CVS_Window::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 			{
 				MeasureMenu(wParam, lParam);
 			}
+
 			return true;
 		}
 	case WM_DRAWITEM:
 		{
 			if(wParam == 0)
 			{
-				DrawMenu(wParam, lParam);
+				if(((LPDRAWITEMSTRUCT) lParam) -> CtlType == ODT_MENU)
+					DrawMenu(wParam, lParam);
+				else if(((LPDRAWITEMSTRUCT) lParam) -> CtlType == ODT_TAB)
+				{
+					printf("Tab!\n");
+
+				}
 				return 0;
 			}
+
 		}
 	//On window creation
 	case WM_CREATE:
@@ -316,6 +396,24 @@ bool CVS_Window::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 		return Close();
 	}
 	return false;
+}
+
+int CVS_Window::getClientWidth()
+{
+	RECT rect;
+
+	GetClientRect(hWnd, &rect);
+
+	return rect.right - rect.left;
+}
+
+int CVS_Window::getClientHeight()
+{
+	RECT rect;
+
+	GetClientRect(hWnd, &rect);
+
+	return rect.bottom - rect.top;
 }
 
 bool CVS_Window::ParseMsgMDI(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -352,6 +450,7 @@ CVS_Tab* CVS_Window::CreateNewTab(std::string header, int x, int y, int w, int h
 {
 	CVS_Tab* newTab = new CVS_Tab(this, x, y, w, h);
 	gui->objects.push_back(newTab);
+	GLOBALSTATEMACHINE.m_GUISub.tabctrls.push_back(newTab);
 	return newTab;
 }
 

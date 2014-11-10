@@ -10,6 +10,7 @@ struct CVS_VertexObject;
 struct CVS_RenderNode;
 struct CVS_RenderPackage;
 struct CVS_RenderSystem;
+struct CVS_View;
 
 struct Vertex{
 	cvec3 position;
@@ -24,23 +25,42 @@ struct CVS_Mesh{
 	std::string name;
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	CVS_VertexObject* vertexArray;
+	GLuint VAO;
 	void initialize();
 	void initializeFromAiMesh(const aiMesh* mesh);
+	void Draw();
 };
+
+struct CVS_View{
+	cmat4 Pers;
+	cmat4 View;
+};
+
 
 struct CVS_Camera{
 	CVS_Transform transform;
-	void getPerspective();
-	void getView();
+	float aspectRatio;
+	float FOV;
+	float NearZ;
+	float FarZ;
+
+	cmat4 Persp;
+	cmat4 View; 
+
+	CVS_Camera(cvec3 pos = cvec3(4,3,4), cvec3 target = cvec3(0,0,0), float FOV = 45.0f, float AspectRatio = 16.0f/9.0f, float NearZ = 0.1f, float FarZ = 100.0f);
+
+	void UpdateView();
+	CVS_View getView();
 };
+
 
 struct CVS_RenderProgramInstance{
 	CVS_RenderProgram* program;
+	GLuint	viewLoc, mvpLoc, modelLoc;
 	std::vector<CVS_RenderNode*> children;
-	CVS_RenderProgramInstance(CVS_RenderProgramInstance* program);
+	CVS_RenderProgramInstance(CVS_RenderProgram* program);
 	void addChild(CVS_RenderNode* node);
-	void Render(CVS_Camera* cam);
+	void Render(CVS_View* cam);
 };
 
 struct CVS_TextureReference{
@@ -55,7 +75,7 @@ struct CVS_RenderNode{
 	std::vector<CVS_TextureReference> textures;
 	cmat4 modelMatrix;
 	CVS_RenderNode(CVS_RenderProgramInstance* parent);
-	void Render(CVS_Camera* cam);
+	void Render(CVS_View* view);
 	void setMesh(CVS_Mesh* mesh);
 };
 
@@ -66,8 +86,7 @@ struct CVS_RenderScene{
 	CVS_RenderScene();
 	CVS_RenderNode* createNewNode();
 	void addProgram(std::string name);
-	void Render(int index);
-	void Render();
+	void Draw(CVS_View* view);
 };
 
 #endif

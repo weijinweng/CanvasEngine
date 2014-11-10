@@ -17,14 +17,12 @@ public:
 };
 
 struct CVS_RenderProgram{
-	GLuint ProgramName;
+	GLuint programID;
 	std::string vertPath;
 	std::string fragPath;
 	std::vector<CVS_UniformLocation> uniforms;
 	CVS_RenderProgram();
 	int getUniformHash(std::string name);
-	void bindVec4v(int uniformHash, float* pointer);
-	void bindMat4v(int uniformHash, float* pointer);
 	bool loadFile(char* vertpath, char* fragpath);
 	void setAsCurrentProgram();
 };

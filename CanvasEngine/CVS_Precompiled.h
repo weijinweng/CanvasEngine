@@ -10,8 +10,6 @@
 #include <vector>
 #include <map>
 
-
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 	//Windows only API
 	#include <Windows.h>
@@ -23,6 +21,7 @@
 
 //GLEW for opengl
 #include <gl\glew.h>
+#include <wglew.h>
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\quaternion.hpp"
@@ -42,6 +41,7 @@
 //Freetype for openglText
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 
 //Window flag Declaration
 #define CVS_WINDOW_MDI 2

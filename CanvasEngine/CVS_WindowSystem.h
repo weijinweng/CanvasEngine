@@ -31,6 +31,10 @@ struct CVS_Window{
 	bool DrawMenu(WPARAM, LPARAM);
 	bool MeasureMenu(WPARAM, LPARAM);
 	void UpdateScreen();
+	int getWidth();
+	int getHeight();
+	int getClientWidth();
+	int getClientHeight();
 	bool Close();
 	bool OpenFile();
 	CVS_Window* CreateSubWindow(std::string header, int x, int y, int width, int height, int FLAGS);
