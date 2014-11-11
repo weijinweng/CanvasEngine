@@ -9,17 +9,22 @@ public:
 	cvec3 translation;
 	cvec3 scale;
 	cquat orientation;
+	CVS_Transform();
 	void calculateMatrix();
 };
 
 struct CVS_TransformNode{
 private:
-	void calculateMatrix();
+
 public:
 	CVS_Transform transform;
 	CVS_TransformNode* parent;
 	std::vector< CVS_TransformNode* >children;
+	CVS_TransformNode();
+	//Tree traversal
 	void calculateAllMatrices();
+	//Gets matrix from parent
+	void calculateMatrix();
 };
 
 #endif

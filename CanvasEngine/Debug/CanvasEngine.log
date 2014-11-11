@@ -1,84 +1,9 @@
-﻿Build started 11/9/2014 10:31:14 PM.
+﻿Build started 11/10/2014 11:15:41 PM.
      1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt CVS_2DTools.cpp CVS_GUI.cpp CVS_RenderComponent.cpp CVS_RenderSystem.cpp CVS_Window.cpp CVS_World.cpp Canvas.cpp main.cpp
-         CVS_World.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(24): warning C4005: 'CVS_BLUE' : macro redefinition
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(22) : see previous definition of 'CVS_BLUE'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(70): warning C4099: 'CVS_App' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(35) : see declaration of 'CVS_App'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(79): warning C4099: 'Editor' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(36) : see declaration of 'Editor'
-         CVS_RenderSystem.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(24): warning C4005: 'CVS_BLUE' : macro redefinition
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(22) : see previous definition of 'CVS_BLUE'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(70): warning C4099: 'CVS_App' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(35) : see declaration of 'CVS_App'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(79): warning C4099: 'Editor' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(36) : see declaration of 'Editor'
-         CVS_RenderComponent.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-         GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-         Generating Code...
-         Compiling...
-         main.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(24): warning C4005: 'CVS_BLUE' : macro redefinition
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(22) : see previous definition of 'CVS_BLUE'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(70): warning C4099: 'CVS_App' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(35) : see declaration of 'CVS_App'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(79): warning C4099: 'Editor' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(36) : see declaration of 'Editor'
-         Canvas.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(24): warning C4005: 'CVS_BLUE' : macro redefinition
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(22) : see previous definition of 'CVS_BLUE'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(70): warning C4099: 'CVS_App' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(35) : see declaration of 'CVS_App'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(79): warning C4099: 'Editor' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(36) : see declaration of 'Editor'
-         CVS_Window.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(24): warning C4005: 'CVS_BLUE' : macro redefinition
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(22) : see previous definition of 'CVS_BLUE'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(70): warning C4099: 'CVS_App' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(35) : see declaration of 'CVS_App'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(79): warning C4099: 'Editor' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(36) : see declaration of 'Editor'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_window.cpp(432): warning C4060: switch statement contains no 'case' or 'default' labels
-         CVS_GUI.cpp
-         GLM: rotateZ function taking degrees as parameters is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(24): warning C4005: 'CVS_BLUE' : macro redefinition
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(22) : see previous definition of 'CVS_BLUE'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(70): warning C4099: 'CVS_App' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(35) : see declaration of 'CVS_App'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(79): warning C4099: 'Editor' : type name first seen using 'struct' now seen using 'class'
-                 c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.h(36) : see declaration of 'Editor'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(717): warning C4101: 'i' : unreferenced local variable
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(711): warning C4101: 'rcClient' : unreferenced local variable
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(719): warning C4101: 'achTemp' : unreferenced local variable
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(715): warning C4101: 'tie' : unreferenced local variable
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_gui.cpp(846): warning C4018: '<' : signed/unsigned mismatch
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         CVS_2DTools.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib glew32.lib opengl32.lib glu32.lib assimp.lib Dwmapi.lib libfbxsdk.lib freetype240MT_D.lib comctl32.lib Gdiplus.lib Msimg32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.lib" /MACHINE:X86 Debug\CanvasEngine.res
-         Debug\Canvas.obj
-         Debug\CVS_2DTools.obj
-         Debug\CVS_GUI.obj
-         Debug\CVS_RenderProgram.obj
-         Debug\CVS_RenderSystem.obj
-         Debug\CVS_Window.obj
-         Debug\CVS_World.obj
-         Debug\main.obj
-         Debug\CVS_RenderComponent.obj
-     1>CVS_World.obj : error LNK2019: unresolved external symbol "public: __thiscall CVS_Scene::CVS_Scene(struct CVS_WorldSystem *,struct CVS_RenderScene *)" (??0CVS_Scene@@QAE@PAUCVS_WorldSystem@@PAUCVS_RenderScene@@@Z) referenced in function "public: struct CVS_Scene * __thiscall CVS_WorldSystem::createNewScene(void)" (?createNewScene@CVS_WorldSystem@@QAEPAUCVS_Scene@@XZ)
-     1>C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe : fatal error LNK1120: 1 unresolved externals
-     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)) -- FAILED.
+     1>Link:
+         CanvasEngine.vcxproj -> C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe
+     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:27.57
+Time Elapsed 00:00:00.06

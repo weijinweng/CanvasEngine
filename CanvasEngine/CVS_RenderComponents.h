@@ -64,7 +64,7 @@ struct CVS_RenderProgramInstance{
 };
 
 struct CVS_TextureReference{
-	CVS_Texture2D* texture;
+	CVS_Texture* texture;
 	std::string name;
 };
 
@@ -81,7 +81,7 @@ struct CVS_RenderNode{
 
 struct CVS_RenderScene{
 	std::vector<CVS_RenderNode*> nodes;
-	std::vector<CVS_RenderProgramInstance> programs;
+	std::vector<CVS_RenderProgramInstance*> programs;
 	std::vector<CVS_Light> lights;
 	CVS_RenderScene();
 	CVS_RenderNode* createNewNode();

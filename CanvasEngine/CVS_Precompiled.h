@@ -21,7 +21,7 @@
 
 //GLEW for opengl
 #include <gl\glew.h>
-#include <wglew.h>
+#include <gl\wglew.h>
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\quaternion.hpp"
@@ -37,10 +37,6 @@
 
 //FBX for autodesk formats.
 #include <fbxsdk.h>
-
-//Freetype for openglText
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 
 //Window flag Declaration

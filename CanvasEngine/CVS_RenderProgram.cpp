@@ -1,18 +1,25 @@
 #include "CVS_RenderProgram.h"
 
-CVS_Texture2D::CVS_Texture2D()
+CVS_Texture::CVS_Texture(UINT target) :target(target)
 {
 	glGenTextures(1, &texture);
 }
 
-bool loadFile(char* filepath)
+bool CVS_Texture::loadData(UINT flags, UINT format, UINT type, int width, int height, int mipmap, void* data)
+{
+	Bind();
+	glTexImage2D(target, mipmap, format, width, height, 0, flags, GL_FLOAT, data);
+	return true;
+}
+
+bool CVS_Texture::loadFile(char* filepath)
 {
 	return true;
 }
 
-bool loadData(int width, int height, int mipmap, void* data)
+void CVS_Texture::Bind()
 {
-	return true;
+	glBindTexture(target, texture);
 }
 
 GLuint CompileShader(char* vertex_file_path, char* fragment_file_path)

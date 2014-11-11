@@ -1,4 +1,5 @@
 #include "CVS_RenderComponents.h"
+#include "Canvas.h"
 
 Vertex::Vertex(cvec3 pos, cvec2 uv, cvec3 normal):position(pos), uv(uv),normal(normal)
 {
@@ -7,10 +8,10 @@ Vertex::Vertex(cvec3 pos, cvec2 uv, cvec3 normal):position(pos), uv(uv),normal(n
 
 void CVS_Mesh::initialize()
 {
+	GLuint vertexBuffer, indiceBuffer;
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
-
-	GLuint vertexBuffer, indiceBuffer;
+	printf("mesh initializing\n");
 
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &indiceBuffer);
@@ -18,13 +19,13 @@ void CVS_Mesh::initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),0);
-	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::vec3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::vec3));
 
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2,3,GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec3) + sizeof(glm::vec2)));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indiceBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
@@ -33,6 +34,7 @@ void CVS_Mesh::initialize()
 	glBindVertexArray(0);
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &indiceBuffer);
+
 }
 
 void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
@@ -62,7 +64,7 @@ void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
 	}
 	this->initialize();
 
-	printf("Init mesh %s\n", mesh->mName.data);
+	printf("Init mesh %s\n", mesh->mName.C_Str());
 
 	return;
 }
@@ -106,8 +108,6 @@ void CVS_Camera::UpdateView()
 
 	cvec3 target = glm::normalize(transform.translation) + cvec3(targetDir.x, targetDir.y, targetDir.z);
 
-	printf(" %f %f %f\n", target.x, target.y, target.z);
-
 
 	View  = glm::lookAt(transform.translation, target, glm::vec3(0, 1, 0));
 
@@ -122,38 +122,75 @@ CVS_View CVS_Camera::getView()
 	return view;
 }
 
+
+CVS_RenderNode::CVS_RenderNode(CVS_RenderProgramInstance* parent) :mesh(NULL)
+{
+	parent->children.push_back(this);
+	printf("Created rendernode\n");
+}
+
+void CVS_RenderNode::setMesh(CVS_Mesh* mesh) 
+{
+	this->mesh = mesh;
+	printf("Set mesh %d\n", mesh->indices.size());
+}
+
 CVS_RenderProgramInstance::CVS_RenderProgramInstance(CVS_RenderProgram* program)
 {
 	this->program = program;
+	this->viewLoc = glGetUniformLocation(program->programID, "V");
+	if (viewLoc < 0)
+	{
+		printf("error uni\n");
+	}
+	mvpLoc = glGetUniformLocation(program->programID, "MVP");
+	if (mvpLoc < 0)
+	{
+		printf("Error uni\n");
+	}
+	this->modelLoc = glGetUniformLocation(program->programID, "M");
 }
 
 void CVS_RenderProgramInstance::Render(CVS_View* view)
 {
-	program->setAsCurrentProgram();
 
+	program->setAsCurrentProgram();
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view->Pers));
 
 	for(int i = 0, e = this->children.size(); i < e; ++i)
 	{
-		cmat4 Model = children[i]->modelMatrix;
+		cmat4 Model = this->children[i]->modelMatrix;
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(Model));
+		
 		cmat4 MVP = view->Pers * view->View * Model;
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
+		
+		int lightPos = glGetUniformLocation(program->programID, "LightPosition_worldspace");
+		glUniform3f(lightPos, 1, 2, 1);
 
-		children[i]->mesh->Draw();
+
+		if (children[i]->mesh != NULL)
+			children[i]->mesh->Draw();
 	}
 }
 
 CVS_RenderScene::CVS_RenderScene()
 {
+	this->programs.push_back(new CVS_RenderProgramInstance(GLOBALSTATEMACHINE.m_RenderSub.createNewShader("Default3D", "./Shaders/3D.vert", "./Shaders/3D.frag")));
+}
 
+CVS_RenderNode* CVS_RenderScene::createNewNode()
+{
+	CVS_RenderNode* newNode = new CVS_RenderNode(programs[0]);
+	nodes.push_back(newNode);
+	return newNode;
 }
 
 void CVS_RenderScene::Draw(CVS_View* view)
 {
 	for(int i = 0, e = programs.size(); i < e; ++i)
 	{
-		programs[i].Render(view);
+		programs[i]->Render(view);
 	}
 }
 

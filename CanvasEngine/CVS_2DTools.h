@@ -18,7 +18,7 @@ struct CVS_2DTools{
 	//Convert a IRECT specified in pixels to OpenGL screen coords
 	CVS_FRECT ConvertToScreenCoords(CVS_IRECT rectangle);
 	void drawRect(CVS_ColorRGBA color, float x, float y, float w, float h);
-	void drawTextureRect(CVS_Texture2D* texture, float x, float y, float w, float h);
+	void drawTextureRect(CVS_Texture* texture, float x, float y, float w, float h);
 	void drawText(std::string text, float x, float y, float w, float h);
 };
 

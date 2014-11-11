@@ -1,5 +1,57 @@
 #include "Canvas.h"
 
+CVS_FrameBuffer::CVS_FrameBuffer()
+{
+	glGenFramebuffers(1, &buffer);
+}
+
+void CVS_FrameBuffer::Bind(GLenum target)
+{
+	glBindFramebuffer(target, buffer);
+	this->flag = target;
+}
+
+void CVS_FrameBuffer::unBind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void CVS_FrameBuffer::BindColorAttachment(CVS_Texture* texture, UINT location)
+{
+	texture->Bind();
+	glFramebufferTexture2D(flag, GL_COLOR_ATTACHMENT0 + location, texture->target, texture->texture, 0);
+}
+
+void CVS_FrameBuffer::BindDepthAttachment(CVS_Texture* texture)
+{
+	texture->Bind();
+	glFramebufferTexture2D(flag, GL_DEPTH_ATTACHMENT, texture->target, texture->texture, 0);
+}
+
+void CVS_FrameBuffer::setDrawBuffer(GLenum flag)
+{
+	glDrawBuffer(flag);
+}
+
+void CVS_FrameBuffer::setReadBuffer(GLenum flag)
+{
+	glReadBuffer(flag);
+}
+
+bool CVS_FrameBuffer::GetBufferStatus()
+{
+	GLenum status = glCheckFramebufferStatus(flag);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		return false;
+	}
+	return true;
+}
+
+void BindColorAttacment(CVS_Texture* texture, UINT location)
+{
+
+}
 void CVS_RenderPipeline::SetUp()
 {
 	
@@ -232,6 +284,20 @@ CVS_RenderScene* CVS_RenderSystem::createNewScene()
 
 	scenes.push_back(newScene);
 	return newScene;
+}
+
+CVS_FrameBuffer* CVS_RenderSystem::createNewFramebuffer()
+{
+	CVS_FrameBuffer* newBuffer = new CVS_FrameBuffer();
+	this->framebuffers.push_back(newBuffer);
+	return newBuffer;
+}
+
+CVS_Texture* CVS_RenderSystem::createNewTexture(UINT target)
+{
+	CVS_Texture* newTex = new CVS_Texture(target);
+	textures.push_back(newTex);
+	return newTex;
 }
 
 bool CVS_RenderSystem::End()

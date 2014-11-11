@@ -1,5 +1,19 @@
 #include "Canvas.h"
 
+int CVS_GUI_OBJ::getWidth()
+{
+	RECT rect;
+	GetWindowRect(hWnd, &rect);
+	return rect.right - rect.left;
+}
+
+int CVS_GUI_OBJ::getHeight()
+{
+	RECT rect;
+	GetWindowRect(hWnd, &rect);
+	return rect.bottom - rect.top;
+}
+
 CVS_Button::CVS_Button(std::string data, CVS_GUI_CONTAINER* parent, int x, int y, int w, int h):text(data),hover(false),mousedown(false),textbool(true),iconbool(false)
 {
 	container = parent;
@@ -615,7 +629,58 @@ void CVS_TabSlot::HideContent()
 	ShowWindow(content->hWnd, SW_HIDE);
 }
 
-CVS_SceneView::CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h):Scene(NULL), Cam(NULL)
+CVS_Selection::CVS_Selection(CVS_SceneView* view) :parent(view)
+{
+	this->mRenderBuffer = GLOBALSTATEMACHINE.m_RenderSub.createNewFramebuffer();
+	this->mSelectionTexture = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(GL_TEXTURE_2D);
+	
+	int width = view->getWidth(), height = view->getHeight();
+
+	mRenderBuffer->Bind(GL_FRAMEBUFFER);
+
+	mSelectionTexture->loadData(GL_RGB, GL_RGB32F, 0, width? width: 100, height? height: 100, 0, NULL);
+	mRenderBuffer->BindColorAttachment(mSelectionTexture, 0);
+
+	mDepthTexture = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(GL_TEXTURE_2D);
+	mDepthTexture->loadData(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, 0, width ? width : 100, height ? height : 100, 0, NULL);
+
+	mRenderBuffer->BindDepthAttachment(mDepthTexture);
+
+	mRenderBuffer->setDrawBuffer(GL_COLOR_ATTACHMENT0);
+	mRenderBuffer->setReadBuffer(GL_NONE);
+
+	if (!mRenderBuffer->GetBufferStatus())
+	{
+		MessageBox(NULL, "Error Generating buffer Status", "Error!", MB_OK | MB_ICONEXCLAMATION);
+	}
+	mRenderBuffer->unBind();
+}
+
+void CVS_Selection::UpdateSize()
+{
+	int width = parent->getWidth(), height = parent->getHeight();
+
+	mRenderBuffer->Bind(GL_FRAMEBUFFER);
+
+	mSelectionTexture->loadData(GL_RGB, GL_RGB32F, 0, width ? width : 100, height ? height : 100, 0, NULL);
+	mRenderBuffer->BindColorAttachment(mSelectionTexture, 0);
+
+	mDepthTexture = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(GL_TEXTURE_2D);
+	mDepthTexture->loadData(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, 0, width ? width : 100, height ? height : 100, 0, NULL);
+
+	mRenderBuffer->BindDepthAttachment(mDepthTexture);
+
+	mRenderBuffer->setDrawBuffer(GL_COLOR_ATTACHMENT0);
+	mRenderBuffer->setReadBuffer(GL_NONE);
+
+	if (!mRenderBuffer->GetBufferStatus())
+	{
+		MessageBox(NULL, "Error Generating buffer Status", "Error!", MB_OK | MB_ICONEXCLAMATION);
+	}
+	mRenderBuffer->unBind();
+}
+
+CVS_SceneView::CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h) :Scene(NULL), Cam(NULL)
 {
 	Cam = new CVS_Camera();
 
@@ -638,7 +703,7 @@ CVS_SceneView::CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h):Scene(NUL
 
 	GLOBALSTATEMACHINE.m_App->AddToUpdate(this);
 
-
+	mSelection = new CVS_Selection(this);
 
 	m_Rect.left = x;
 	m_Rect.right = x + w;
@@ -652,8 +717,6 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_PAINT:
 		{
-			printf("Drawing\n");
-
 			PAINTSTRUCT ps;
 
 			BeginPaint(hWnd, &ps);
@@ -688,12 +751,16 @@ void CVS_SceneView::SetSize(int x, int y, int w, int h)
 {
 	MoveWindow(hWnd, x, y, w, h, TRUE);
 	glViewport(0,0,w,h);
+
 	m_Rect.left = x;
 	m_Rect.right = x + w;
 	m_Rect.top = y;
 	m_Rect.bottom = y + h;
+	
 	Cam->aspectRatio = (float)w/(float)h;
 	Cam->UpdateView();
+	
+	mSelection->UpdateSize();
 }
 
 HFONT CVS_Tab::font = NULL;
@@ -1077,7 +1144,7 @@ CVS_EditorLayout::CVS_EditorLayout(CVS_Gui* gui): toolbarCell(this), rightbarCel
 	CVS_ToolBar* ToolBar = new CVS_ToolBar(gui, 0,0,0,0);
 	CVS_Tab* Tab = new CVS_Tab(gui->window, 0, 0, 0, 0);
 	CVS_Tab* Tabbot = new CVS_Tab(gui->window,0,0,0,0);
-	CVS_SceneView* view = new CVS_SceneView(gui, 0,0,0,0);
+	view = new CVS_SceneView(gui, 0,0,0,0);
 
 
 	Tab->addTab("Scene",0);
@@ -1108,6 +1175,11 @@ void CVS_EditorLayout::onResize()
 	leftbarCell.SetSize(window->getClientWidth() - 300, 30, 300, window->getClientHeight() - 200);
 	bottomCell.SetSize(0, window->getClientHeight() - 170, window->getClientWidth(), 170);
 	renderCell.SetSize(0, 30, window->getClientWidth() - 300, window->getClientHeight() - 200);
+}
+
+void CVS_EditorLayout::setScene(CVS_Scene* scene)
+{
+	this->view->Scene = scene->scene;
 }
 
 

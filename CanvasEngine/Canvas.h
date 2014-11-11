@@ -21,7 +21,7 @@ struct CVS_SceneView;
 #define CVS_WHITE RGB(255,255,255)
 #define CVS_BLUE RGB(0,0,255)
 #define CVS_RED RGB(255, 0,0)
-#define CVS_BLUE RGB(0, 0, 255)
+
 
 #define CVS_LIGHT_GREY RGB(106,106,106)
 #define CVS_GREY RGB(83, 83, 83)
@@ -31,9 +31,8 @@ struct CVS_SceneView;
 #define CVS_LIGHT_BLACK RGB(55, 55, 55)
 #define CVS_DARK_BLACK RGB(40, 40, 40)
 
-//Forward declaration
-struct CVS_App;
-struct Editor;
+class CVS_App;
+class Editor;
 
 /***********************************
 *Canvas singleton state machine, used
@@ -48,6 +47,7 @@ public:
 	CVS_RenderSystem m_RenderSub;
 	CVS_WindowSystem m_WindowSub;
 	CVS_GuiManager m_GUISub;
+	CVS_WorldSystem m_WorldSub;
 	//CVS_GameSystem m_GameSub;
 	bool initialize();
 	void update();

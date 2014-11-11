@@ -186,6 +186,9 @@ bool Editor::Initialize()
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", 0,0, 1600, 900, CVS_NULL);
 	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
 	m_MainWindow->CreateMenuMain();
+	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
+	testScene->loadFile("suzanne.obj");
+	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);
 

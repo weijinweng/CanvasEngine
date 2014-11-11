@@ -57,6 +57,9 @@
     <ClCompile Include="Canvas.cpp">
       <Filter>Source Files\Src</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Src\GAMESYSTEMS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CVS_Precompiled.h">

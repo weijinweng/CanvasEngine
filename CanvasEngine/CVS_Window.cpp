@@ -305,16 +305,14 @@ bool CVS_Window::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if((UINT)wParam == 1)
 			{
-		   // Calculate new NCCALCSIZE_PARAMS based on custom NCA inset.
-			NCCALCSIZE_PARAMS *pncsp = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
+				// Calculate new NCCALCSIZE_PARAMS based on custom NCA inset.
+				NCCALCSIZE_PARAMS *pncsp = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
 
-			pncsp->rgrc[0].left   = pncsp->rgrc[0].left   + 0;
-			pncsp->rgrc[0].top    = pncsp->rgrc[0].top    + 0;
-			pncsp->rgrc[0].right  = pncsp->rgrc[0].right  - 0;
-			pncsp->rgrc[0].bottom = pncsp->rgrc[0].bottom - 0;
+				pncsp->rgrc[0].left   = pncsp->rgrc[0].left   + 0;
+				pncsp->rgrc[0].top    = pncsp->rgrc[0].top    + 0;
+				pncsp->rgrc[0].right  = pncsp->rgrc[0].right  - 0;
+				pncsp->rgrc[0].bottom = pncsp->rgrc[0].bottom - 0;
 
-
-				printf("Calc size\n");
 				return 0;
 			}
 		}

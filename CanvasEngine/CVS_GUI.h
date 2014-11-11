@@ -95,12 +95,34 @@ struct CVS_GUI_OBJ{
 	CVS_GUI_CONTAINER* container;
 	CVS_Window* parent;
 	virtual int ParseMsg(UINT msg, WPARAM, LPARAM) = 0;
-
+	virtual int getWidth();
+	virtual int getHeight();
 };
 
+struct CVS_SceneView;
+//Render forward declaration
 struct CVS_Renderer;
 struct CVS_RenderScene;
 struct CVS_Camera;
+struct CVS_Scene;
+struct CVS_Texture;
+struct CVS_FrameBuffer;
+struct CVS_View;
+
+//Selection object for 3D picking
+struct CVS_Selection{
+	CVS_SceneView* parent;
+
+	CVS_FrameBuffer* mRenderBuffer;
+	CVS_Texture* mSelectionTexture;
+	CVS_Texture* mDepthTexture;
+	
+	CVS_Selection(CVS_SceneView* view);
+	bool Initializ();
+	UINT getPrimitiveID(int, int);
+	void Render(CVS_RenderScene*, CVS_View*);
+	void UpdateSize();
+};
 
 struct CVS_SceneView:public CVS_GUI_OBJ, CVS_LAYOUT_OBJ{
 	CVS_RenderScene* Scene;
@@ -109,11 +131,12 @@ struct CVS_SceneView:public CVS_GUI_OBJ, CVS_LAYOUT_OBJ{
 	HGLRC m_glContext;
 	HDC glHdc;
 	CVS_Renderer* m_Renderer;
+	CVS_Selection* mSelection;
 	CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h);
 	//void SetScene(CVS_Scene* scene);
 	int ParseMsg(UINT msg, WPARAM, LPARAM);
 	static LRESULT CALLBACK SceneViewCallback(HWND, UINT, WPARAM, LPARAM, UINT_PTR, DWORD_PTR);
-	void SetScene();
+	void SetScene(CVS_Scene* scene);
 	void Render();
 	void SetSize(int,int,int,int);
 };
@@ -229,6 +252,8 @@ struct CVS_Layout{
 
 struct CVS_GUI_CELL{
 
+
+
 	bool m_Divided;
 	RECT m_Rect;
 	RECT m_MaxRect;
@@ -250,6 +275,7 @@ struct CVS_EditorLayout:public CVS_Layout{
 		TOP,
 		MIDDLE
 	};
+	CVS_SceneView* view;
 	CVS_GUI_CELL toolbarCell;
 	CVS_GUI_CELL rightbarCell;
 	CVS_GUI_CELL leftbarCell;
@@ -262,6 +288,7 @@ struct CVS_EditorLayout:public CVS_Layout{
 	CVS_Tab* GetTab();
 	CVS_ToolBar* getToolBar();
 	void onResize();
+	void setScene(CVS_Scene* scene);
 };
 
 struct CVS_Menu{

@@ -37,14 +37,20 @@ struct CVS_RenderComponent:public CVS_GameComponent{
 
 class CVS_GameObject{
 public:
+	CVS_GameObject* parent;
 	std::string name;
 	CVS_TransformNode transformNode;
 	std::vector<CVS_GameComponent*> components;
 	std::vector<CVS_GameObject*> children;
 	CVS_GameObject(std::string name = "Object");
+	CVS_GameObject(const aiNode* node, CVS_RenderScene* scene, std::vector<CVS_Mesh*>);
+	void UpdateTransformMatrix();
+	void setParent(CVS_GameObject* parent);
 	void addChildren(CVS_GameObject* child);
 	void removeChildren(CVS_GameObject* child);
 	void addComponent(CVS_GameComponent* component);
+
+	void Update();
 };
 
 struct CVS_Scene{

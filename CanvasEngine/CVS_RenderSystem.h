@@ -27,6 +27,19 @@ struct CVS_VertexObject{
 	void drawArrays(CVS_Enum type, unsigned int vertCount, unsigned int offset = 0);
 };
 
+struct CVS_FrameBuffer{
+	GLuint buffer;
+	GLenum flag;
+	CVS_FrameBuffer();
+	void BindColorAttachment(CVS_Texture*, UINT location);
+	void BindDepthAttachment(CVS_Texture*);
+	bool GetBufferStatus();
+	void Bind(GLenum flags);
+	void unBind();
+	void setReadBuffer(GLenum flag);
+	void setDrawBuffer(GLenum flag);
+};
+
 struct CVS_Buffer{
 	GLuint buffer;
 	GLenum target;
@@ -51,7 +64,6 @@ public:
 };
 
 struct CVS_Font{
-	FT_Face face;
 	std::string fontName;
 };
 
@@ -61,15 +73,16 @@ public:
 	int m_GridNum;
 	GLint m_GridMVP;
 
-	FT_Library lib;
+
 	CVS_RenderProgram* m_GridDraw;
 	GLuint gridVAO;
 	CVS_RenderProgram* m_DefaultProgram;
-	CVS_Texture2D* m_DefaultTexture;
+	CVS_Texture* m_DefaultTexture;
 	std::vector<CVS_Renderer*> renderers;
 	std::map<std::string, CVS_RenderProgram*> programs;
 	std::vector<CVS_VertexObject*> vertexArrays;
 	std::vector<CVS_Font> fonts;
+	std::vector<CVS_FrameBuffer*> framebuffers;
 
 	HGLRC m_glContext;
 
@@ -78,7 +91,7 @@ public:
 	//storage for 3D related data types
 	std::vector<CVS_RenderScene*> scenes;
 	std::vector<CVS_Mesh*> meshes;
-	std::vector<CVS_Texture2D> textures;
+	std::vector<CVS_Texture*> textures;
 
 	CVS_RenderSystem();
 	bool Initialize();
@@ -92,6 +105,9 @@ public:
 	CVS_RenderProgram* createNewShader(std::string name, char* vertpath, char* fragpath);
 	CVS_VertexObject* createNewVertexObject();
 	CVS_RenderScene* createNewScene();
+	CVS_FrameBuffer* createNewFramebuffer();
+	CVS_Texture* createNewTexture(UINT target);
+
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);

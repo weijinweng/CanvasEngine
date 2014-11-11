@@ -2,11 +2,13 @@
 #define CVS_RENDERPROGRAM
 #include "CVS_Precompiled.h"
 
-struct CVS_Texture2D{
+struct CVS_Texture{
+	UINT target;
 	GLuint texture;
-	CVS_Texture2D();
-	bool loadData(int width, int height, int mipmap, void* data);
+	CVS_Texture(UINT target);
+	bool loadData(UINT flags, UINT format, UINT type, int width, int height, int mipmap, void* data);
 	bool loadFile(char* filepath);
+	void Bind();
 };
 
 struct CVS_UniformLocation{
