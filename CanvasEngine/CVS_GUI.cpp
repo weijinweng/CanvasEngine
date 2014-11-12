@@ -703,7 +703,7 @@ CVS_SceneView::CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h) :Scene(NU
 
 	GLOBALSTATEMACHINE.m_App->AddToUpdate(this);
 
-	mSelection = new CVS_Selection(this);
+
 
 	m_Rect.left = x;
 	m_Rect.right = x + w;
@@ -723,7 +723,6 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 
 			Render();
 
-
 			EndPaint(hWnd, &ps);
 		}
 		return 0;
@@ -733,6 +732,14 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 
 void CVS_SceneView::Render()
 {
+	/*static int time = 0;
+	LARGE_INTEGER newTime;
+	QueryPerformanceCounter(&newTime);
+	int deltaTime = newTime.QuadPart/1000  - time;
+	printf("%d\n", deltaTime);
+	time = newTime.QuadPart/1000;*/
+	
+	//Rendering
 	CVS_View View = Cam->getView();
 	m_Renderer->Render(Scene, View);
 }
@@ -757,15 +764,12 @@ void CVS_SceneView::SetSize(int x, int y, int w, int h)
 	m_Rect.top = y;
 	m_Rect.bottom = y + h;
 	
-	Cam->aspectRatio = (float)w/(float)h;
+	Cam->aspectRatio = ((float)w)/((float)h);
 	Cam->UpdateView();
-	
-	mSelection->UpdateSize();
+
 }
 
 HFONT CVS_Tab::font = NULL;
-
-
 
 CVS_Tab::CVS_Tab(CVS_Window* parent, int x, int y, int w, int h)
 {

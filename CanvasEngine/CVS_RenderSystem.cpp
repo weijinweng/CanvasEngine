@@ -71,7 +71,6 @@ CVS_Renderer::CVS_Renderer(HDC glHdc)
 
 void CVS_Renderer::Render(CVS_RenderScene* scene, CVS_View View)
 {
-	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	GLOBALSTATEMACHINE.m_RenderSub.m_GridDraw->setAsCurrentProgram();
@@ -94,11 +93,6 @@ void CVS_Renderer::Render(CVS_RenderScene* scene, CVS_View View)
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
 {
 	this->pipeline = new CVS_RenderPipeline();
-
-
-
-
-
 }
 
 bool CVS_RenderSystem::Initialize()
@@ -256,6 +250,18 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 		}
 
 		m_GridNum = vertices.size();
+
+		wglSwapIntervalEXT(0);
+		
+		glEnable(GL_CULL_FACE);
+	
+
+		glEnable(GL_DEPTH_TEST);
+	
+		glClearColor(0.7, 0.7, 0.7, 1.0);
+
+		this->pipeline = new CVS_RenderPipeline();
+		this->pipeline->SetUp();
 	}
 
 

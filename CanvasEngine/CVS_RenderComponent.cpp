@@ -155,7 +155,7 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 {
 
 	program->setAsCurrentProgram();
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view->Pers));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view->View));
 
 	for(int i = 0, e = this->children.size(); i < e; ++i)
 	{
