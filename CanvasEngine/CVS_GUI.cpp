@@ -703,7 +703,7 @@ CVS_SceneView::CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h) :Scene(NU
 
 	GLOBALSTATEMACHINE.m_App->AddToUpdate(this);
 
-
+	mSelection = new CVS_Selection(this);
 
 	m_Rect.left = x;
 	m_Rect.right = x + w;
@@ -766,7 +766,7 @@ void CVS_SceneView::SetSize(int x, int y, int w, int h)
 	
 	Cam->aspectRatio = ((float)w)/((float)h);
 	Cam->UpdateView();
-
+	mSelection->UpdateSize();
 }
 
 HFONT CVS_Tab::font = NULL;
@@ -785,7 +785,6 @@ CVS_Tab::CVS_Tab(CVS_Window* parent, int x, int y, int w, int h)
 
 	TCITEM tie;
 
-	int i;
 
 	TCHAR achTemp[256];
 

@@ -1,4 +1,4 @@
-﻿Build started 11/11/2014 6:41:37 PM.
+﻿Build started 11/11/2014 10:28:45 PM.
      1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
      1>Link:
          CanvasEngine.vcxproj -> C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe
@@ -6,4 +6,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.20
+Time Elapsed 00:00:00.06

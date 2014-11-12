@@ -157,6 +157,10 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 	program->setAsCurrentProgram();
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view->View));
 
+	int lightPos = glGetUniformLocation(program->programID, "LightPosition_worldspace");
+	glUniform3f(lightPos, 3, 3, 3);
+
+
 	for(int i = 0, e = this->children.size(); i < e; ++i)
 	{
 		cmat4 Model = this->children[i]->modelMatrix;
@@ -165,8 +169,6 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 		cmat4 MVP = view->Pers * view->View * Model;
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 		
-		int lightPos = glGetUniformLocation(program->programID, "LightPosition_worldspace");
-		glUniform3f(lightPos, 1, 2, 1);
 
 
 		if (children[i]->mesh != NULL)
