@@ -1,7 +1,7 @@
 #ifndef CVS_RENDERSCENE_H
 #define CVS_RENDERSCENE_H
 
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 #include "CVS_Transform.h"
 #include "CVS_RenderProgram.h"
 #include "CVS_Light.h"

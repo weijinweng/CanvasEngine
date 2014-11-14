@@ -1,5 +1,4 @@
-#ifndef CVS_PRECOMPILED
-#define CVS_PRECOMPILED
+#pragma once
 
 //SDL for window creation and Event handling.
 //STL externals
@@ -71,7 +70,7 @@ GLenum convertToGLEnum(CVS_Enum enumerator);
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to);
 float fClamp(float value, float min, float max);
 
-const float PI = 3.14159265;
+const float PI = 3.14159265f;
 
 typedef glm::vec3 cvec3;
 typedef glm::vec4 cvec4;
@@ -80,5 +79,3 @@ typedef glm::simdVec4 fcvec4;
 typedef glm::simdMat4 fcmat4;
 typedef glm::fquat cquat;
 typedef glm::vec2 cvec2;
-
-#endif

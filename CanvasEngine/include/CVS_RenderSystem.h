@@ -1,7 +1,7 @@
 #ifndef CVS_RENDER
 #define CVS_RENDER
 
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 #include "CVS_SubSystem.h"
 #include "CVS_2DTools.h"
 #include "CVS_GUI.h"

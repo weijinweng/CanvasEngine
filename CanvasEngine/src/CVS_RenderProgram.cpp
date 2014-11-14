@@ -1,5 +1,5 @@
 #include "CVS_RenderProgram.h"
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 
 CVS_Texture2D::CVS_Texture2D()
 {

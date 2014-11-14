@@ -1,4 +1,4 @@
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 #include "Canvas.h"
 
 int main(int argv, char* argc[])

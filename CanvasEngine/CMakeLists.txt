@@ -2,6 +2,7 @@ cmake_minimum_required( VERSION 2.8 )
 find_package(OpenGL REQUIRED)
 
 ADD_DEFINITIONS("-DGLEW_STATIC")
+ADD_DEFINITIONS("-DCVS_PRECOMPILED_H=<stdafx.h>")
 
 SET( INCLUDE_DIRS
 ${glew_INCLUDE_DIRS}

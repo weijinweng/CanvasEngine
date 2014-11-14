@@ -167,7 +167,7 @@ bool Editor::Run()
 {
 	while(!quit)
 	{
-		GLOBALSTATEMACHINE.m_WindowSub.Update();
+		GLOBALSTATEMACHINE.m_RenderSub.Update();
 	}
 	return true;
 }

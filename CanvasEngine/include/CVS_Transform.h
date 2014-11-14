@@ -1,7 +1,7 @@
 #ifndef CVS_TRANSFORM_H
 #define CVS_TRANSFORM_H
 
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 
 struct CVS_Transform{
 public:

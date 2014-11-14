@@ -1,7 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 #include "CVS_WindowSystem.h"
 #include "CVS_World.h"
 

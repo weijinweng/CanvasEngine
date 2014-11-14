@@ -1,6 +1,6 @@
 #ifndef CVS_WORLD_H
 #define CVS_WORLD_H
-#include "CVS_Precompiled.h"
+#include CVS_PRECOMPILED_H
 #include "CVS_Transform.h"
 #include "CVS_RenderSystem.h"
 

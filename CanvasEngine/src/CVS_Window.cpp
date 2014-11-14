@@ -24,8 +24,8 @@ void CVS_Window::getEvent(SDL_Event e)
 void CVS_Window::UpdateScreen()
 {
 	renderer->Clear();
-	if(gui!=NULL)
-		gui->Update();
+// 	if(gui!=NULL)
+// 		gui->Update();
 	renderer->SwapFrameBuffer();
 }
 
