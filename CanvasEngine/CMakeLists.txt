@@ -12,6 +12,7 @@ ${SDL2_image_INCLUDE_DIRS}
 ${SDL2_ttf_INCLUDE_DIRS}
 ${FreeType_INCLUDE_DIRS}
 ${assimp_INCLUDE_DIRS}
+${fbxsdk_INCLUDE_DIRS}
 )
 SET( LINK_DIRS
 ${DirectX_LIBRARY_PATHS}
@@ -28,8 +29,13 @@ glm
 zlib
 libpng
 jpeg
+${fbxsdk_SOURCE_DIR}/lib/x86/debug/libfbxsdk.lib
+Gdiplus.lib
+Comctl32.lib
+Dwmapi.lib
+Msimg32.lib
 )
 
 parse_directory_name(PROJECT_NAME)
 project( ${PROJECT_NAME} )
-create_project_ex(CONSOLE "${INCLUDE_DIRS}" "${LINK_DIRS}" "${LINK_LIBS}")
+create_project_ex(WIN32 "${INCLUDE_DIRS}" "${LINK_DIRS}" "${LINK_LIBS}")

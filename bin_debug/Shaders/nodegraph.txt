@@ -1,0 +1,35 @@
+scene renders
+	transformNOde root -> calculatesMAtrics();
+	renderProgramID renders
+		renderProgram->setup
+		allrenderNodes->render
+			textures->bind;
+			mesh->draw;
+		
+		
+aiscene 
+	-ainodes
+		-int index to a mesh;
+		-children;
+	-mesh[]
+		-data;
+		
+scene 
+	-rendernode
+		TRANSOFRMnoDE
+		nochild
+		mesh.
+		
+				node1
+			node2 	node3
+		node4 	node5
+			
+			standard
+		rendernode1 rendernode2 rendernode4 rendernode 5
+		
+			root
+			rendernodetransformnode1  rendernodetransformnode2
+rendernodetransformnode4 rendernodetransformnode5
+
+for every ainode while we are traversing down the tree, we need an rendernode. However, ainode also
+contains transform data, like matrixes. 

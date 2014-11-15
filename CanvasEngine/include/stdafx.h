@@ -1,6 +1,10 @@
-#pragma once
+#ifndef CVS_PRECOMPILED
+#define CVS_PRECOMPILED
 
-//SDL for window creation and Event handling.
+//SDL libraries
+#include <SDL.h>
+#include <SDL_image.h>
+
 //STL externals
 #include <stdio.h>
 #include <fstream>
@@ -9,22 +13,21 @@
 #include <vector>
 #include <map>
 
-//SDL supplements and extensions
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_thread.h>
-#include <SDL_syswm.h>
-#undef main
-
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 	//Windows only API
 	#include <Windows.h>
+	#include <Windowsx.h>
 	#include <dwmapi.h>
+	#include <gdiplus.h>
+	#include <strsafe.h>
+#define CVS_WIN32 100
 #endif
 
 //GLEW for opengl
 #include <gl\glew.h>
+#include <gl\wglew.h>
+
+#define GLM_FORCE_RADIANS 
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\quaternion.hpp"
@@ -39,13 +42,17 @@
 #include <assimp\scene.h>
 
 //FBX for autodesk formats.
-//#include <fbxsdk.h>
-
-//Freetype for openglText
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <fbxsdk.h>
 
 
+//Window flag Declaration
+#define CVS_WINDOW_MDI 2
+#define CVS_WINDOW 4
+#define CVS_WINDOW_MDI_CHILD 8
+
+#define RAD_CONV 0.0174532925
+
+//CVS enumerators
 enum CVS_Enum{
 	CVS_NULL = 0,
 	CVS_RDS_DEFERRED = 3,
@@ -58,19 +65,11 @@ enum CVS_Enum{
 	CVS_ARRAY_BUFFER = 13,
 	CVS_TRIANGLES = 14,
 	CVS_ELEMENT_BUFFER = 15,
-	CVS_TXT_RGB = 17,
-	CVS_TXT_RGBA = 18,
-	CVS_SAMPLER2D = 19,
-	CVS_POS_RELATIVE = 20,
-	CVS_POS_ABSOLUTE = 21,
-	CVS_POS_FIXED = 22,
 };
 
 GLenum convertToGLEnum(CVS_Enum enumerator);
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to);
-float fClamp(float value, float min, float max);
-
-const float PI = 3.14159265f;
+int iClamp(int value, int min, int max);
 
 typedef glm::vec3 cvec3;
 typedef glm::vec4 cvec4;
@@ -79,3 +78,5 @@ typedef glm::simdVec4 fcvec4;
 typedef glm::simdMat4 fcmat4;
 typedef glm::fquat cquat;
 typedef glm::vec2 cvec2;
+
+#endif

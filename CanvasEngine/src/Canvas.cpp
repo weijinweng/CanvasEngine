@@ -3,6 +3,40 @@
 bool CVS_Initialized = false;
 CVS_StateMachine GLOBALSTATEMACHINE;
 
+HINSTANCE CVS_AppInstance;
+HINSTANCE CVS_AppPrevInstance;
+int CVS_CmdShow;
+LPSTR CVS_CmdLine;
+
+CVS_Timer::CVS_Timer()
+{
+	lastTime = 0;
+	LARGE_INTEGER newTime;
+	QueryPerformanceCounter(&newTime);
+	lastTime = newTime.QuadPart;
+}
+
+int CVS_Timer::setFrame(UINT precision)
+{
+	int deltaTime = 0;
+
+	LARGE_INTEGER newTime;
+	QueryPerformanceCounter(&newTime);
+
+	switch (precision)
+	{
+	case 0:
+		deltaTime = newTime.QuadPart / (1000);
+		return deltaTime;
+	case 1:
+		deltaTime = newTime.QuadPart;
+		return deltaTime;
+	default:
+		return 0;
+	}
+	lastTime = newTime.QuadPart;
+}
+
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to)
 {
 	to[0][0] = (GLfloat)from->a1; to[1][0] = (GLfloat)from->a2;
@@ -13,6 +47,15 @@ void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to)
     to[2][2] = (GLfloat)from->c3; to[3][2] = (GLfloat)from->c4;
     to[0][3] = (GLfloat)from->d1; to[1][3] = (GLfloat)from->d2;
     to[2][3] = (GLfloat)from->d3; to[3][3] = (GLfloat)from->d4;
+}
+
+int iClamp(int value, int min, int max)
+{
+	if(value > max)
+		return max;
+	if(value < min)
+		return min;
+	return value;
 }
 
 GLenum convertToGLEnum(CVS_Enum enumerator){
@@ -53,123 +96,206 @@ void testButtonFunction(void* lol)
 
 bool CVS_Initialize()
 {
-	printf("Initialize CVS\n");
-	if(CVS_Initialized)
-		return true;
+	return true;
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+}
+
+LRESULT CALLBACK CVS_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return GLOBALSTATEMACHINE.m_WindowSub.WndProc(hWnd, msg, wParam, lParam);
+}
+
+LRESULT CALLBACK CVS_WndProcMDI(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return GLOBALSTATEMACHINE.m_WindowSub.WndProc_MDI(hWnd, msg, wParam, lParam);
+}
+
+LRESULT CALLBACK CVS_WndProcMDIChild(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return GLOBALSTATEMACHINE.m_WindowSub.WndProc_MDIChild(hWnd, msg, wParam, lParam);
+}
+
+ULONG_PTR gdiToken;
+
+bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR mCmdLine, int mCmdNum)
+{
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
+		printf("SDL error\n", SDL_GetError());
 		return false;
 	}
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1);
-	SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);	
 
-	int imgFlags = IMG_INIT_PNG;
+	int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
 
-	if( !(IMG_Init( imgFlags ) & imgFlags))
+	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
+		printf("Error\n");
 		return false;
 	}
+	//Register Default window class
+	WNDCLASSEX wc;
+
+    wc.cbSize        = sizeof(WNDCLASSEX);
+    wc.style         = 0;
+    wc.lpfnWndProc   = CVS_WndProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = hInstance;
+    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
+    wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+    wc.lpszMenuName  = NULL;
+	wc.lpszClassName = GLOBALSTATEMACHINE.m_WindowSub.className;
+	wc.hIconSm       = LoadIcon(hInstance, MAKEINTRESOURCE(CVS_ICON));
+
+    if(!RegisterClassEx(&wc))
+    {
+        MessageBox(NULL, "Window Registration Failed!", "Error!",
+            MB_ICONEXCLAMATION | MB_OK);
+        return 0;
+    }
+
+	//Register MDI window class
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = GLOBALSTATEMACHINE.m_WindowSub.className_MDI;
+	wc.lpfnWndProc = CVS_WndProcMDI;
+
+	if(!RegisterClassEx(&wc))
+	{
+		MessageBox(NULL, "Window MDI Registration Failed!", "Error!",
+			MB_ICONEXCLAMATION | MB_OK);
+		return 0;
+	}
+
+	wc.lpfnWndProc = CVS_WndProcMDIChild;
+	wc.lpszClassName = GLOBALSTATEMACHINE.m_WindowSub.className_MDIChild;
+	wc.lpszMenuName = (LPCTSTR) NULL;
+
+	if(!RegisterClassEx(&wc))
+	{
+		MessageBox(NULL, "Window MDI Child Registration Failed!", "Error!",
+			MB_ICONEXCLAMATION | MB_OK);
+		return 0;
+	}
+
+	wc.lpfnWndProc = CVS_WndProc;
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; 
+	wc.lpszClassName = "OpenGL";
+
+	if(!RegisterClassEx(&wc))
+	{
+		MessageBox(NULL, "Windows OPENGL Child Registration Failed!", "Error!",
+			MB_ICONEXCLAMATION | MB_OK);
+		return 0;
+	}
+
+
+	Gdiplus::GdiplusStartupInput gdiInput;
+
+	Gdiplus::GdiplusStartupOutput gdiOutput;
+
+	GdiplusStartup(&gdiToken, &gdiInput, &gdiOutput);
+
+	
+
+	//Register MDI child class
+	CVS_AppInstance = hInstance;
+	CVS_AppPrevInstance = hPrevInstance;
+	CVS_CmdLine = mCmdLine;
+	CVS_CmdShow = mCmdNum;
+
+
 	if(!GLOBALSTATEMACHINE.initialize())
 	{
 		return false;
 	}
-	FT_Library lib;
-	if(FT_Init_FreeType(&lib)){
-		printf("Error initializing font\n");
-		return false;
-	}
-
-	if(TTF_Init() == -1)
-	{
-		printf("Error initializing ttf\n");
-		return false;
-	}
-
-	GLOBALSTATEMACHINE.m_RenderSub.lib = lib;
-
-	GLOBALSTATEMACHINE.m_RenderSub.loadFont("Default", "ChaletParisNineteenSixty.ttf");
 
 	CVS_Initialized = true;
-	printf("Initialized CVS\n");
 	return true;
 }
 
-void boolToggle(void* data)
-{
-	*(bool*) data = !*(bool*)data;
-}
-
-void Minimize(void* window)
-{
-	SDL_MinimizeWindow((SDL_Window*) window);
-}
-
-CVS_Scene* newScene;
 
 bool Editor::Initialize()
 {
-	quit = false;
 	if(!CVS_Initialized)
 	{
 		return false;
 	}
-	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900);
+	GLOBALSTATEMACHINE.m_App = this;
+	
 
-	CVS_Button* closeButton = m_MainWindow->gui->addButton(0,0,50,30,boolToggle, &quit);
+	
+	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", 0,0, 1600, 900, CVS_NULL);
+	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
+	m_MainWindow->CreateMenuMain();
+	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
+	testScene->loadFile("dk.obj");
+	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
+	mMainScene = testScene;
+	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
+	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);
 
-	closeButton->offHoverColor = CVS_ColorRGBA(0.9,0.9,0.9,1.0);
-	closeButton->onHoverColor = CVS_ColorRGBA(1.0, 1.0, 1.0, 1.0);
-	closeButton->mouseDownColor = CVS_ColorRGBA(0.0,0.23137254,0.70588,1.0);
-	closeButton->mouseUpColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
-	closeButton->bitColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
-	closeButton->addBitmap("./bitmap/close.png");
+	tab->addTab("hello", 0);
+	tab->addTab("Second", 1);
 
-	CVS_Button* minimizeButton = m_MainWindow->gui->addButton(50,0,50,30,Minimize, m_MainWindow->window);
-	minimizeButton->onHoverColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
-	minimizeButton->mouseDownColor = CVS_ColorRGBA(1.0,0.0,0.0,1.0);
-	minimizeButton->mouseUpColor = CVS_ColorRGBA(1.0,1.0,1.0,1.0);
-	minimizeButton->offHoverColor = CVS_ColorRGBA(0.9,0.9,0.9,1.0);
-	minimizeButton->addBitmap("./bitmap/minimize.png");
+	tab->m_Slots[0]->content->AddButton("Hello", 10,10,100,100);
 
-	m_MainWindow->gui->mainCell.Divide(true, 30);
 
-	m_MainWindow->gui->mainCell.bar.active = false;
+	CVS_ToolBar* hello = new CVS_ToolBar(m_MainWindow->gui, 0, 0, 100, 30);
 
-	m_MainWindow->gui->mainCell.cell1->debugColor = CVS_ColorRGBA(0.9,0.9,0.9,1.0f);
-
-	m_MainWindow->gui->mainCell.cell2->Divide(true, 200);
-
-	m_MainWindow->gui->mainCell.cell2->cell1->debugColor = CVS_ColorRGBA(0.85,0.85,0.85,1.0f);
-
-	m_MainWindow->gui->mainCell.cell2->bar.active = false;
-
-	m_MainWindow->gui->mainCell.cell2->cell2->Divide(false,200);
-
-	m_MainWindow->gui->mainCell.cell2->cell2->setHandleBarMin(200);
-
-	m_MainWindow->gui->mainCell.cell2->cell2->setHandleBarMax(300);
-
-	CVS_Gui_SceneRenderer* renderer = new CVS_Gui_SceneRenderer(0,0, 400,400, NULL, m_MainWindow);
-	m_MainWindow->gui->mainCell.cell2->cell2->cell2->children.push_back(renderer);
-
-	newScene = GLOBALSTATEMACHINE.m_GameSub.createnewScene();
-
-	newScene->loadFile("suzanne.obj");
-
-	m_MainWindow->gui->setScene(newScene);
-
+	hello->AddButton(CVS_ARROW, 0, 0, 25, 25);
+	*/
 	return true;
 }
 
 bool Editor::Run()
 {
-	while(!quit)
+	if(!CVS_Initialized)
+		return false;
+	MSG Msg;
+	bool quit = false;
+	while(m_MainWindow->m_Active)
 	{
-		GLOBALSTATEMACHINE.m_RenderSub.Update();
+		//Non blocking message transfer
+		while(PeekMessage(&Msg, NULL, 0,0, PM_REMOVE))
+		{
+			TranslateMessage(&Msg);
+			DispatchMessage(&Msg);
+		}
+		for(int i = 0, e = updatables.size(); i < e; ++i)
+		{
+			updatables[i]->Render();
+		}
+
 	}
 	return true;
+}
+
+void Editor::AddToUpdate(CVS_SceneView* view)
+{
+	updatables.push_back(view);
+}
+
+int Editor::FileOpen(void* data)
+{
+	MessageBox(NULL, (char*) data, "File opened", MB_OK);
+	return 1;
+}
+
+LONG_PTR Editor::Message(UINT msg, UINT sParam, LONG_PTR lParam)
+{
+	switch (msg)
+	{
+	case RENDER_SELECTION :
+				if (lParam != 0)
+				{
+					CVS_RenderComponent* component = (CVS_RenderComponent*)(void*)((GLint)lParam);
+					mSelected = component->object;
+					printf("yay %s\n", mSelected->name.c_str());
+				}
+				return 0;
+			break;
+	}
 }
 
 bool Editor::End()

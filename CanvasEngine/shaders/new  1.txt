@@ -1,0 +1,31 @@
+4-2 a) MERGE_LISTS(L)
+        Heap H <- MAKE_HEAP
+        r <- L.length
+        while r is not 0
+            INSERT(H, L[r][1], r)
+            r <- r - 1
+        
+        while r is less than L.length
+            n <- EXTRACT_MIN(H)
+            C append L[n][1]
+            L[n][1] pop first element
+            if(L[n].Length is not zero)
+                INSERT(H, L[n][1], n)
+            else L removes L[n] from itself
+            r <- r + 1
+        return C
+		
+	b)SORT_HARRY_SORT(L, k)
+        Heap H <- MAKE_HEAP
+        r <- 2 * k
+        while r is not 0
+            INSERT(H, L[r], r)
+        while r is not L.length
+            n <- EXTRACT_MIN(H)
+            C append L[n]
+            if n + 2 * k is less than or equal to L.length
+                INSERT(H, L[n + 2 * k], n + 2 * k)
+            r <- r + 1
+        return C
+		
+	See back pages for analysis and descriptiong.,
