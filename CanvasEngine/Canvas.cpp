@@ -119,6 +119,19 @@ ULONG_PTR gdiToken;
 
 bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR mCmdLine, int mCmdNum)
 {
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		printf("SDL error\n", SDL_GetError());
+		return false;
+	}
+
+	int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
+
+	if (!(IMG_Init(imgFlags) & imgFlags))
+	{
+		printf("Error\n");
+		return false;
+	}
 	//Register Default window class
 	WNDCLASSEX wc;
 

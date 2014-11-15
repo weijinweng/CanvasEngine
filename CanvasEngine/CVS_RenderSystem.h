@@ -107,6 +107,7 @@ public:
 	CVS_RenderScene* createNewScene();
 	CVS_FrameBuffer* createNewFramebuffer();
 	CVS_Texture* createNewTexture(UINT target);
+	CVS_Texture* createNewTexture(char*);
 
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);

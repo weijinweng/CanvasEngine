@@ -2,7 +2,7 @@
 
 CVS_Texture::CVS_Texture(UINT target) :target(target)
 {
-	glGenTextures(1, &texture);
+	glGenTextures(1, &textureID);
 }
 
 bool CVS_Texture::loadData(UINT flags, UINT format, UINT type, int width, int height, int mipmap, void* data)
@@ -12,14 +12,42 @@ bool CVS_Texture::loadData(UINT flags, UINT format, UINT type, int width, int he
 	return true;
 }
 
-bool CVS_Texture::loadFile(char* filepath)
+bool CVS_Texture::loadFile(char* filePath)
 {
+	SDL_Surface* img = IMG_Load(filePath);
+
+	if (img == NULL)
+	{
+		printf("Error loading image %s\n", filePath);
+		return false;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	int Mode = GL_RGB;
+
+	printf("pixel format = %d\n", img->format->BitsPerPixel);
+
+	if (img->format->BytesPerPixel == 4)
+	{
+		Mode = GL_RGBA;
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img->w, img->h, 0, Mode, GL_UNSIGNED_BYTE, img->pixels);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	this->width = img->w;
+	this->height = img->h;
+	this->filepath = filePath;
+	this->type = Mode == Mode;
 	return true;
 }
 
 void CVS_Texture::Bind()
 {
-	glBindTexture(target, texture);
+	glBindTexture(target, textureID);
 }
 
 GLuint CompileShader(char* vertex_file_path, char* fragment_file_path)

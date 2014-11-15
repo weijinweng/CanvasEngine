@@ -75,6 +75,8 @@ struct CVS_RenderProgramInstance{
 struct CVS_TextureReference{
 	CVS_Texture* texture;
 	std::string name;
+	int uniformLoc;
+	CVS_TextureReference(CVS_Texture* texture, GLint uniformLoc);
 };
 
 struct CVS_RenderNode{

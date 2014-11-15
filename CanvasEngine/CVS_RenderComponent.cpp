@@ -201,9 +201,21 @@ void CVS_Camera::shiftLocalPos(float x, float y, float z)
 	UpdateView();
 }
 
+CVS_TextureReference::CVS_TextureReference(CVS_Texture* texture, int loc) :texture(texture), uniformLoc(loc)
+{
+
+}
+
 CVS_RenderNode::CVS_RenderNode(CVS_RenderProgramInstance* parent) :mesh(NULL)
 {
 	parent->children.push_back(this);
+	for (int i = 0, e = parent->program->uniforms.size(); i < e; ++i)
+	{
+		if (parent->program->uniforms[i].type == GL_SAMPLER_2D)
+		{
+			this->textures.push_back(CVS_TextureReference(GLOBALSTATEMACHINE.m_RenderSub.m_DefaultTexture, parent->program->uniforms[i].location));
+		}
+	}
 	printf("Created rendernode\n");
 }
 
@@ -247,7 +259,12 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 		cmat4 MVP = view->Pers * view->View * Model;
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 		
-
+		for (int i = 0, e = children[i]->textures.size(); i < e; ++i)
+		{
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(children[i]->textures[i].texture->target, children[i]->textures[i].texture->textureID);
+			glUniform1i(children[i]->textures[i].uniformLoc, i);
+		}
 
 		if (children[i]->mesh != NULL)
 			children[i]->mesh->Draw();

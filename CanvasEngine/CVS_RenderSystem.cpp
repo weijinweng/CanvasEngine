@@ -19,13 +19,13 @@ void CVS_FrameBuffer::unBind()
 void CVS_FrameBuffer::BindColorAttachment(CVS_Texture* texture, UINT location)
 {
 	texture->Bind();
-	glFramebufferTexture2D(flag, GL_COLOR_ATTACHMENT0 + location, texture->target, texture->texture, 0);
+	glFramebufferTexture2D(flag, GL_COLOR_ATTACHMENT0 + location, texture->target, texture->textureID, 0);
 }
 
 void CVS_FrameBuffer::BindDepthAttachment(CVS_Texture* texture)
 {
 	texture->Bind();
-	glFramebufferTexture2D(flag, GL_DEPTH_ATTACHMENT, texture->target, texture->texture, 0);
+	glFramebufferTexture2D(flag, GL_DEPTH_ATTACHMENT, texture->target, texture->textureID, 0);
 }
 
 void CVS_FrameBuffer::setDrawBuffer(GLenum flag)
@@ -269,6 +269,7 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 		this->pipeline = new CVS_RenderPipeline();
 		this->pipeline->SetUp();
 		createNewShader("Selection", "./Shaders/selection.vert", "./Shaders/selection.frag");
+		this->m_DefaultTexture = createNewTexture("./Textures/Default.png");
 	}
 
 
@@ -310,6 +311,15 @@ CVS_Texture* CVS_RenderSystem::createNewTexture(UINT target)
 {
 	CVS_Texture* newTex = new CVS_Texture(target);
 	textures.push_back(newTex);
+	return newTex;
+}
+
+CVS_Texture* CVS_RenderSystem::createNewTexture(char* filepath)
+{
+	CVS_Texture* newTex = new CVS_Texture(GL_TEXTURE_2D);
+
+	textures.push_back(newTex);
+	newTex->loadFile(filepath);
 	return newTex;
 }
 

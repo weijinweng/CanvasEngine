@@ -4,7 +4,11 @@
 
 struct CVS_Texture{
 	UINT target;
-	GLuint texture;
+	GLuint textureID;
+	int height;
+	int width;
+	std::string filepath;
+	UINT type;
 	CVS_Texture(UINT target);
 	bool loadData(UINT flags, UINT format, UINT type, int width, int height, int mipmap, void* data);
 	bool loadFile(char* filepath);
