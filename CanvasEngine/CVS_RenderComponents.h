@@ -39,6 +39,9 @@ struct CVS_View{
 
 struct CVS_Camera{
 	CVS_Transform transform;
+
+	cvec3 target;
+
 	float aspectRatio;
 	float FOV;
 	float NearZ;
@@ -50,6 +53,12 @@ struct CVS_Camera{
 	CVS_Camera(cvec3 pos = cvec3(4,3,4), cvec3 target = cvec3(0,0,0), float FOV = 45.0f, float AspectRatio = 16.0f/9.0f, float NearZ = 0.1f, float FarZ = 100.0f);
 
 	void UpdateView();
+	void UpdatePerspective();
+
+	void RotateAroundTarget(float,float,float);
+	void pointRotate(float, float, float);
+	void shiftLocalPos(float x, float y, float z);
+
 	CVS_View getView();
 };
 
@@ -69,12 +78,15 @@ struct CVS_TextureReference{
 };
 
 struct CVS_RenderNode{
+	void* msgData;
 	int type;
 	CVS_RenderProgramInstance* parent;
 	CVS_Mesh* mesh;
 	std::vector<CVS_TextureReference> textures;
 	cmat4 modelMatrix;
 	CVS_RenderNode(CVS_RenderProgramInstance* parent);
+	int voidGetTextureHash(std::string texture);
+	void BindTexture(CVS_Texture* texture, int location);
 	void Render(CVS_View* view);
 	void setMesh(CVS_Mesh* mesh);
 };

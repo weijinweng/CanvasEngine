@@ -76,16 +76,22 @@ public:
 	virtual void AddToUpdate(CVS_SceneView* obj) = 0;
 };
 
-class Editor:public CVS_App{
+class Editor:public CVS_App, public CVS_Messagable{
 public:
 	std::vector<CVS_SceneView*> updatables;
+	CVS_Scene* mMainScene;
+	CVS_GameObject* mSelected;
 	CVS_Window* m_MainWindow;
 	bool Initialize();
 	bool Run();
 	bool End();
 	void AddToUpdate(CVS_SceneView* obj);
 	int FileOpen(void* data);
+	LONG_PTR Message(UINT, UINT, LONG_PTR);
 };
+
+#define PRECISION_MILLIS 0
+#define PRECISION_MILLIC 1
 
 bool CVS_Initialize();
 #ifdef CVS_WIN32

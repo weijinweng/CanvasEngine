@@ -79,15 +79,19 @@ void CVS_Renderer::Render(CVS_RenderScene* scene, CVS_View View)
 	glBindVertexArray(GLOBALSTATEMACHINE.m_RenderSub.gridVAO);
 	glDrawArrays(GL_LINES, 0, GLOBALSTATEMACHINE.m_RenderSub.m_GridNum);
 	glBindVertexArray(0);
-	
+
 	if(scene != NULL)
 	{
 		scene->Draw(&View);
 	}
+
 	if(SwapBuffers(m_ParentHDC) != TRUE)
 	{
 		printf("Error swap buffers\n");
+
 	}
+
+
 }
 
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
@@ -187,7 +191,7 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 		int attribs[] =
 		{
 			 WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
-			 WGL_CONTEXT_MINOR_VERSION_ARB, 1,
+			 WGL_CONTEXT_MINOR_VERSION_ARB, 2,
 			 WGL_CONTEXT_FLAGS_ARB,
 			 WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
 			 0
@@ -260,8 +264,11 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 	
 		glClearColor(0.7, 0.7, 0.7, 1.0);
 
+		
+
 		this->pipeline = new CVS_RenderPipeline();
 		this->pipeline->SetUp();
+		createNewShader("Selection", "./Shaders/selection.vert", "./Shaders/selection.frag");
 	}
 
 

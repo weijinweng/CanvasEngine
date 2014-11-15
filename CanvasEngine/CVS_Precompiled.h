@@ -1,6 +1,9 @@
 #ifndef CVS_PRECOMPILED
 #define CVS_PRECOMPILED
 
+//SDL libraries
+#include <SDL.h>
+#include <SDL_image.h>
 
 //STL externals
 #include <stdio.h>
@@ -13,6 +16,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 	//Windows only API
 	#include <Windows.h>
+	#include <Windowsx.h>
 	#include <dwmapi.h>
 	#include <gdiplus.h>
 	#include <strsafe.h>
@@ -22,6 +26,8 @@
 //GLEW for opengl
 #include <gl\glew.h>
 #include <gl\wglew.h>
+
+#define GLM_FORCE_RADIANS 
 #include "glm\glm.hpp"
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\quaternion.hpp"
@@ -43,6 +49,8 @@
 #define CVS_WINDOW_MDI 2
 #define CVS_WINDOW 4
 #define CVS_WINDOW_MDI_CHILD 8
+
+#define RAD_CONV 0.0174532925
 
 //CVS enumerators
 enum CVS_Enum{

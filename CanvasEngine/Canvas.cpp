@@ -8,6 +8,35 @@ HINSTANCE CVS_AppPrevInstance;
 int CVS_CmdShow;
 LPSTR CVS_CmdLine;
 
+CVS_Timer::CVS_Timer()
+{
+	lastTime = 0;
+	LARGE_INTEGER newTime;
+	QueryPerformanceCounter(&newTime);
+	lastTime = newTime.QuadPart;
+}
+
+int CVS_Timer::setFrame(UINT precision)
+{
+	int deltaTime = 0;
+
+	LARGE_INTEGER newTime;
+	QueryPerformanceCounter(&newTime);
+
+	switch (precision)
+	{
+	case 0:
+		deltaTime = newTime.QuadPart / (1000);
+		return deltaTime;
+	case 1:
+		deltaTime = newTime.QuadPart;
+		return deltaTime;
+	default:
+		return 0;
+	}
+	lastTime = newTime.QuadPart;
+}
+
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to)
 {
 	to[0][0] = (GLfloat)from->a1; to[1][0] = (GLfloat)from->a2;
@@ -187,8 +216,9 @@ bool Editor::Initialize()
 	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
 	m_MainWindow->CreateMenuMain();
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
-	testScene->loadFile("dk.obj");
+	testScene->loadFile("suzanne.obj");
 	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
+	mMainScene = testScene;
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);
 
@@ -237,6 +267,22 @@ int Editor::FileOpen(void* data)
 {
 	MessageBox(NULL, (char*) data, "File opened", MB_OK);
 	return 1;
+}
+
+LONG_PTR Editor::Message(UINT msg, UINT sParam, LONG_PTR lParam)
+{
+	switch (msg)
+	{
+	case RENDER_SELECTION :
+				if (lParam != 0)
+				{
+					CVS_RenderComponent* component = (CVS_RenderComponent*)(void*)((GLint)lParam);
+					mSelected = component->object;
+					printf("yay %s\n", mSelected->name.c_str());
+				}
+				return 0;
+			break;
+	}
 }
 
 bool Editor::End()

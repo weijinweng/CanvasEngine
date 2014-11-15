@@ -109,6 +109,11 @@ struct CVS_Texture;
 struct CVS_FrameBuffer;
 struct CVS_View;
 
+struct SelectData{
+	float ObjectID;
+	float DrawID;
+	float PrimID;
+};
 //Selection object for 3D picking
 struct CVS_Selection{
 	CVS_SceneView* parent;
@@ -116,15 +121,28 @@ struct CVS_Selection{
 	CVS_FrameBuffer* mRenderBuffer;
 	CVS_Texture* mSelectionTexture;
 	CVS_Texture* mDepthTexture;
+
+	int MVPLoc;
+	int DrawIndexLoc;
+	int ObjectIndexLoc;
+	
+	CVS_RenderProgram* mRenderProgram;
 	
 	CVS_Selection(CVS_SceneView* view);
 	bool Initializ();
-	UINT getPrimitiveID(int, int);
+	SelectData getPrimitiveID(int, int);
 	void Render(CVS_RenderScene*, CVS_View*);
 	void UpdateSize();
 };
 
 struct CVS_SceneView:public CVS_GUI_OBJ, CVS_LAYOUT_OBJ{
+	bool mMouseDown;
+	bool mMiddleMouse;
+	bool mHover;
+	int mouseX;
+	int mouseY;
+
+	CVS_Timer mTimer;
 	CVS_RenderScene* Scene;
 	CVS_Camera* Cam;
 	static GLuint m_GridProgram;

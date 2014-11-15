@@ -64,7 +64,6 @@ GLuint CompileShader(char* vertex_file_path, char* fragment_file_path)
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
     glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
     std::vector<char> VertexShaderErrorMessage(InfoLogLength);
-	fprintf(stdout, "Error %s\n", glGetError());
 	glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
     fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
  
@@ -144,6 +143,14 @@ bool CVS_RenderProgram::loadFile(char* vertex_file_path, char* fragment_file_pat
 	}
 
 	return true;
+}
+
+GLint CVS_RenderProgram::getUniformHash(std::string uniform)
+{
+	int ret = glGetUniformLocation(this->programID, uniform.c_str());
+	if (ret == -1)
+		printf("Error value does not exist\n");
+	return ret;
 }
 
 void CVS_RenderProgram::setAsCurrentProgram()

@@ -9,6 +9,8 @@ CVS_GameComponent::CVS_GameComponent(CVS_GameObject* object) :object(object)
 CVS_RenderComponent::CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene* scene) :CVS_GameComponent(object)
 {
 	this->node = scene->createNewNode();
+	this->node->msgData = this;
+	printf("%p\n", this);
 	this->priority;
 }
 

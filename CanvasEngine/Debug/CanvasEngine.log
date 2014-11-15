@@ -1,9 +1,28 @@
-﻿Build started 11/11/2014 10:28:45 PM.
+﻿Build started 11/15/2014 1:03:46 AM.
      1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
-     1>Link:
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Canvas.cpp
+         Canvas.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(16): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(29): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(32): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(37): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(286): warning C4715: 'Editor::Message' : not all control paths return a value
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib glew32.lib opengl32.lib glu32.lib assimp.lib Dwmapi.lib libfbxsdk.lib comctl32.lib Gdiplus.lib Msimg32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.lib" /MACHINE:X86 Debug\CanvasEngine.res
+         Debug\Canvas.obj
+         Debug\CVS_2DTools.obj
+         Debug\CVS_GUI.obj
+         Debug\CVS_RenderProgram.obj
+         Debug\CVS_RenderSystem.obj
+         Debug\CVS_Window.obj
+         Debug\CVS_World.obj
+         Debug\main.obj
+         Debug\CVS_RenderComponent.obj
+         Debug\Transform.obj
          CanvasEngine.vcxproj -> C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe
      1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:02.62
