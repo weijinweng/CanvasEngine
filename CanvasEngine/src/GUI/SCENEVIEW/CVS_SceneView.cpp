@@ -65,7 +65,8 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 					   }
 	}
 		return 0;
-	case WM_RBUTTONDOWN:
+	case WM_MBUTTONDOWN:
+/*	case WM_RBUTTONDOWN:*/
 	{
 						   CVS_View view = Cam->getView();
 						   mSelection->Render(Scene, &view);
@@ -83,14 +84,16 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 						   }
 	}
 		return 0;
-	case WM_MBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+/*	case WM_MBUTTONDOWN:*/
 	{
 						   mMiddleMouse = true;
 						   mouseX = GET_X_LPARAM(lParam);
 						   mouseY = GET_Y_LPARAM(lParam);
 	}
 		return 0;
-	case WM_MBUTTONUP:
+	case WM_RBUTTONUP:
+/*	case WM_MBUTTONUP:*/
 	{
 						 mMiddleMouse = false;
 	}
