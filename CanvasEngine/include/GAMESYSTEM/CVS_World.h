@@ -61,6 +61,7 @@ public:
 	CVS_Scene(CVS_WorldSystem* system, CVS_RenderScene* scene);
 	void Update();
 	bool loadFile(char* filepath);
+	FbxScene* _loadFBXScene(char* filepath);
 	bool initializeGameObjectsFromaiScene(const aiScene* scene, std::vector<CVS_Mesh*> meshes);
 	CVS_GameObject* createGameObjectsFromaiNodes(const aiNode* node, std::vector<CVS_Mesh*> meshes);
 	//void Merge(CVS_Scene* other);

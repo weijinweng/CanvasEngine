@@ -16,6 +16,7 @@ struct Vertex{
 	cvec3 position;
 	cvec3 normal;
 	cvec2 uv;
+	Vertex();
 	Vertex(cvec3 position, cvec2 uv, cvec3 normal);
 };
 
@@ -27,8 +28,20 @@ struct CVS_Mesh{
 	std::vector<unsigned int> indices;
 	GLuint VAO;
 	void initialize();
+	static CVS_Mesh* initFromFbxNode(FbxNode* inNode);
 	void initializeFromAiMesh(const aiMesh* mesh);
 	void Draw();
+
+	// For every material, record the offsets in every VBO and triangle counts
+	struct CVSSubMesh
+	{
+		CVSSubMesh() : m_indexOffset(0), m_triangleCount(0) {}
+
+		int m_indexOffset;
+		int m_triangleCount;
+	};
+
+	std::vector<CVSSubMesh*> m_subMeshes;
 };
 
 struct CVS_View{

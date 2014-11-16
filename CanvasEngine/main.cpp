@@ -22,10 +22,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+void SetupWindowsDebugConsole(void)
+{
+#ifdef _DEBUG
+	// Create our debug console window
+	// redirect the iostreams
+	// and enable mouse scrolling
+	AllocConsole();
+	HANDLE hConsole = GetStdHandle(STD_INPUT_HANDLE);
+	DWORD mode;
+	GetConsoleMode(hConsole, &mode);
+	SetConsoleMode(hConsole, mode & ~ENABLE_MOUSE_INPUT | ENABLE_PROCESSED_INPUT);
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
+
+#endif
+}
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
+	SetupWindowsDebugConsole();
 	CVS_Initialize(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 	Editor app;
 	app.Initialize();

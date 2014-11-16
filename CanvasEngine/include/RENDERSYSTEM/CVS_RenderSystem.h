@@ -110,6 +110,8 @@ public:
 	CVS_Texture* createNewTexture(char*);
 
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
+	std::vector<CVS_Mesh*> _initMeshesFromFbxNodeRecursive(FbxNode* _pNode);
+	std::vector<CVS_Mesh*> addMeshesFromFbxScene(const FbxScene* scene);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);
 };

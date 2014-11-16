@@ -279,6 +279,44 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 	return newRenderer;
 }
 
+std::vector<CVS_Mesh*> CVS_RenderSystem::_initMeshesFromFbxNodeRecursive(FbxNode* _pNode)
+{
+	std::vector<CVS_Mesh*> meshes;
+
+	auto pMesh = CVS_Mesh::initFromFbxNode(_pNode);
+	if (pMesh)
+	{
+		meshes.push_back(pMesh);
+		this->meshes.push_back(pMesh);
+	}
+	else
+	{
+		printf("Warning: _initMeshesFromFbxNodeRecursive parsed a non-mesh node: %s.\n", _pNode->GetName());
+	}
+
+	// Process children
+	const int childCount = _pNode->GetChildCount();
+	for (int i = 0; i < childCount; ++i)
+	{
+		std::vector<CVS_Mesh*> childMeshes = _initMeshesFromFbxNodeRecursive(_pNode->GetChild(i));
+		meshes.insert(meshes.end(), childMeshes.begin(), childMeshes.end());
+	}
+
+	return meshes;
+}
+
+std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromFbxScene(const FbxScene* _scene)
+{
+	auto pRootNode = _scene->GetRootNode();
+	std::vector<CVS_Mesh*> meshes = _initMeshesFromFbxNodeRecursive(pRootNode);
+	for (auto i : meshes)
+	{
+		i->initialize();
+	}
+
+	return meshes;
+}
+
 std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromaiScene(const aiScene* scene)
 {
 	std::vector<CVS_Mesh*> newmeshes;
