@@ -19,3 +19,16 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+
+# Visual C++ project files
+*.vcxproj*
+*.sln
+*.stamp*
+
+# Cmake cache files
+cmake_install.cmake
+CMakeFiles/
+CMakeCache.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+CTestTestfile.cmake
