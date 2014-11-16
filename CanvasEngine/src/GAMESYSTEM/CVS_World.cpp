@@ -93,6 +93,8 @@ void CVS_GameObject::removeChildren(CVS_GameObject* child)
 
 void CVS_GameObject::Update()
 {
+	UpdateTransformMatrix();
+
 	for (int i = 0, e = components.size(); i < e; ++i)
 	{
 		components[i]->Update();
@@ -189,7 +191,7 @@ FbxScene* CVS_Scene::_loadFBXScene(char* filepath)
 	return scene;
 }
 
-CVS_GameObject* _initGameObjectRecursive(FbxNode* _pNode, CVS_RenderScene* _pScene, std::vector<CVS_Mesh*> _meshes, int& /*Must be 0 on first call*/_recursionIndex)
+CVS_GameObject* _initGameObjectRecursive(FbxNode* _pNode, CVS_Scene* _pScene, std::vector<CVS_Mesh*> _meshes, int& /*Must be 0 on first call*/_recursionIndex)
 {
 	// Assumption: Depth first search of FbxNodes is always traversed in the same order
 	CVS_GameObject* pParent;
@@ -198,15 +200,31 @@ CVS_GameObject* _initGameObjectRecursive(FbxNode* _pNode, CVS_RenderScene* _pSce
 	{
 		// Create an instance first to reduce constructor complexity
 		pParent = new CVS_GameObject(_pNode->GetName());
+		_pScene->objects.push_back(pParent);
+
+		auto pRenderComp = new CVS_RenderComponent(pParent, _pScene->scene);
+		pRenderComp->node->setMesh(_meshes[_recursionIndex]);
+		pParent->addComponent(pRenderComp);
 
 		// Fill all attributes here
-		CVS_RenderComponent* pRenderComp = new CVS_RenderComponent(pParent, _pScene);
-		pRenderComp->node->setMesh(_meshes[_recursionIndex]);
-		auto hProp = _pNode->GetPropertyHandle();
-		auto prop = hProp.Find("Lcl Translation", true);
-		void* pVal = prop.Get()
-		pParent->transformNode.transform.translation = prop.GetUserData()
-		//transformNode
+		double pDouble[3];
+		auto hAllProps = _pNode->GetPropertyHandle();
+		auto hProp = hAllProps.Find("PreRotation", true);
+		hProp.Get(pDouble, EFbxType::eFbxDouble3);
+		pParent->transformNode.transform.orientation = cquat(cvec3(pDouble[0] * RAD_CONV, pDouble[1] * RAD_CONV, pDouble[2] * RAD_CONV));
+
+		hProp = hAllProps.Find("Lcl Translation", true);
+		hProp.Get(pDouble, EFbxType::eFbxDouble3);
+		// Note: y and z are flipped here because we want Y-up translation
+		pParent->transformNode.transform.translation = cvec3(pDouble[0], pDouble[2], pDouble[1]);
+
+		hProp = hAllProps.Find("Lcl Rotation", true);
+		hProp.Get(pDouble, EFbxType::eFbxDouble3);
+		pParent->transformNode.transform.orientation *= cquat(cvec3(pDouble[0] * RAD_CONV, pDouble[1] * RAD_CONV, pDouble[2] * RAD_CONV));
+
+		hProp = hAllProps.Find("Lcl Scaling", true);
+		hProp.Get(pDouble, EFbxType::eFbxDouble3);
+		pParent->transformNode.transform.scale = cvec3(pDouble[0], pDouble[1], pDouble[2]);
 
 		// Increment recursion counter
 		++_recursionIndex;
@@ -247,9 +265,10 @@ bool CVS_Scene::loadFile(char* filename)
 	{
 		printf("CVS_Scene: Loading %s.\n", filename);
 		auto fbxScene = _loadFBXScene(filename);
+
 		std::vector<CVS_Mesh*> meshes = GLOBALSTATEMACHINE.m_RenderSub.addMeshesFromFbxScene(fbxScene);
 		int numObjInitialized = 0;
-		CVS_GameObject* pRootObj = _initGameObjectRecursive(fbxScene->GetRootNode(), scene, meshes, numObjInitialized);
+		CVS_GameObject* pRootObj = _initGameObjectRecursive(fbxScene->GetRootNode(), this, meshes, numObjInitialized);
 		if (numObjInitialized != meshes.size())
 		{
 			printf("CVS_Scene::loadFile numObjInitialized does not match vector size.\n");
@@ -277,6 +296,13 @@ bool CVS_WorldSystem::Initialize()
 
 bool CVS_WorldSystem::Update()
 {
+	for (auto i : this->scenes)
+	{
+		for (auto j : i->objects)
+		{
+			j->Update();
+		}
+	}
 	return true;
 }
 

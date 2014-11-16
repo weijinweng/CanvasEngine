@@ -40,13 +40,38 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-		case WM_RBUTTONDOWN:
-			{
-			   CVS_View view = Cam->getView();
-			   mSelection->Render(Scene, &view);
-			   SelectData data = mSelection->getPrimitiveID(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-			   ((Editor*)GLOBALSTATEMACHINE.m_App)->Message(RENDER_SELECTION, 0, (LONG_PTR)data.ObjectID);
-			}
+	case WM_KEYDOWN:
+	{
+					   switch (wParam)
+					   {
+					   case 'W':
+						   this->Cam->shiftLocalPos(0, 0, 0.2);
+						   break;
+					   case 'S':
+						   this->Cam->shiftLocalPos(0, 0, -0.2);
+						   break;
+					   case 'A':
+						   this->Cam->shiftLocalPos(-0.2, 0, 0);
+						   break;
+					   case 'D':
+						   this->Cam->shiftLocalPos(0.2, 0, 0);
+						   break;
+					   case 'Q':
+						   this->Cam->shiftLocalPos(0, -0.2, 0);
+						   break;
+					   case 'E':
+						   this->Cam->shiftLocalPos(0, 0.2, 0);
+						   break;
+					   }
+	}
+		return 0;
+	case WM_RBUTTONDOWN:
+	{
+						   CVS_View view = Cam->getView();
+						   mSelection->Render(Scene, &view);
+						   SelectData data = mSelection->getPrimitiveID(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+						   ((Editor*)GLOBALSTATEMACHINE.m_App)->Message(RENDER_SELECTION, 0, (LONG_PTR)data.ObjectID);
+	}
 		return 0;
 	case WM_LBUTTONDOWN:
 	{
