@@ -3,6 +3,7 @@
 
 # Build results
 build/
+debug/
 lib/*
 *.exe
 *.ilk
