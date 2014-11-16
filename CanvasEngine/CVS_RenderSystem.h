@@ -21,7 +21,7 @@ struct CVS_VertexObject{
 	CVS_VertexObject();
 	void bindVAO();
 	void unBind();
-	void bindArrayBuffer( CVS_Buffer* buffer, unsigned int location, int size, CVS_Enum type = CVS_FLOAT, bool normalize = false, unsigned int stride = 0, unsigned int offset = 0);
+	void bindArrayBuffer( CVS_Buffer* buffer, unsigned int location, int size, UINT type = CVS_FLOAT, bool normalize = false, unsigned int stride = 0, unsigned int offset = 0);
 	void bindElementBuffer( unsigned int dataSize, void* data, CVS_Enum usage);
 	void drawElements(CVS_Enum type, unsigned int vertCount,unsigned int offset = 0);
 	void drawArrays(CVS_Enum type, unsigned int vertCount, unsigned int offset = 0);

@@ -45,12 +45,16 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions) _CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;glew32.lib;opengl32.lib;glu32.lib;assimp.lib;Dwmapi.lib;libfbxsdk.lib;comctl32.lib;Gdiplus.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -71,26 +75,42 @@
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="CVS_2DTools.cpp" />
+    <ClCompile Include="CVS_Button.cpp" />
+    <ClCompile Include="CVS_EditBox.cpp" />
     <ClCompile Include="CVS_GUI.cpp" />
+    <ClCompile Include="CVS_LayOut.cpp" />
+    <ClCompile Include="CVS_Mesh.cpp" />
+    <ClCompile Include="CVS_RendererScene.cpp" />
+    <ClCompile Include="CVS_RenderNode.cpp" />
     <ClCompile Include="CVS_RenderProgram.cpp" />
     <ClCompile Include="CVS_RenderSystem.cpp" />
+    <ClCompile Include="CVS_SceneView.cpp" />
+    <ClCompile Include="CVS_TabControl.cpp" />
+    <ClCompile Include="CVS_TabSlot.cpp" />
+    <ClCompile Include="CVS_Texture.cpp" />
+    <ClCompile Include="CVS_ToolBar.cpp" />
     <ClCompile Include="CVS_Window.cpp" />
     <ClCompile Include="CVS_World.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="CVS_RenderComponent.cpp" />
+    <ClCompile Include="CVS_Camera.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="CVS_2DTools.h" />
+    <ClInclude Include="CVS_Button.h" />
+    <ClInclude Include="CVS_GroupBox.h" />
+    <ClInclude Include="CVS_Gui.h" />
     <ClInclude Include="CVS_Light.h" />
     <ClInclude Include="CVS_Precompiled.h" />
     <ClInclude Include="CVS_RenderProgram.h" />
     <ClInclude Include="CVS_RenderComponents.h" />
     <ClInclude Include="CVS_RenderSystem.h" />
+    <ClInclude Include="CVS_SceneView.h" />
     <ClInclude Include="CVS_SubSystem.h" />
+    <ClInclude Include="CVS_TreeView.h" />
     <ClInclude Include="CVS_WindowSystem.h" />
-    <ClInclude Include="CVS_GUI.h" />
+    <ClInclude Include="CVS_GUISystem.h" />
     <ClInclude Include="CVS_World.h" />
     <ClInclude Include="CVS_Transform.h" />
     <ClInclude Include="Manifest.h" />
@@ -106,6 +126,10 @@
     <Image Include="icon1.ico" />
     <Image Include="MoveTool.bmp" />
     <Image Include="Rotate.bmp" />
+    <Image Include="transform.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

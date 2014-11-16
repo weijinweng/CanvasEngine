@@ -28,27 +28,45 @@
     <Filter Include="Source Files\Src\GAMESYSTEMS">
       <UniqueIdentifier>{96ff00bd-8fb5-4171-9f59-d147870b83af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{ac9d6d77-1902-48fb-8d63-e08d5ec01b2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI">
+      <UniqueIdentifier>{0918c13b-bd40-4082-bfb0-c157c5e8bd60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI\EDITBOX">
+      <UniqueIdentifier>{df6438b6-b725-4dee-9b03-91934d5ab627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI\BUTTON">
+      <UniqueIdentifier>{0194bb7a-8da7-4972-bcbd-91fbf6968986}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI\LAYOUT">
+      <UniqueIdentifier>{5977e20a-6119-4cb4-8052-d87e8d86188c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI\TABCONTROL">
+      <UniqueIdentifier>{58397dfe-1833-43f0-83c5-80c9b7be1d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI\SCENEVIEW">
+      <UniqueIdentifier>{cce4bf8e-8c85-4666-be4f-bb44c3f76e11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\GUI\TOOLBAR">
+      <UniqueIdentifier>{224252c0-d8a7-4a09-988e-c669151e2da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\RENDERSYSTEM">
+      <UniqueIdentifier>{8e4c3f73-4c3a-4dbd-be3a-0d8a7d399a47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT">
+      <UniqueIdentifier>{dd946141-a76e-40b5-bc14-07438adf2276}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CVS_GUI.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
     <ClCompile Include="CVS_Window.cpp">
       <Filter>Source Files\Src</Filter>
     </ClCompile>
-    <ClCompile Include="CVS_RenderSystem.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
     <ClCompile Include="CVS_2DTools.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RenderProgram.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RenderComponent.cpp">
       <Filter>Source Files\Src</Filter>
     </ClCompile>
     <ClCompile Include="CVS_World.cpp">
@@ -59,6 +77,51 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Source Files\Src\GAMESYSTEMS</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_GUI.cpp">
+      <Filter>Source Files\Src\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_EditBox.cpp">
+      <Filter>Source Files\Src\GUI\EDITBOX</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_Button.cpp">
+      <Filter>Source Files\Src\GUI\BUTTON</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_LayOut.cpp">
+      <Filter>Source Files\Src\GUI\LAYOUT</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_TabControl.cpp">
+      <Filter>Source Files\Src\GUI\TABCONTROL</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_TabSlot.cpp">
+      <Filter>Source Files\Src\GUI\TABCONTROL</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_SceneView.cpp">
+      <Filter>Source Files\Src\GUI\SCENEVIEW</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_ToolBar.cpp">
+      <Filter>Source Files\Src\GUI\TOOLBAR</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RenderSystem.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RenderProgram.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RendererScene.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_Mesh.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RenderNode.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_Camera.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_Texture.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +135,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CVS_WindowSystem.h">
-      <Filter>Header Files\WINDOWSYSTEM</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_GUI.h">
       <Filter>Header Files\WINDOWSYSTEM</Filter>
     </ClInclude>
     <ClInclude Include="CVS_2DTools.h">
@@ -107,6 +167,24 @@
     <ClInclude Include="wglext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CVS_Button.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_GUISystem.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_Gui.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_SceneView.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_GroupBox.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_TreeView.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CanvasEngine.rc">
@@ -129,5 +207,11 @@
     <Image Include="bitmap1.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="transform.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

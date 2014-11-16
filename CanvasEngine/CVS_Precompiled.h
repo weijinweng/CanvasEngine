@@ -12,6 +12,7 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
 	//Windows only API
