@@ -196,7 +196,7 @@ CVS_Mesh* CVS_Mesh::initFromFbxNode(FbxNode* inNode)
 	}
 
 	pOutMesh->vertices.resize(lPolygonVertexCount);
-	pOutMesh->indices.resize(lPolygonVertexCount);
+	pOutMesh->indices.resize(lPolyCount * TRIANGLE_VERTEX_COUNT);
 
 	FbxStringList lUVNames;
 	pInMesh->GetUVSetNames(lUVNames);
