@@ -244,11 +244,8 @@ long long milliseconds_now() {
 
 void CVS_SceneView::Render()
 {
-
-
 	CVS_View View = Cam->getView();
 	m_Renderer->Render(Scene, View);
-	mSelection->Render(Scene, &View);
 }
 
 LRESULT CALLBACK CVS_SceneView::SceneViewCallback(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, UINT_PTR id, DWORD_PTR pointer)
