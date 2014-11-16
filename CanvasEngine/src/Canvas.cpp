@@ -229,7 +229,7 @@ bool Editor::Initialize()
 	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
 	m_MainWindow->CreateMenuMain();
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
-	testScene->loadFile("dk.obj");
+	testScene->loadFile("dk_XFormReset.fbx");
 	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
 	mMainScene = testScene;
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);

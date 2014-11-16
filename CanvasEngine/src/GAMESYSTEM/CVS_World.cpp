@@ -37,6 +37,15 @@ CVS_GameObject::CVS_GameObject(const aiNode* node,
 	printf("Created GameObject %s\n", name.c_str());
 }
 
+CVS_GameObject::CVS_GameObject(CVS_RenderScene* scene, std::vector<CVS_Mesh*>)
+{
+
+}
+
+CVS_GameObject::CVS_GameObject(std::string _name /*= "Object"*/) : name(_name)
+{
+}
+
 void CVS_GameObject::UpdateTransformMatrix()
 {
 	this->transformNode.transform.calculateMatrix();
@@ -116,8 +125,16 @@ FbxScene* CVS_Scene::_loadFBXScene(char* filepath)
 	fbxManager->SetIOSettings(ioSettings);
 
 	auto importer = FbxImporter::Create(fbxManager, "");
-	bool importerStatus = importer->Initialize(filepath, -1, fbxManager->GetIOSettings());
-	if (!importerStatus)
+
+	// Create the importer.
+	int fileFormat = -1;
+	if (!fbxManager->GetIOPluginRegistry()->DetectReaderFileFormat(filepath, fileFormat))
+	{
+		// Unrecognizable file format. Try to fall back to FbxImporter::eFBX_BINARY
+		fileFormat = fbxManager->GetIOPluginRegistry()->FindReaderIDByDescription("FBX binary (*.fbx)");;
+	}
+
+	if (!importer->Initialize(filepath, -1, fbxManager->GetIOSettings()))
 	{
 		printf("Call to FbxImporter::Initialize() failed.\n");
 		printf("Error returned: %s\n\n", importer->GetStatus().GetErrorString());
@@ -141,6 +158,15 @@ FbxScene* CVS_Scene::_loadFBXScene(char* filepath)
 			OurAxisSystem.ConvertScene(scene);
 		}
 
+		// Requires the complete fbxsdk library
+// 		// Convert Unit System to what is used in this example, if needed
+// 		FbxSystemUnit SceneSystemUnit = scene->GetGlobalSettings().GetSystemUnit();
+// 		if (SceneSystemUnit.GetScaleFactor() != 1.0)
+// 		{
+// 			//The unit in this example is centimeter.
+// 			FbxSystemUnit::cm.ConvertScene(scene);
+// 		}
+
 		FbxArray<FbxString*> mAnimStackNameArray;
 		// Get the list of all the animation stack.
 		scene->FillAnimStackNameArray(mAnimStackNameArray);
@@ -159,10 +185,49 @@ FbxScene* CVS_Scene::_loadFBXScene(char* filepath)
 	}
 	importer->Destroy();
 	ioSettings->Destroy();
-	fbxManager->Destroy();
 
 	return scene;
 }
+
+CVS_GameObject* _initGameObjectRecursive(FbxNode* _pNode, CVS_RenderScene* _pScene, std::vector<CVS_Mesh*> _meshes, int& /*Must be 0 on first call*/_recursionIndex)
+{
+	// Assumption: Depth first search of FbxNodes is always traversed in the same order
+	CVS_GameObject* pParent;
+	// Not all nodes are meshes
+	if (_pNode->GetMesh())
+	{
+		// Create an instance first to reduce constructor complexity
+		pParent = new CVS_GameObject(_pNode->GetName());
+
+		CVS_RenderComponent* pRenderComp = new CVS_RenderComponent(pParent, _pScene);
+		pRenderComp->node->setMesh(_meshes[_recursionIndex]);
+		// Increment recursion counter
+		++_recursionIndex;
+
+		printf("_InitGameObjectRecursive: Created GameObject %s\n", pParent->name.c_str());
+	}
+	else
+	{
+		pParent = nullptr;
+		printf("_InitGameObjectRecursive: Skipped Non-mesh Node. %s\n", _pNode->GetName());
+	}
+
+
+	// Process children regardless of whether parent is a mesh node
+	const int childCount = _pNode->GetChildCount();
+	for (int i = 0; i < childCount; ++i)
+	{
+		auto pChild = _initGameObjectRecursive(_pNode->GetChild(i), _pScene, _meshes, _recursionIndex);
+		// Only push when it is a child
+		if (pChild && pParent)
+		{
+			pParent->children.push_back(pChild);
+		}
+	}
+
+	return pParent;
+}
+
 bool CVS_Scene::loadFile(char* filename)
 {
 	std::string file = filename;
@@ -176,10 +241,11 @@ bool CVS_Scene::loadFile(char* filename)
 		printf("CVS_Scene: Loading %s.\n", filename);
 		auto fbxScene = _loadFBXScene(filename);
 		std::vector<CVS_Mesh*> meshes = GLOBALSTATEMACHINE.m_RenderSub.addMeshesFromFbxScene(fbxScene);
-		childCount = fbxScene->GetNodeCount();
-		for (int i = 0, e = childCount; i < e; ++i)
+		int numObjInitialized = 0;
+		CVS_GameObject* pRootObj = _initGameObjectRecursive(fbxScene->GetRootNode(), scene, meshes, numObjInitialized);
+		if (numObjInitialized != meshes.size())
 		{
-			//CVS_GameObject* newObject = new CVS_GameObject(fbxScene->GetRootNode()->GetChild(i), this->scene, meshes);
+			printf("CVS_Scene::loadFile numObjInitialized does not match vector size.\n");
 		}
 	}
 	else // Default loader

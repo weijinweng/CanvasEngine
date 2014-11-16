@@ -29,6 +29,7 @@ glm
 zlib
 libpng
 jpeg
+#${fbxsdk_SOURCE_DIR}/lib/x86/debug/libfbxsdk-md.lib
 ${fbxsdk_SOURCE_DIR}/lib/x86/debug/libfbxsdk.lib
 Gdiplus.lib
 Comctl32.lib
