@@ -113,6 +113,9 @@ bool CVS_Scene::loadFile(char* filename)
 	Assimp::Importer importer;
 	const aiScene* aiscene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
 	std::vector<CVS_Mesh*> meshes = GLOBALSTATEMACHINE.m_RenderSub.addMeshesFromaiScene(aiscene);
+	
+	if (aiscene == NULL)
+		return false;
 
 	for(int i = 0, e = aiscene->mRootNode->mNumChildren; i < e; ++i)
 	{

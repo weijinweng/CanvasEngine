@@ -229,14 +229,22 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 	return -1;
 }
 
+long long milliseconds_now() {
+	static LARGE_INTEGER s_frequency;
+	static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+	if (s_use_qpc) {
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		return (1000LL * now.QuadPart) / s_frequency.QuadPart;
+	}
+	else {
+		return GetTickCount();
+	}
+}
+
 void CVS_SceneView::Render()
 {
-	static int time = 0;
-	LARGE_INTEGER newTime;
-	QueryPerformanceCounter(&newTime);
-	int deltaTime = newTime.QuadPart / 1000 - time;
-	//printf("%d\n", deltaTime);
-	time = newTime.QuadPart / 1000;
+
 
 	CVS_View View = Cam->getView();
 	m_Renderer->Render(Scene, View);
