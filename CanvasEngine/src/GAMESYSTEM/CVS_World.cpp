@@ -204,7 +204,8 @@ CVS_GameObject* _initGameObjectRecursive(FbxNode* _pNode, CVS_RenderScene* _pSce
 		pRenderComp->node->setMesh(_meshes[_recursionIndex]);
 		auto hProp = _pNode->GetPropertyHandle();
 		auto prop = hProp.Find("Lcl Translation", true);
-		printf("prop is: %d", prop.GetType());
+		void* pVal = prop.Get()
+		pParent->transformNode.transform.translation = prop.GetUserData()
 		//transformNode
 
 		// Increment recursion counter
