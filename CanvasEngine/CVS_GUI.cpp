@@ -1,5 +1,39 @@
 #include "Canvas.h"
 
+void KeyParse::AddKey(char key)
+{
+	keys[key] = false;
+}
+
+int KeyParse::ParseKeyDown(char key)
+{
+	if (keys.find(key) != keys.end())
+	{
+		keys[key] = true; 
+		return 0;
+	}
+	return - 1;
+}
+
+int KeyParse::ParseKeyUp(char key)
+{
+	if (keys.find(key) != keys.end())
+	{
+		keys[key] = false;
+		return 0;
+	}
+	return -1;
+}
+
+bool KeyParse::GetKey(char key)
+{
+	if (keys.find(key) != keys.end())
+	{
+		return keys[key];
+	}
+	return false;
+}
+
 int CVS_GUI_OBJ::getWidth()
 {
 	RECT rect;

@@ -58,6 +58,9 @@
     <Filter Include="Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT">
       <UniqueIdentifier>{dd946141-a76e-40b5-bc14-07438adf2276}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Src\GUI\TREEVIEW">
+      <UniqueIdentifier>{eb2f5cb4-f891-4d38-b33c-b8e9829c1871}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="CVS_Texture.cpp">
       <Filter>Source Files\Src\RENDERSYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_TreeView.cpp">
+      <Filter>Source Files\Src\GUI\TREEVIEW</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +214,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="transform.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="collapse.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="expand.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

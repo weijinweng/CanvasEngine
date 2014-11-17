@@ -89,6 +89,7 @@
     <ClCompile Include="CVS_TabSlot.cpp" />
     <ClCompile Include="CVS_Texture.cpp" />
     <ClCompile Include="CVS_ToolBar.cpp" />
+    <ClCompile Include="CVS_TreeView.cpp" />
     <ClCompile Include="CVS_Window.cpp" />
     <ClCompile Include="CVS_World.cpp" />
     <ClCompile Include="main.cpp" />
@@ -123,6 +124,8 @@
   <ItemGroup>
     <Image Include="Arrow.bmp" />
     <Image Include="bitmap1.bmp" />
+    <Image Include="collapse.bmp" />
+    <Image Include="expand.bmp" />
     <Image Include="icon1.ico" />
     <Image Include="MoveTool.bmp" />
     <Image Include="Rotate.bmp" />

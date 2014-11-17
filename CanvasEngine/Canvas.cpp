@@ -231,6 +231,7 @@ bool Editor::Initialize()
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
 	testScene->loadFile("dk.obj");
 	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
+
 	mMainScene = testScene;
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);

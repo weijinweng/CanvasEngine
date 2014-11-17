@@ -21,6 +21,13 @@ struct CVS_Texture;
 struct CVS_FrameBuffer;
 struct CVS_View;
 
+struct KeyParse{
+	std::map<char, bool> keys;
+	void AddKey(char);
+	int ParseKeyDown(char);
+	int ParseKeyUp(char);
+	bool GetKey(char);
+};
 
 typedef unsigned int CVSButtonHandle;
 typedef unsigned short CVSFontHandle;

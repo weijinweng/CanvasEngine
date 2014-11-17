@@ -101,6 +101,19 @@ void CVS_EditBox::FinalizeInput()
 		}
 
 	}
+	if (dataPtr != NULL)
+	{
+		switch (dataType)
+		{
+		case CVS_INT:
+			if (dataPtr != NULL)
+				*(int*)dataPtr = std::stoi(data);
+			break;
+		case CVS_FLOAT:
+			*(float*)dataPtr = std::stof(data);
+		}
+	}
+
 	printf("Finalize\n");
 	SetWindowText(hWnd, data.c_str());
 }

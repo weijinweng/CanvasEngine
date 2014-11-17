@@ -34,6 +34,7 @@ struct CVS_SceneView :public CVS_GUI_OBJ, CVS_LAYOUT_OBJ{
 	bool mHover;
 	int mouseX;
 	int mouseY;
+	bool mFpsMode;
 
 	CVS_RenderScene* Scene;
 	CVS_Camera* Cam;

@@ -126,12 +126,14 @@ CVS_SceneView::CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h) :Scene(NU
 	m_Rect.right = x + w;
 	m_Rect.top = y;
 	m_Rect.bottom = y + h;
+
 }
 
 int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+
 	case WM_RBUTTONDOWN:
 	{
 						   CVS_View view = Cam->getView();
