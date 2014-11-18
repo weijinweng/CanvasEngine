@@ -19,12 +19,16 @@ CVS_TreeViewContent::CVS_TreeViewContent(CVS_TreeView* _Parent, int x, int y, in
 	mOpenList = ImageList_Add(hImageList, OpenBit, (HBITMAP)NULL);
 	DeleteObject(OpenBit);
 
+	HBITMAP StuffBit = LoadBitmap(CVS_AppInstance, MAKEINTRESOURCE(CVS_TV_EXPAND));
+	mStuffList = ImageList_Add(hImageList, StuffBit, (HBITMAP)NULL);
+	DeleteObject(StuffBit);
+
 	if (ImageList_GetImageCount(hImageList) < 2)
 	{
 		printf("Error, image list not added\n");
 	}
 
-	TreeView_SetImageList(TVhWnd, hImageList, TVSIL_NORMAL);
+
 }
 
 CVS_TREENODEHANDLE CVS_TreeViewContent::CreateNewNode(CVS_TREENODEHANDLE p, CVS_TREENODEHANDLE n1, CVS_TREENODEHANDLE n2)
@@ -36,13 +40,15 @@ CVS_TREENODEHANDLE CVS_TreeViewContent::CreateNewNode(CVS_TREENODEHANDLE p, CVS_
 	static HTREEITEM hPrevLev2Item = NULL;
 	HTREEITEM hti;
 
-	int nLevel = 1;
+	
 
-	tvi.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
+	static int nLevel = 0;
+	nLevel++;
+
+	tvi.mask = TVIF_TEXT |TVIF_PARAM;
 
 	tvi.pszText = "Node Lol";
-	tvi.iSelectedImage = mCloseList;
-	
+
 	tvi.lParam = (LPARAM)1;
 	tvins.item = tvi;
 	tvins.hInsertAfter = hPrev;
@@ -64,15 +70,7 @@ CVS_TREENODEHANDLE CVS_TreeViewContent::CreateNewNode(CVS_TREENODEHANDLE p, CVS_
 	else if (nLevel == 2)
 		hPrevLev2Item = hPrev;
 
-	if (nLevel > 1)
-	{
-		hti = TreeView_GetParent(TVhWnd, hPrev);
-		tvi.mask = TVIF_IMAGE | TVIF_SELECTEDIMAGE;
-		tvi.hItem = hti;
-		tvi.iImage = mCloseList;
-		tvi.iSelectedImage = mCloseList;
-		TreeView_SetItem(TVhWnd, &tvi);
-	}
+
 
 	return NULL;
 }

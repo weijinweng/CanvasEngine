@@ -3,7 +3,12 @@
 
 #include "CVS_GUISystem.h"
 
-typedef UINT CVS_TREENODEHANDLE;
+typedef struct CVS_TreeNodeHandle
+{
+	int msg;
+	HTREEITEM item;
+	void* data;
+} CVS_TREENODEHANDLE;
 
 struct CVS_TreeView;
 
@@ -13,7 +18,8 @@ struct CVS_TreeViewContent{
 	HIMAGELIST hImageList;
 	int mOpenList;
 	int mCloseList;
-	
+	int mStuffList;
+
 	CVS_TreeView* mParent;
 
 	std::vector<CVS_TREENODEHANDLE> mNodes;

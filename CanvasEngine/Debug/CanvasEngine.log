@@ -1,37 +1,65 @@
-﻿Build started 11/16/2014 7:38:33 PM.
+﻿Build started 11/17/2014 9:17:27 PM.
      1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt CVS_LayOut.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt CVS_Button.cpp CVS_Camera.cpp CVS_EditBox.cpp CVS_GUI.cpp CVS_LayOut.cpp CVS_Mesh.cpp CVS_RenderNode.cpp CVS_RenderSystem.cpp CVS_RendererScene.cpp CVS_SceneView.cpp CVS_TabControl.cpp CVS_TabSlot.cpp CVS_Texture.cpp CVS_ToolBar.cpp CVS_TreeView.cpp CVS_Window.cpp CVS_World.cpp Canvas.cpp main.cpp
+         main.cpp
+         CVS_World.cpp
+         CVS_Window.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_window.cpp(430): warning C4060: switch statement contains no 'case' or 'default' labels
+         CVS_ToolBar.cpp
+         CVS_Texture.cpp
+         CVS_TabSlot.cpp
+         CVS_TabControl.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_tabcontrol.cpp(13): warning C4101: 'rcClient' : unreferenced local variable
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_tabcontrol.cpp(20): warning C4101: 'achTemp' : unreferenced local variable
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_tabcontrol.cpp(17): warning C4101: 'tie' : unreferenced local variable
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_tabcontrol.cpp(147): warning C4018: '<' : signed/unsigned mismatch
+         CVS_SceneView.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_sceneview.cpp(77): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
+         CVS_RendererScene.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendererscene.cpp(45): warning C4258: 'i' : definition from the for loop is ignored; the definition from the enclosing scope is used
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendererscene.cpp(38) : definition of 'i' ignored
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendererscene.cpp(30) : definition of 'i' used
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendererscene.cpp(46): warning C4258: 'i' : definition from the for loop is ignored; the definition from the enclosing scope is used
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendererscene.cpp(38) : definition of 'i' ignored
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendererscene.cpp(30) : definition of 'i' used
+         CVS_RenderSystem.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_rendersystem.cpp(265): warning C4305: 'argument' : truncation from 'double' to 'GLclampf'
+         CVS_RenderNode.cpp
+         CVS_Mesh.cpp
+         CVS_GUI.cpp
+         CVS_EditBox.cpp
+         CVS_Camera.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(16): warning C4005: 'WINVER' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(215) : see previous definition of 'WINVER'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(17): warning C4005: '_WIN32_WINNT' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(200) : see previous definition of '_WIN32_WINNT'
+         Generating Code...
+         Compiling...
+         Canvas.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(16): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(29): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(32): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(37): warning C4244: '=' : conversion from 'LONGLONG' to 'int', possible loss of data
+         CVS_TreeView.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_treeview.cpp(66): error C2664: 'CVS_TreeNodeHandle::CVS_TreeNodeHandle(const CVS_TreeNodeHandle &)' : cannot convert argument 1 from 'int' to 'const CVS_TreeNodeHandle &'
+                 Reason: cannot convert from 'int' to 'const CVS_TreeNodeHandle'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_treeview.cpp(75): error C2664: 'CVS_TreeNodeHandle::CVS_TreeNodeHandle(const CVS_TreeNodeHandle &)' : cannot convert argument 1 from 'int' to 'const CVS_TreeNodeHandle &'
+                 Reason: cannot convert from 'int' to 'const CVS_TreeNodeHandle'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
          CVS_LayOut.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib glew32.lib opengl32.lib glu32.lib assimp.lib Dwmapi.lib libfbxsdk.lib comctl32.lib Gdiplus.lib Msimg32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.lib" /MACHINE:X86 Debug\CanvasEngine.res
-         Debug\Canvas.obj
-         Debug\CVS_2DTools.obj
-         Debug\CVS_Button.obj
-         Debug\CVS_EditBox.obj
-         Debug\CVS_GUI.obj
-         Debug\CVS_LayOut.obj
-         Debug\CVS_Mesh.obj
-         Debug\CVS_RendererScene.obj
-         Debug\CVS_RenderNode.obj
-         Debug\CVS_RenderProgram.obj
-         Debug\CVS_RenderSystem.obj
-         Debug\CVS_SceneView.obj
-         Debug\CVS_TabControl.obj
-         Debug\CVS_TabSlot.obj
-         Debug\CVS_Texture.obj
-         Debug\CVS_ToolBar.obj
-         Debug\CVS_TreeView.obj
-         Debug\CVS_Window.obj
-         Debug\CVS_World.obj
-         Debug\main.obj
-         Debug\CVS_Camera.obj
-         Debug\Transform.obj
-         CanvasEngine.vcxproj -> C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.bsc" /n Debug\Canvas.sbr Debug\CVS_2DTools.sbr Debug\CVS_Button.sbr Debug\CVS_EditBox.sbr Debug\CVS_GUI.sbr Debug\CVS_LayOut.sbr Debug\CVS_Mesh.sbr Debug\CVS_RendererScene.sbr Debug\CVS_RenderNode.sbr Debug\CVS_RenderProgram.sbr Debug\CVS_RenderSystem.sbr Debug\CVS_SceneView.sbr Debug\CVS_TabControl.sbr Debug\CVS_TabSlot.sbr Debug\CVS_Texture.sbr Debug\CVS_ToolBar.sbr Debug\CVS_TreeView.sbr Debug\CVS_Window.sbr Debug\CVS_World.sbr Debug\main.sbr Debug\CVS_Camera.sbr Debug\Transform.sbr
-     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)).
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_layout.cpp(23): error C2664: 'CVS_TREENODEHANDLE CVS_TreeViewContent::CreateNewNode(CVS_TREENODEHANDLE,CVS_TREENODEHANDLE,CVS_TREENODEHANDLE)' : cannot convert argument 1 from 'int' to 'CVS_TREENODEHANDLE'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_layout.cpp(24): error C2664: 'CVS_TREENODEHANDLE CVS_TreeViewContent::CreateNewNode(CVS_TREENODEHANDLE,CVS_TREENODEHANDLE,CVS_TREENODEHANDLE)' : cannot convert argument 1 from 'int' to 'CVS_TREENODEHANDLE'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\cvs_layout.cpp(25): error C2664: 'CVS_TREENODEHANDLE CVS_TreeViewContent::CreateNewNode(CVS_TREENODEHANDLE,CVS_TREENODEHANDLE,CVS_TREENODEHANDLE)' : cannot convert argument 1 from 'int' to 'CVS_TREENODEHANDLE'
+                 No constructor could take the source type, or constructor overload resolution was ambiguous
+         CVS_Button.cpp
+         Generating Code...
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\canvas.cpp(300): warning C4715: 'Editor::Message' : not all control paths return a value
+     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:13.41
+Time Elapsed 00:00:45.53

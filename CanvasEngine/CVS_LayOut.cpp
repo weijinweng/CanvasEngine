@@ -18,6 +18,12 @@ CVS_EditorLayout::CVS_EditorLayout(CVS_Gui* gui) : toolbarCell(this), rightbarCe
 
 	Tabbot->addTab("Debug", 0);
 
+	CVS_TreeView* viewlol = new CVS_TreeView(Tab->m_Slots[0]->content, 0, 0, 200, 400);
+
+	viewlol->mContent->CreateNewNode(0, 0, 0);
+	viewlol->mContent->CreateNewNode(0, 0, 0);
+	viewlol->mContent->CreateNewNode(0, 0, 0);
+
 	ToolBar->AddButton(CVS_ARROW, 0, 0, 25, 25);
 	ToolBar->AddButton(CVS_MOVE, 0, 0, 25, 25);
 	ToolBar->AddButton(CVS_ROTATE, 0, 0, 25, 25);

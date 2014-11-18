@@ -222,6 +222,9 @@
     <Image Include="expand.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="stuff.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -129,6 +129,7 @@
     <Image Include="icon1.ico" />
     <Image Include="MoveTool.bmp" />
     <Image Include="Rotate.bmp" />
+    <Image Include="stuff.bmp" />
     <Image Include="transform.bmp" />
   </ItemGroup>
   <ItemGroup>
