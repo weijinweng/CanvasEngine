@@ -80,6 +80,22 @@ list(GET p2list 0 temp)
 set(${OUT_NAME} "${temp}" PARENT_SCOPE)
 endfunction(parse_directory_name OUT_NAME)
 
+MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar)
+  IF(MSVC)
+    GET_FILENAME_COMPONENT(PrecompiledBasename ${PrecompiledHeader} NAME_WE)
+    SET(PrecompiledBinary "${CMAKE_CURRENT_BINARY_DIR}/${PrecompiledBasename}.pch")
+    SET(Sources ${${SourcesVar}})
+
+    SET_SOURCE_FILES_PROPERTIES(${PrecompiledSource}
+                                PROPERTIES COMPILE_FLAGS "/Yc\"${PrecompiledHeader}\" /Fp\"${PrecompiledBinary}\""
+                                           OBJECT_OUTPUTS "${PrecompiledBinary}")
+    SET_SOURCE_FILES_PROPERTIES(${Sources}
+                                PROPERTIES COMPILE_FLAGS "/Yu\"${PrecompiledHeader}\" /FI\"${PrecompiledHeader}\" /Fp\"${PrecompiledBinary}\""
+                                           OBJECT_DEPENDS "${PrecompiledBinary}")  
+    # Add precompiled header to SourcesVar
+    LIST(APPEND ${SourcesVar} ${PrecompiledSource})
+  ENDIF(MSVC)
+ENDMACRO(ADD_MSVC_PRECOMPILED_HEADER)
 #
 #
 #
@@ -133,7 +149,7 @@ endfunction(setup_solution SOLUTION_NAME)
 function(create_project_ex mode includeDirs linkDirs linkLibs)
 
 #----- Scan source -----
-file(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+file(GLOB_RECURSE MY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cxx ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 if( NOT MY_SRC STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SRC})
 endif()
@@ -161,6 +177,15 @@ file(GLOB_RECURSE
 	${CMAKE_CURRENT_SOURCE_DIR}/*.glsl
 	)
 	
+file(GLOB_RECURSE
+	MY_PRECOMPILED_HEADER
+	${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h
+	)
+file(GLOB_RECURSE
+	MY_PRECOMPILED_SOURCE
+	${CMAKE_CURRENT_SOURCE_DIR}/stdafx.cpp
+	)
+	
 if( NOT MY_SHADERS STREQUAL "" )
 create_source_group("" "${CMAKE_CURRENT_SOURCE_DIR}/" ${MY_SHADERS})
 endif()
@@ -181,6 +206,29 @@ include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
 include_directories(${includeDirs})
 link_directories(${linkDirs})
 link_libraries(${linkLibs})
+
+if( NOT MY_PRECOMPILED_HEADER STREQUAL "" AND NOT MY_PRECOMPILED_SOURCE STREQUAL "")
+IF(MSVC)
+	GET_FILENAME_COMPONENT(MY_PRECOMPILED_SOURCE ${MY_PRECOMPILED_SOURCE} NAME)
+	GET_FILENAME_COMPONENT(MY_PRECOMPILED_HEADER ${MY_PRECOMPILED_HEADER} NAME)
+	
+	message(${MY_PRECOMPILED_HEADER})
+	message(STATUS "${PROJECT_NAME} is using precompiled header stdafx.h & stdafx.cpp")
+	GET_FILENAME_COMPONENT(PrecompiledBasename ${MY_PRECOMPILED_HEADER} NAME_WE)
+	SET(PrecompiledBinary "${PrecompiledBasename}.pch")
+	
+	SET_SOURCE_FILES_PROPERTIES(${Sources}
+							PROPERTIES COMPILE_FLAGS "/Yu\"${MY_PRECOMPILED_HEADER}\" /FI\"${MY_PRECOMPILED_HEADER}\" /Fp\"${PrecompiledBinary}\""
+									   OBJECT_DEPENDS "${PrecompiledBinary}")  
+	SET_SOURCE_FILES_PROPERTIES(${MY_PRECOMPILED_SOURCE}
+							PROPERTIES COMPILE_FLAGS "/Yc\"${MY_PRECOMPILED_HEADER}\" /Fp\"${PrecompiledBinary}\""
+								   OBJECT_OUTPUTS "${PrecompiledBinary}")
+ENDIF(MSVC)
+
+endif()
+
+
+
 
 if(${mode} STREQUAL "STATIC")
 	add_library (${PROJECT_NAME} STATIC ${MY_SRC} ${MY_HEADERS})
