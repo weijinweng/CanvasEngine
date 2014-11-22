@@ -67,16 +67,17 @@ extern FILEFILTER Filter;
 
 #endif
 
-class CVS_App{
+class CVS_App: public CVS_Messagable{
 public:
 	virtual bool Initialize() = 0;
 	virtual bool Run() = 0;
 	virtual bool End() = 0;
 	virtual int FileOpen(void* data) = 0;
 	virtual void AddToUpdate(CVS_SceneView* obj) = 0;
+	virtual LONG_PTR Message(UINT, UINT, LONG_PTR) = 0;
 };
 
-class Editor:public CVS_App, public CVS_Messagable{
+class Editor:public CVS_App{
 public:
 	std::vector<CVS_SceneView*> updatables;
 	CVS_Scene* mMainScene;

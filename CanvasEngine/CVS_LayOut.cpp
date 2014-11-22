@@ -18,11 +18,7 @@ CVS_EditorLayout::CVS_EditorLayout(CVS_Gui* gui) : toolbarCell(this), rightbarCe
 
 	Tabbot->addTab("Debug", 0);
 
-	CVS_TreeView* viewlol = new CVS_TreeView(Tab->m_Slots[0]->content, 0, 0, 200, 400);
-
-	viewlol->mContent->CreateNewNode(0, 0, 0);
-	viewlol->mContent->CreateNewNode(0, 0, 0);
-	viewlol->mContent->CreateNewNode(0, 0, 0);
+	CVS_TreeView* viewlol = Tab->m_Slots[0]->content->AddTreeView(0, 0, 300, window->getClientHeight() - 200, 0);
 
 	ToolBar->AddButton(CVS_ARROW, 0, 0, 25, 25);
 	ToolBar->AddButton(CVS_MOVE, 0, 0, 25, 25);
@@ -52,4 +48,22 @@ void CVS_EditorLayout::onResize()
 void CVS_EditorLayout::setScene(CVS_Scene* scene)
 {
 	this->view->Scene = scene->scene;
+	ParseMsg(SCENE_LOAD, 0, (LONG_PTR)scene);
+}
+
+int CVS_EditorLayout::ParseMsg(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
+{
+	switch (msg)
+	{
+	case SCENE_LOAD:
+	{
+					   printf("lol the fuck\n");
+					   this->toolbarCell.ParseMsg(msg, sParam, lParam);
+					   this->leftbarCell.ParseMsg(msg, sParam, lParam);
+					   this->bottomCell.ParseMsg(msg, sParam, lParam);
+					   this->renderCell.ParseMsg(msg, sParam, lParam);
+	}
+	}
+
+		return -1;
 }

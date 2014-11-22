@@ -3,12 +3,12 @@
 
 #include "CVS_GUISystem.h"
 
+#define CVS_TV_NODEDBCLK 700
 typedef struct CVS_TreeNodeHandle
 {
-	int msg;
 	HTREEITEM item;
 	void* data;
-} CVS_TREENODEHANDLE;
+} CVS_TREENODEHANDLE ,* LPCVS_TREENODEHANDLE;
 
 struct CVS_TreeView;
 
@@ -21,10 +21,18 @@ struct CVS_TreeViewContent{
 	int mStuffList;
 
 	CVS_TreeView* mParent;
+	UINT msg;
+
+	int ParseMsg(UINT, WPARAM, LPARAM);
+	static LRESULT CALLBACK TreeViewProc(HWND, UINT, WPARAM, LPARAM, UINT_PTR, DWORD_PTR);
 
 	std::vector<CVS_TREENODEHANDLE> mNodes;
 	CVS_TreeViewContent(CVS_TreeView* parent, int, int, int, int);
-	CVS_TREENODEHANDLE CreateNewNode(CVS_TREENODEHANDLE, CVS_TREENODEHANDLE,CVS_TREENODEHANDLE);
+	void SetMsg(UINT msg = RENDER_SELECTION);
+	LPCVS_TREENODEHANDLE CreateNewNode(LPCVS_TREENODEHANDLE, 
+		LPCVS_TREENODEHANDLE,
+		std::string name,
+		void* data);
 };
 
 struct CVS_TreeView:public CVS_GUI_OBJ{

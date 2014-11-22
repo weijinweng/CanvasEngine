@@ -3,7 +3,7 @@
 
 CVS_TabContent::CVS_TabContent(CVS_Tab* parent) :parent(parent)
 {
-	hWnd = CreateWindow(WC_STATIC, "Content", WS_CHILD | WS_VISIBLE | WS_BORDER, 0, parent->m_TabMargins.bottom + 2, parent->m_Rect.right - parent->m_Rect.left, parent->m_Rect.bottom - parent->m_Rect.top - 30, parent->hWnd, NULL, CVS_AppInstance, NULL);
+	hWnd = CreateWindow(WC_STATIC, "Content", WS_CHILD | WS_VISIBLE , 0, parent->m_TabMargins.bottom + 2, parent->m_Rect.right - parent->m_Rect.left, parent->m_Rect.bottom - parent->m_Rect.top - 30, parent->hWnd, NULL, CVS_AppInstance, NULL);
 
 	SetWindowSubclass(hWnd, &CVS_TabContent::TabContProc, CVS_TABCONT, (DWORD_PTR)this);
 
@@ -20,10 +20,17 @@ CVS_TabContent::CVS_TabContent(CVS_Tab* parent) :parent(parent)
 
 }
 
-int CVS_TabContent::ParseMsg(HWND Hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+int CVS_TabContent::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case SCENE_LOAD:
+	{
+					   for (int i = 0, e = this->buttons.size(); i < e; ++i)
+					   {
+						   this->buttons[i]->ParseMsg(msg, wParam, lParam);
+					   }
+	}
 	case WM_SHOWWINDOW:
 	{
 	}
@@ -40,7 +47,7 @@ int CVS_TabContent::ParseMsg(HWND Hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					 rect.top = m_Rect.top;
 					 rect.bottom = m_Rect.bottom;
 
-					 HDC hdc = BeginPaint(Hwnd, &ps);
+					 HDC hdc = BeginPaint(hWnd, &ps);
 
 					 if (hdc == NULL)
 					 {
@@ -64,7 +71,7 @@ int CVS_TabContent::ParseMsg(HWND Hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					 DeleteObject(mainPen);
 
 
-					 EndPaint(Hwnd, &ps);
+					 EndPaint(hWnd, &ps);
 					 return 0;
 	}
 	}
@@ -100,7 +107,7 @@ CVS_Button* CVS_TabContent::AddButton(std::string data, int x, int y, int w, int
 
 LRESULT CALLBACK CVS_TabContent::TabContProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, UINT_PTR id, DWORD_PTR pointer)
 {
-	int result = ((CVS_TabContent*)pointer)->ParseMsg(hWnd, msg, wParam, lParam);
+	int result = ((CVS_TabContent*)pointer)->ParseMsg(msg, wParam, lParam);
 	if (result != -1)
 	{
 		return result;

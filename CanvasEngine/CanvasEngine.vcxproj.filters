@@ -61,6 +61,9 @@
     <Filter Include="Source Files\Src\GUI\TREEVIEW">
       <UniqueIdentifier>{eb2f5cb4-f891-4d38-b33c-b8e9829c1871}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Src\RENDERSYSTEM\RENDERER">
+      <UniqueIdentifier>{91e0dc46-3a0d-476f-a240-5c8a712e4c47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -129,6 +132,12 @@
     <ClCompile Include="CVS_TreeView.cpp">
       <Filter>Source Files\Src\GUI\TREEVIEW</Filter>
     </ClCompile>
+    <ClCompile Include="CVS_Renderer.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERER</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_RenderPipeline.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERER</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CVS_Precompiled.h">
@@ -190,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="CVS_TreeView.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVS_RenderPipeline.h">
+      <Filter>Header Files\RENDERSYSTEMS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -50,7 +50,7 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 
 CVS_RenderScene::CVS_RenderScene()
 {
-	this->programs.push_back(new CVS_RenderProgramInstance(GLOBALSTATEMACHINE.m_RenderSub.createNewShader("Default3D", "./Shaders/3D.vert", "./Shaders/3D.frag")));
+	this->programs.push_back(new CVS_RenderProgramInstance(GLOBALSTATEMACHINE.m_RenderSub.createNewShader("Default", "./Shaders/3D.vert", "./Shaders/3D.frag")));
 }
 
 CVS_RenderNode* CVS_RenderScene::createNewNode()

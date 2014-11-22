@@ -6,15 +6,13 @@
 #include "CVS_2DTools.h"
 #include "CVS_GUI.h"
 #include "CVS_RenderComponents.h"
+#include "CVS_RenderPipeline.h"
 
 struct CVS_RenderSystem;
 struct CVS_Window;
 struct CVS_Buffer;
 
-struct CVS_RenderPipeline{
-	void SetUp();
-	void Render(CVS_RenderScene* scene, CVS_View view);
-};
+
 
 struct CVS_VertexObject{
 	GLuint VAO;

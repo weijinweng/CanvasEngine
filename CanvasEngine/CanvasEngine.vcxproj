@@ -80,8 +80,10 @@
     <ClCompile Include="CVS_GUI.cpp" />
     <ClCompile Include="CVS_LayOut.cpp" />
     <ClCompile Include="CVS_Mesh.cpp" />
+    <ClCompile Include="CVS_Renderer.cpp" />
     <ClCompile Include="CVS_RendererScene.cpp" />
     <ClCompile Include="CVS_RenderNode.cpp" />
+    <ClCompile Include="CVS_RenderPipeline.cpp" />
     <ClCompile Include="CVS_RenderProgram.cpp" />
     <ClCompile Include="CVS_RenderSystem.cpp" />
     <ClCompile Include="CVS_SceneView.cpp" />
@@ -104,6 +106,7 @@
     <ClInclude Include="CVS_Gui.h" />
     <ClInclude Include="CVS_Light.h" />
     <ClInclude Include="CVS_Precompiled.h" />
+    <ClInclude Include="CVS_RenderPipeline.h" />
     <ClInclude Include="CVS_RenderProgram.h" />
     <ClInclude Include="CVS_RenderComponents.h" />
     <ClInclude Include="CVS_RenderSystem.h" />

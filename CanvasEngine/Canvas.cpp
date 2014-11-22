@@ -231,7 +231,6 @@ bool Editor::Initialize()
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
 	testScene->loadFile("dk.obj");
 	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
-
 	mMainScene = testScene;
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);
@@ -292,7 +291,7 @@ LONG_PTR Editor::Message(UINT msg, UINT sParam, LONG_PTR lParam)
 				{
 					CVS_RenderComponent* component = (CVS_RenderComponent*)(void*)((GLint)lParam);
 					mSelected = component->object;
-					printf("yay %s\n", mSelected->name.c_str());
+					printf("Object Selected %s\n", mSelected->name.c_str());
 				}
 				return 0;
 			break;

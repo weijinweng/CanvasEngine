@@ -1,3 +1,4 @@
+#pragma once
 #ifndef CVS_GUI
 #define CVS_GUI
 
@@ -57,9 +58,11 @@ struct CVS_ColorRGBA{
 struct CVS_GUI_OBJ;
 struct CVS_Button;
 struct CVS_EditBox;
+struct CVS_TreeView;
 
 struct CVS_LAYOUT_OBJ{
 	virtual void SetSize(int,int,int,int) = 0 ;
+	virtual void GetMsg(UINT msg, UINT_PTR, LONG_PTR) = 0;
 };
 
 #define CVS_INT 400
@@ -71,9 +74,10 @@ struct CVS_GUI_CONTAINER{
 	int type;
 	virtual HWND getHWND() = 0;
 	virtual CVS_Window* getWindow() = 0;
-	virtual CVS_Button* AddButton(std::string data, int x, int y, int w, int h) = 0;
-	virtual CVS_Button* AddButton(UINT, int x, int y, int w, int h) = 0;
-	virtual CVS_EditBox* AddEditBox(UINT type, void* data, int x, int y, int w, int h) = 0;
+	virtual CVS_Button* AddButton(std::string data, int x, int y, int w, int h);
+	virtual CVS_Button* AddButton(UINT, int x, int y, int w, int h);
+	virtual CVS_EditBox* AddEditBox(UINT type, void* data, int x, int y, int w, int h);
+	virtual CVS_TreeView* AddTreeView(int x, int y, int w, int h, UINT type);
 };
 
 struct CVS_GUI_OBJ{
@@ -108,7 +112,7 @@ struct CVS_TabContent:public CVS_GUI_CONTAINER{
 	CVS_ARECT m_Rect;
 	HWND hWnd;
 	CVS_Tab* parent;
-	int ParseMsg(HWND,UINT msg, WPARAM wParam, LPARAM lParam);
+	int ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam);
 	static LRESULT CALLBACK TabContProc(HWND, UINT, WPARAM, LPARAM, UINT_PTR, DWORD_PTR);
 	CVS_TabContent(CVS_Tab* parent);
 	void OnResize();
@@ -146,6 +150,7 @@ struct CVS_Tab:public CVS_GUI_OBJ, public CVS_LAYOUT_OBJ{
 	int ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam);
 	bool CalibrateLocation();
 
+	void GetMsg(UINT, UINT_PTR, LONG_PTR);
 	void SetSize(int,int,int,int);
 	void HideAllContent(CVS_TabSlot* slot);
 
@@ -165,6 +170,7 @@ struct CVS_ToolBar:public CVS_GUI_OBJ, public CVS_GUI_CONTAINER, public CVS_LAYO
 	CVS_Button* AddButton(UINT bitmapID, int x, int y, int w, int h);
 	CVS_EditBox* AddEditBox(UINT, void*, int, int, int, int);
 	CVS_Window* getWindow();
+	void GetMsg(UINT, UINT_PTR, LONG_PTR);
 	void SetSize(int x, int y, int w, int h);
 	//Creates a new line of tab
 	void AddLine();
@@ -204,6 +210,7 @@ struct CVS_SRECT{
 struct CVS_Layout{
 
 	CVS_Window* window;
+	virtual int ParseMsg(UINT msg, UINT_PTR, LONG_PTR) = 0;
 	virtual void onResize();
 };
 
@@ -233,6 +240,7 @@ struct CVS_GUI_CELL{
 	RECT GetCellRect();
 	void SetPosition(UINT type, CVS_GUI_CELL* pos = NULL, int value = 0);
 	void SetObj(CVS_LAYOUT_OBJ* obj);
+	int ParseMsg(UINT msg, UINT_PTR, LONG_PTR);
 };
 
 
@@ -252,6 +260,7 @@ struct CVS_EditorLayout:public CVS_Layout{
 	//Creates an editor gui;
 	//All commands are sent to he main window
 	CVS_EditorLayout(CVS_Gui* parent);
+	int ParseMsg(UINT msg, UINT_PTR, LONG_PTR);
 	CVS_Button* AddButton(std::string,int,int,int,int,UINT ID);
 	CVS_Tab* GetTab();
 	CVS_ToolBar* getToolBar();
@@ -265,13 +274,14 @@ struct CVS_Menu{
 };
 
 /*Cvs gui parent*/
-struct CVS_Gui{
+struct CVS_Gui:public CVS_Messagable{
 	std::vector<CVS_GUI_OBJ*> objects;
 	//CVS_Frame frame;
 	CVS_Window* window;
 	CVS_Layout* Layout;
 	CVS_Gui(CVS_Window* window);
 	void DrawTab(WPARAM, LPARAM);
+	LONG_PTR Message(UINT msg, UINT sParam, LONG_PTR lParam);
 	CVSButtonHandle addButton(int x, int y, int w, int h, void (function)(void* bundle) = NULL, void* bundle = NULL);
 	void Update();
 };

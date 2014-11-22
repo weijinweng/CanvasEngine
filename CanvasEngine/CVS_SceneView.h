@@ -46,6 +46,7 @@ struct CVS_SceneView :public CVS_GUI_OBJ, CVS_LAYOUT_OBJ{
 	CVS_SceneView(CVS_Gui* gui, int x, int y, int w, int h);
 	//void SetScene(CVS_Scene* scene);
 	int ParseMsg(UINT msg, WPARAM, LPARAM);
+	void GetMsg(UINT, UINT_PTR, LONG_PTR);
 	static LRESULT CALLBACK SceneViewCallback(HWND, UINT, WPARAM, LPARAM, UINT_PTR, DWORD_PTR);
 	void SetScene(CVS_Scene* scene);
 	void Render();

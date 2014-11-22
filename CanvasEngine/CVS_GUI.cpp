@@ -58,6 +58,29 @@ CVS_GUI_OBJ::~CVS_GUI_OBJ()
 	DestroyWindow(hWnd);
 }
 
+CVS_Button* CVS_GUI_CONTAINER::AddButton(std::string data, int x, int y, int w, int h)
+{
+	return NULL;
+}
+
+CVS_Button* CVS_GUI_CONTAINER::AddButton(UINT type, int x, int y, int w, int h)
+{
+	return NULL;
+}
+
+CVS_EditBox* CVS_GUI_CONTAINER::AddEditBox(UINT type, void* data, int x, int y, int w, int h)
+{
+	return NULL;
+}
+
+CVS_TreeView* CVS_GUI_CONTAINER::AddTreeView(int x, int y, int w, int h, UINT type)
+{
+	//FOR the environment
+	CVS_TreeView* newtree = new CVS_TreeView(this, x, y, w, h);
+	this->buttons.push_back(newtree);
+	return newtree;
+}
+
 CVS_GUI_CELL::CVS_GUI_CELL(CVS_Layout* parent):m_Weight(1.0f)
 {
 	
@@ -85,6 +108,17 @@ void CVS_GUI_CELL::SetObj(CVS_LAYOUT_OBJ* obj)
 	
 }
 
+int CVS_GUI_CELL::ParseMsg(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
+{
+	switch (msg)
+	{
+		case SCENE_LOAD:
+			{
+					   this->obj->GetMsg(msg, sParam, lParam);
+			}
+	}
+	return -1;
+}
 
 
 /*Main gui controller*/
@@ -94,7 +128,11 @@ CVS_Gui::CVS_Gui(CVS_Window* parent):window(parent),Layout(NULL)
 
 }
 
-
+LONG_PTR CVS_Gui::Message(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
+{
+	Layout->ParseMsg(msg, sParam, lParam);
+	return 0;
+}
 
 bool CVS_GuiManager::Initialize()
 {

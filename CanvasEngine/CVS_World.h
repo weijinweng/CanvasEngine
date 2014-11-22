@@ -49,7 +49,7 @@ public:
 	void addChildren(CVS_GameObject* child);
 	void removeChildren(CVS_GameObject* child);
 	void addComponent(CVS_GameComponent* component);
-
+	CVS_GameComponent* getComponent(std::string name);
 	void Update();
 };
 

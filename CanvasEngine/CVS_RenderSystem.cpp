@@ -1,99 +1,5 @@
 #include "Canvas.h"
 
-CVS_FrameBuffer::CVS_FrameBuffer()
-{
-	glGenFramebuffers(1, &buffer);
-}
-
-void CVS_FrameBuffer::Bind(GLenum target)
-{
-	glBindFramebuffer(target, buffer);
-	this->flag = target;
-}
-
-void CVS_FrameBuffer::unBind()
-{
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void CVS_FrameBuffer::BindColorAttachment(CVS_Texture* texture, UINT location)
-{
-	texture->Bind();
-	glFramebufferTexture2D(flag, GL_COLOR_ATTACHMENT0 + location, texture->target, texture->textureID, 0);
-}
-
-void CVS_FrameBuffer::BindDepthAttachment(CVS_Texture* texture)
-{
-	texture->Bind();
-	glFramebufferTexture2D(flag, GL_DEPTH_ATTACHMENT, texture->target, texture->textureID, 0);
-}
-
-void CVS_FrameBuffer::setDrawBuffer(GLenum flag)
-{
-	glDrawBuffer(flag);
-}
-
-void CVS_FrameBuffer::setReadBuffer(GLenum flag)
-{
-	glReadBuffer(flag);
-}
-
-bool CVS_FrameBuffer::GetBufferStatus()
-{
-	GLenum status = glCheckFramebufferStatus(flag);
-	if (status != GL_FRAMEBUFFER_COMPLETE)
-	{
-		return false;
-	}
-	return true;
-}
-
-void BindColorAttacment(CVS_Texture* texture, UINT location)
-{
-
-}
-void CVS_RenderPipeline::SetUp()
-{
-	
-}
-
-void CVS_RenderPipeline::Render(CVS_RenderScene* scene, CVS_View view)
-{
-	scene->Draw(&view);
-}
-
-
-CVS_Renderer::CVS_Renderer(HDC glHdc)
-{
-	wglMakeCurrent(glHdc, GLOBALSTATEMACHINE.m_RenderSub.m_glContext);
-	m_ParentHDC = glHdc;
-}
-
-void CVS_Renderer::Render(CVS_RenderScene* scene, CVS_View View)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	GLOBALSTATEMACHINE.m_RenderSub.m_GridDraw->setAsCurrentProgram();
-	glm::mat4 Mat = View.Pers * View.View * glm::mat4(1.0f);
-	glUniformMatrix4fv(GLOBALSTATEMACHINE.m_RenderSub.m_GridMVP,1, GL_FALSE, glm::value_ptr(Mat));
-	glBindVertexArray(GLOBALSTATEMACHINE.m_RenderSub.gridVAO);
-	glDrawArrays(GL_LINES, 0, GLOBALSTATEMACHINE.m_RenderSub.m_GridNum);
-	glBindVertexArray(0);
-
-	if(scene != NULL)
-	{
-		scene->Draw(&View);
-	}
-
-	if(SwapBuffers(m_ParentHDC) != TRUE)
-	{
-		printf("Error swap buffers\n");
-
-	}
-
-
-}
-
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
 {
 	this->pipeline = new CVS_RenderPipeline();
@@ -231,20 +137,17 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 			Z += 0.2f;
 		}
 
-
-
 		glBufferData(GL_ARRAY_BUFFER, sizeof(cvec3) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 		
 		glEnableVertexAttribArray(0);
-
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 	
 
 		glBindVertexArray(0);
-
 		glDeleteBuffers(1, &vertexBuffer);
 
 		m_GridDraw = createNewShader("DefaultGrid", "./Shaders/grid.vert", "./Shaders/grid.frag");
+		createNewShader("Selection", "./Shaders/selection.vert", "./Shaders/selection.frag");
 
 		m_GridMVP = glGetUniformLocation(m_GridDraw->programID, "MVP");
 
@@ -258,17 +161,12 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 		wglSwapIntervalEXT(0);
 		
 		glEnable(GL_CULL_FACE);
-	
-
 		glEnable(GL_DEPTH_TEST);
 	
-		glClearColor(0.7, 0.7, 0.7, 1.0);
+		glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
-		
-
-		this->pipeline = new CVS_RenderPipeline();
 		this->pipeline->SetUp();
-		createNewShader("Selection", "./Shaders/selection.vert", "./Shaders/selection.frag");
+
 		this->m_DefaultTexture = createNewTexture("./Textures/Default.png");
 	}
 

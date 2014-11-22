@@ -9,7 +9,8 @@ public:
 };
 
 
-#define RENDER_SELECTION 0x3131d3
+#define RENDER_SELECTION WM_USER + 1
+#define SCENE_LOAD WM_USER + 2
 
 //WILL COME UP WITH BETTER NAME. But this is the core CVS communications.
 struct CVS_Messagable{

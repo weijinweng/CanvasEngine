@@ -260,6 +260,18 @@ LRESULT CALLBACK CVS_SceneView::SceneViewCallback(HWND hWnd, UINT msg, WPARAM wP
 	return DefSubclassProc(hWnd, msg, wParam, lParam);
 }
 
+void CVS_SceneView::GetMsg(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
+{
+	switch (msg)
+	{
+	case SCENE_LOAD:
+	{
+		
+	}
+		break;
+	}
+}
+
 void CVS_SceneView::SetSize(int x, int y, int w, int h)
 {
 	MoveWindow(hWnd, x, y, w, h, TRUE);

@@ -88,6 +88,14 @@ int CVS_ToolBar::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 	return -1;
 }
 
+void CVS_ToolBar::GetMsg(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
+{
+	for (int i = 0, e = buttons.size(); i < e; ++i)
+	{
+		buttons[i]->ParseMsg(msg, sParam, lParam);
+	}
+}
+
 CVS_Button* CVS_ToolBar::AddButton(std::string name, int x, int y, int w, int h)
 {
 	CVS_Button* newButton = new CVS_Button(name, this, x, 0, w, h);

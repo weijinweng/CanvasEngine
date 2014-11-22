@@ -8,6 +8,7 @@ CVS_GameComponent::CVS_GameComponent(CVS_GameObject* object) :object(object)
 
 CVS_RenderComponent::CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene* scene) :CVS_GameComponent(object)
 {
+	this->name = "RenderComponent";
 	this->node = scene->createNewNode();
 	this->node->msgData = this;
 	printf("%p\n", this);
@@ -58,6 +59,19 @@ void CVS_GameObject::setParent(CVS_GameObject* parent)
 	this->parent = parent;
 
 	transformNode.parent = &parent->transformNode;
+}
+
+CVS_GameComponent* CVS_GameObject::getComponent(std::string cname)
+{
+	for (int i = 0, e = components.size(); i < e; ++i)
+	{
+		if (components[i]->name == cname)
+		{
+			return components[i];
+		}
+	}
+	printf("Shit got nothing here\n");
+	return NULL;
 }
 
 void CVS_GameObject::removeChildren(CVS_GameObject* child)
@@ -120,6 +134,7 @@ bool CVS_Scene::loadFile(char* filename)
 	for(int i = 0, e = aiscene->mRootNode->mNumChildren; i < e; ++i)
 	{
 		CVS_GameObject* newObject = new CVS_GameObject(aiscene->mRootNode->mChildren[i], this->scene, meshes);
+		this->objects.push_back(newObject);
 	}
 	return true;
 }

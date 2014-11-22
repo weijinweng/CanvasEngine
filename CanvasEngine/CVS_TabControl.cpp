@@ -140,6 +140,20 @@ void CVS_Tab::HideAllContent(CVS_TabSlot* slot)
 	}
 }
 
+void CVS_Tab::GetMsg(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
+{
+	switch (msg)
+	{
+	case SCENE_LOAD:
+	{
+					   for (int i = 0, e = m_Slots.size(); i < e; ++i)
+					   {
+						   m_Slots[i]->content->ParseMsg(msg, sParam, lParam);
+					   }
+	}
+	}
+}
+
 bool CVS_Tab::CalibrateLocation()
 {
 	int offX = 0;
