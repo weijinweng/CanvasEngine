@@ -35,11 +35,11 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 		cmat4 MVP = view->Pers * view->View * Model;
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 
-		for (int i = 0, e = children[i]->textures.size(); i < e; ++i)
+		for (int j = 0, e = children[j]->textures.size(); j < e; ++j)
 		{
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(children[i]->textures[i].texture->target, children[i]->textures[i].texture->textureID);
-			glUniform1i(children[i]->textures[i].uniformLoc, i);
+			glActiveTexture(GL_TEXTURE0 + j);
+			glBindTexture(children[i]->textures[j].texture->target, children[i]->textures[j].texture->textureID);
+			glUniform1i(children[i]->textures[j].uniformLoc, j);
 		}
 
 		if (children[i]->mesh != NULL)

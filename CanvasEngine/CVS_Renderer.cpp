@@ -90,8 +90,5 @@ void CVS_Renderer::Render(CVS_RenderScene* scene, CVS_View View)
 		renderSystem->pipeline->Render(scene, View);
 	}
 
-	if (SwapBuffers(m_ParentHDC) != TRUE)
-	{
-		printf("Error swap buffers\n");
-	}
+	SwapBuffers(m_ParentHDC);
 }

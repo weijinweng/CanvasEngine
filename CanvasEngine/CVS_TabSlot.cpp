@@ -3,7 +3,7 @@
 
 CVS_TabContent::CVS_TabContent(CVS_Tab* parent) :parent(parent)
 {
-	hWnd = CreateWindow(WC_STATIC, "Content", WS_CHILD | WS_VISIBLE , 0, parent->m_TabMargins.bottom + 2, parent->m_Rect.right - parent->m_Rect.left, parent->m_Rect.bottom - parent->m_Rect.top - 30, parent->hWnd, NULL, CVS_AppInstance, NULL);
+	hWnd = CreateWindow(WC_STATIC, "Content", WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_CLIPCHILDREN, 0, parent->m_TabMargins.bottom + 2, parent->m_Rect.right - parent->m_Rect.left, parent->m_Rect.bottom - parent->m_Rect.top - 30, parent->hWnd, NULL, CVS_AppInstance, NULL);
 
 	SetWindowSubclass(hWnd, &CVS_TabContent::TabContProc, CVS_TABCONT, (DWORD_PTR)this);
 

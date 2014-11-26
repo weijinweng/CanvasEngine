@@ -11,7 +11,6 @@ CVS_RenderComponent::CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene
 	this->name = "RenderComponent";
 	this->node = scene->createNewNode();
 	this->node->msgData = this;
-	printf("%p\n", this);
 	this->priority;
 }
 
@@ -22,20 +21,49 @@ void CVS_RenderComponent::Update()
 
 CVS_GameObject::CVS_GameObject(const aiNode* node,
 								CVS_RenderScene* scene,
-								std::vector<CVS_Mesh*> meshes)
+								std::vector<CVS_Mesh*> meshes,
+								const aiScene* aiscene)
 {
 	for (int i = 0, e = node->mNumChildren; i < e; ++i)
 	{
-		this->children.push_back(new CVS_GameObject(node->mChildren[i], scene, meshes));
+		this->children.push_back(new CVS_GameObject(node->mChildren[i], scene, meshes, aiscene));
 	}
 	this->name = std::string(node->mName.C_Str());
 	CVS_RenderComponent* RenderComponent = new CVS_RenderComponent(this, scene);
 	
+
 	RenderComponent->node->setMesh(meshes[node->mMeshes[0]]);
 	
+	const aiMesh* aimesh = aiscene->mMeshes[node->mMeshes[0]];
+
+	const aiMaterial* aimaterial = aiscene->mMaterials[aimesh->mMaterialIndex];
+
+	if (aimaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+	{
+		aiString path;
+
+		aimaterial->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+		CVS_Texture* difTex = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(const_cast<char*>(path.C_Str()));
+		RenderComponent->node->SetTexture("diffuseMap", difTex);
+	}
+
+	if (aimaterial->GetTextureCount(aiTextureType_HEIGHT) > 0)
+	{
+		aiString path;
+		aimaterial->GetTexture(aiTextureType_HEIGHT, 0, &path);
+
+		printf("Added normal map %s\n", path.C_Str());
+
+		CVS_Texture* normTex = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(const_cast<char*>(path.C_Str()));
+		RenderComponent->node->SetTexture("normalMap", normTex);
+	}
+	
+	
+
 	this->addComponent(RenderComponent);
 
-	printf("Created GameObject %s\n", name.c_str());
+
 }
 
 void CVS_GameObject::UpdateTransformMatrix()
@@ -125,7 +153,10 @@ CVS_Scene::CVS_Scene(CVS_WorldSystem* system, CVS_RenderScene* renderer)
 bool CVS_Scene::loadFile(char* filename)
 {
 	Assimp::Importer importer;
-	const aiScene* aiscene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* aiscene = importer.ReadFile(filename, aiProcess_GenUVCoords | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs);
+	
+	importer.ApplyPostProcessing(aiProcess_CalcTangentSpace);
+
 	std::vector<CVS_Mesh*> meshes = GLOBALSTATEMACHINE.m_RenderSub.addMeshesFromaiScene(aiscene);
 	
 	if (aiscene == NULL)
@@ -133,7 +164,7 @@ bool CVS_Scene::loadFile(char* filename)
 
 	for(int i = 0, e = aiscene->mRootNode->mNumChildren; i < e; ++i)
 	{
-		CVS_GameObject* newObject = new CVS_GameObject(aiscene->mRootNode->mChildren[i], this->scene, meshes);
+		CVS_GameObject* newObject = new CVS_GameObject(aiscene->mRootNode->mChildren[i], this->scene, meshes, aiscene);
 		this->objects.push_back(newObject);
 	}
 	return true;

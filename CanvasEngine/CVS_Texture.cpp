@@ -14,7 +14,13 @@ bool CVS_Texture::loadData(UINT flags, UINT format, UINT type, int width, int he
 
 bool CVS_Texture::loadFile(char* filePath)
 {
-	SDL_Surface* img = IMG_Load(filePath);
+	this->filepath = std::string(filePath);
+
+	SDL_Surface* img = NULL;
+
+
+	img = IMG_Load(filePath);
+
 
 	if (img == NULL)
 	{
@@ -26,8 +32,6 @@ bool CVS_Texture::loadFile(char* filePath)
 
 	int Mode = GL_RGB;
 
-	printf("pixel format = %d\n", img->format->BitsPerPixel);
-
 	if (img->format->BytesPerPixel == 4)
 	{
 		Mode = GL_RGBA;
@@ -35,13 +39,18 @@ bool CVS_Texture::loadFile(char* filePath)
 
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, img->w, img->h, 0, Mode, GL_UNSIGNED_BYTE, img->pixels);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+
 
 	this->width = img->w;
 	this->height = img->h;
 	this->filepath = filePath;
 	this->type = Mode == Mode;
+	SDL_FreeSurface(img);
 	return true;
 }
 

@@ -97,6 +97,9 @@ public:
 bool CVS_Initialize();
 #ifdef CVS_WIN32
 
+//Render Global Funcs
+void CVS_SetViewport(int w, int h);
+
 bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE prevInstance, LPSTR mCmdLine, int mCmdNum);
 LRESULT CALLBACK CVS_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #endif

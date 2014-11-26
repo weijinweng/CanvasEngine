@@ -33,5 +33,6 @@ struct CVS_RenderProgram{
 	void setAsCurrentProgram();
 };
 
+GLuint CompileShader(char*, char*);
 
 #endif

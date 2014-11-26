@@ -43,7 +43,7 @@ public:
 	std::vector<CVS_GameComponent*> components;
 	std::vector<CVS_GameObject*> children;
 	CVS_GameObject(std::string name = "Object");
-	CVS_GameObject(const aiNode* node, CVS_RenderScene* scene, std::vector<CVS_Mesh*>);
+	CVS_GameObject(const aiNode* node, CVS_RenderScene* scene, std::vector<CVS_Mesh*>, const aiScene*);
 	void UpdateTransformMatrix();
 	void setParent(CVS_GameObject* parent);
 	void addChildren(CVS_GameObject* child);

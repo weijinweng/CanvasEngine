@@ -2,7 +2,7 @@
 
 CVS_Transform::CVS_Transform() :orientation(cvec3(0, 0, 0)), 
 								translation(0.0f),
-								scale(0.0f)
+								scale(1.0f)
 {
 
 }

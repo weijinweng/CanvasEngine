@@ -14,8 +14,10 @@ struct CVS_View;
 
 struct Vertex{
 	cvec3 position;
-	cvec3 normal;
 	cvec2 uv;
+	cvec3 normal;
+	cvec3 tangent;
+
 	Vertex(cvec3 position, cvec2 uv, cvec3 normal);
 };
 
@@ -28,7 +30,9 @@ struct CVS_Mesh{
 	GLuint VAO;
 	void initialize();
 	void initializeFromAiMesh(const aiMesh* mesh);
+	bool LoadFromFile(char* fpath);
 	void Draw();
+	void calculateTangents();
 };
 
 struct CVS_View{
@@ -50,7 +54,9 @@ struct CVS_Camera{
 	cmat4 Persp;
 	cmat4 View; 
 
-	CVS_Camera(cvec3 pos = cvec3(4,3,4), cvec3 target = cvec3(0,0,0), float FOV = 45.0f, float AspectRatio = 16.0f/9.0f, float NearZ = 0.1f, float FarZ = 100.0f);
+	CVS_Camera(cvec3 pos = cvec3(4,3,4), cvec3 target = cvec3(0,0,0), 
+	float FOV = 45.0f, float AspectRatio = 16.0f/9.0f, 
+	float NearZ = 0.1f, float FarZ = 1000.0f);
 
 	void UpdateView();
 	void UpdatePerspective();
@@ -76,7 +82,7 @@ struct CVS_TextureReference{
 	CVS_Texture* texture;
 	std::string name;
 	int uniformLoc;
-	CVS_TextureReference(CVS_Texture* texture, GLint uniformLoc);
+	CVS_TextureReference(CVS_Texture* texture, GLint uniformLoc, std::string uniformname);
 };
 
 struct CVS_RenderNode{
@@ -89,6 +95,7 @@ struct CVS_RenderNode{
 	CVS_RenderNode(CVS_RenderProgramInstance* parent);
 	int voidGetTextureHash(std::string texture);
 	void BindTexture(CVS_Texture* texture, int location);
+	bool SetTexture(std::string, CVS_Texture*);
 	void Render(CVS_View* view);
 	void setMesh(CVS_Mesh* mesh);
 };
@@ -96,7 +103,7 @@ struct CVS_RenderNode{
 struct CVS_RenderScene{
 	std::vector<CVS_RenderNode*> nodes;
 	std::vector<CVS_RenderProgramInstance*> programs;
-	std::vector<CVS_Light> lights;
+	std::vector<CVS_Light*> lights;
 	CVS_RenderScene();
 	CVS_RenderNode* createNewNode();
 	void addProgram(std::string name);

@@ -65,12 +65,20 @@ struct CVS_Font{
 	std::string fontName;
 };
 
+struct CVS_Primitive{
+	CVS_Mesh* Sphere;
+	CVS_Mesh* Cube;
+	CVS_Mesh* Quad;
+	void init();
+};
+
 struct CVS_RenderSystem:public CVS_SubSystem{
 public:
 	int renderWidth, renderHeight;
 	int m_GridNum;
 	GLint m_GridMVP;
 
+	CVS_Primitive primitives;
 
 	CVS_RenderProgram* m_GridDraw;
 	GLuint gridVAO;
@@ -108,6 +116,8 @@ public:
 	CVS_Texture* createNewTexture(char*);
 
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
+	CVS_Mesh* createMesh(char* file);
+	CVS_Mesh* createEmptyMesh(std::string meshName);
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);
 };

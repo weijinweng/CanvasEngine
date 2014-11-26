@@ -63,6 +63,9 @@ void CVS_Selection::Render(CVS_RenderScene* scene, CVS_View* view)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mRenderProgram->setAsCurrentProgram();
 
+	glDisable(GL_BLEND);
+
+
 	for (int i = 0, e = scene->nodes.size(); i < e; ++i)
 	{
 		glUniform1i(this->ObjectIndexLoc, (GLint)scene->nodes[i]->msgData);
@@ -74,7 +77,8 @@ void CVS_Selection::Render(CVS_RenderScene* scene, CVS_View* view)
 		scene->nodes[i]->mesh->Draw();
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glClearColor(0.7, 0.7, 0.7, 1.0);
+	glClearColor(0.0, 0.0,0.0, 0.0);
+
 }
 
 SelectData CVS_Selection::getPrimitiveID(int x, int y)
@@ -275,7 +279,7 @@ void CVS_SceneView::GetMsg(UINT msg, UINT_PTR sParam, LONG_PTR lParam)
 void CVS_SceneView::SetSize(int x, int y, int w, int h)
 {
 	MoveWindow(hWnd, x, y, w, h, TRUE);
-	glViewport(0, 0, w, h);
+	CVS_SetViewport( w, h);
 
 	m_Rect.left = x;
 	m_Rect.right = x + w;

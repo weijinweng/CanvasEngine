@@ -79,6 +79,7 @@
     <ClCompile Include="CVS_EditBox.cpp" />
     <ClCompile Include="CVS_GUI.cpp" />
     <ClCompile Include="CVS_LayOut.cpp" />
+    <ClCompile Include="CVS_Light.cpp" />
     <ClCompile Include="CVS_Mesh.cpp" />
     <ClCompile Include="CVS_Renderer.cpp" />
     <ClCompile Include="CVS_RendererScene.cpp" />

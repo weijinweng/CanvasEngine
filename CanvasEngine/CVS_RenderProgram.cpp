@@ -42,6 +42,7 @@ GLuint CompileShader(char* vertex_file_path, char* fragment_file_path)
     // Check Vertex Shader
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
     glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	InfoLogLength = InfoLogLength != 0 ? InfoLogLength : 256;
     std::vector<char> VertexShaderErrorMessage(InfoLogLength);
 	glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
     fprintf(stdout, "%s\n", &VertexShaderErrorMessage[0]);
@@ -56,6 +57,7 @@ GLuint CompileShader(char* vertex_file_path, char* fragment_file_path)
     // Check Fragment Shader
     glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
     glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	InfoLogLength = InfoLogLength != 0 ? InfoLogLength : 256;
     std::vector<char> FragmentShaderErrorMessage(InfoLogLength);
     glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
     fprintf(stdout, "%s\n", &FragmentShaderErrorMessage[0]);
@@ -70,6 +72,7 @@ GLuint CompileShader(char* vertex_file_path, char* fragment_file_path)
     // Check the program
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
     glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	InfoLogLength = InfoLogLength != 0 ? InfoLogLength : 256;
     std::vector<char> ProgramErrorMessage( std::max(InfoLogLength, int(1)) );
     glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
     fprintf(stdout, "%s\n", &ProgramErrorMessage[0]);
@@ -128,7 +131,7 @@ GLint CVS_RenderProgram::getUniformHash(std::string uniform)
 {
 	int ret = glGetUniformLocation(this->programID, uniform.c_str());
 	if (ret == -1)
-		printf("Error value does not exist\n");
+		printf("Error value does not exist %s\n",uniform.c_str());
 	return ret;
 }
 

@@ -35,7 +35,10 @@ typedef unsigned short CVSFontHandle;
 
 //GUI rectangle
 struct CVS_IRECT{
-	int x, y, w, h;
+	int x,
+	y,
+	w,
+	h;
 };
 
 struct CVS_ARECT{

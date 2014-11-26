@@ -138,6 +138,9 @@
     <ClCompile Include="CVS_RenderPipeline.cpp">
       <Filter>Source Files\Src\RENDERSYSTEM\RENDERER</Filter>
     </ClCompile>
+    <ClCompile Include="CVS_Light.cpp">
+      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CVS_Precompiled.h">

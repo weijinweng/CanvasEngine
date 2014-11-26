@@ -1,8 +1,18 @@
 #include "Canvas.h"
 
+void CVS_Primitive::init()
+{
+	Sphere = GLOBALSTATEMACHINE.m_RenderSub.createMesh("./CVS_Sphere.obj");
+	printf("Sphere vertex count %d\n", Sphere->indices.size());
+	Cube = GLOBALSTATEMACHINE.m_RenderSub.createMesh("./CVS_Box.obj");
+	printf("Sphere vertex count %d\n", Cube->indices.size());
+	Quad = GLOBALSTATEMACHINE.m_RenderSub.createMesh("./CVS_Quad.obj");
+	printf("Sphere vertex count %d\n", Quad->indices.size());
+}
+
 CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
 {
-	this->pipeline = new CVS_RenderPipeline();
+	this->pipeline = new CVS_DeferredPipeline();
 }
 
 bool CVS_RenderSystem::Initialize()
@@ -163,11 +173,13 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
 	
-		glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 		this->pipeline->SetUp();
 
 		this->m_DefaultTexture = createNewTexture("./Textures/Default.png");
+
+		this->primitives.init();
 	}
 
 
@@ -188,6 +200,13 @@ std::vector<CVS_Mesh*> CVS_RenderSystem::addMeshesFromaiScene(const aiScene* sce
 		this->meshes.push_back(newmesh);
 	}
 	return newmeshes;
+}
+
+CVS_Mesh* CVS_RenderSystem::createMesh(char* filename)
+{
+	CVS_Mesh* nMesh = new CVS_Mesh();
+	nMesh->LoadFromFile(filename);
+	return nMesh;
 }
 
 CVS_RenderScene* CVS_RenderSystem::createNewScene()
@@ -214,8 +233,16 @@ CVS_Texture* CVS_RenderSystem::createNewTexture(UINT target)
 
 CVS_Texture* CVS_RenderSystem::createNewTexture(char* filepath)
 {
-	CVS_Texture* newTex = new CVS_Texture(GL_TEXTURE_2D);
+	std::string fpath(filepath);
+	for (int i = 0, e = textures.size(); i < e; ++i)
+	{
+		if (textures[i]->filepath == fpath)
+		{
+			return textures[i];
+		}
+	}
 
+	CVS_Texture* newTex = new CVS_Texture(GL_TEXTURE_2D);
 	textures.push_back(newTex);
 	newTex->loadFile(filepath);
 	return newTex;

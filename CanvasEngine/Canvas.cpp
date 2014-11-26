@@ -8,6 +8,12 @@ HINSTANCE CVS_AppPrevInstance;
 int CVS_CmdShow;
 LPSTR CVS_CmdLine;
 
+void CVS_SetViewport(int w, int h)
+{
+	glViewport(0, 0, w, h);
+	GLOBALSTATEMACHINE.m_RenderSub.pipeline->SetSize(w,h);
+}
+
 CVS_Timer::CVS_Timer()
 {
 	lastTime = 0;
@@ -125,7 +131,7 @@ bool CVS_Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR mCmdLine
 		return false;
 	}
 
-	int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
+	int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG ;
 
 	if (!(IMG_Init(imgFlags) & imgFlags))
 	{
@@ -222,16 +228,22 @@ bool Editor::Initialize()
 		return false;
 	}
 	GLOBALSTATEMACHINE.m_App = this;
-	
 
 	
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", 0,0, 1600, 900, CVS_NULL);
 	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
 	m_MainWindow->CreateMenuMain();
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
-	testScene->loadFile("dk.obj");
+	testScene->loadFile("sponza.obj");
 	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
 	mMainScene = testScene;
+	CVS_Light* light = new CVS_Light();
+	CVS_Light* light2 = new CVS_Light();
+	light->SetPosition(cvec3(0, 5, 0));
+	light2->SetPosition(cvec3(200, 5, 0));
+	testScene->scene->lights.push_back(light);
+	light->DirectionalLight(cvec3(1, 0, 0));
+
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);
 
