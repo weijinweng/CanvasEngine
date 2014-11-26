@@ -22,7 +22,8 @@ struct CVS_InternalResource
 	enum class eType
 	{
 		Unknown,
-		Bone
+		Bone,
+		AnimCurveNode
 	};
 
 	CVS_InternalResource() : m_name("DefaultName"), m_type(eType::Unknown) {}

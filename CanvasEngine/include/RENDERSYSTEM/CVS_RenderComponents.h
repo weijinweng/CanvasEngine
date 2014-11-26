@@ -20,6 +20,14 @@ struct CVS_Animation;
 const uint8 MAX_BONES_PER_VERTEX = 6;
 const uint8 MAX_BONES = 100;
 
+#define TRIANGLE_VERTEX_COUNT 3
+// Four floats for every position.
+#define VERTEX_STRIDE 4
+// Three floats for every normal.
+#define NORMAL_STRIDE 3
+// Two floats for every UV.
+#define UV_STRIDE 2
+
 enum AttribIndex
 {
 	POSITION = 0,

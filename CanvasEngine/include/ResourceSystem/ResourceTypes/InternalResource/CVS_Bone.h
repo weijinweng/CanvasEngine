@@ -19,9 +19,9 @@ struct CVS_Bone : public CVS_InternalResource
 	cvec3 m_scaling;
 
 	// Geometry Offset SRT
-	cvec3 m_GORotation;
-	cvec3 m_GOTranslation;
-	cvec3 m_GOScaling;
+	cvec3 m_geoRotation;
+	cvec3 m_geoTranslation;
+	cvec3 m_geoScaling;
 
 	// Not sure what they do yet..
 	double m_size;

@@ -112,11 +112,6 @@ public:
 	//Assimp
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
 
-	/*
-	std::vector<CVS_Mesh*> _RecursionSwitcher(FbxNode* _pNode, EFbxParseMode _parseMode, std::map<FbxNode*, CVS_Bone*>& _boneMap, std::map<FbxNode*, CVS_Mesh*>& _meshMap);
-	std::vector<CVS_Mesh*> _populateFromFbxNodeRecursive(FbxNode* _pNode, EFbxParseMode _parseMode, std::map<FbxNode*, CVS_Bone*>& _boneMap, std::map<FbxNode*, CVS_Mesh*>& _meshMap);
-	std::vector<CVS_Mesh*> populateRenderSceneFromFbxScene(FbxScene* _scene);
-	*/
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);
 };

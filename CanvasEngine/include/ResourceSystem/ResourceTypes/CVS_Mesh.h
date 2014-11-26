@@ -4,16 +4,18 @@
 
 class CVS_Skeleton;
 
+// For every material, record the offsets in every VBO and triangle counts
+struct CVS_SubMesh
+{
+	CVS_SubMesh() : m_indexOffset(0), m_triangleCount(0) {}
+
+	int m_indexOffset;
+	int m_triangleCount;
+};
+
 struct CVS_Mesh : public CVS_Renderable, public CVS_Resource
 {
-	// For every material, record the offsets in every VBO and triangle counts
-	struct CVS_SubMesh
-	{
-		CVS_SubMesh() : m_indexOffset(0), m_triangleCount(0) {}
 
-		int m_indexOffset;
-		int m_triangleCount;
-	};
 	std::vector<CVS_SubMesh*> m_subMeshes;
 
 	std::vector<Vertex> m_vertices;

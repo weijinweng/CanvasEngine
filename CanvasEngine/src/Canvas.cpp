@@ -248,7 +248,8 @@ bool Editor::Initialize()
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
 	// Load FBX to Resource System
 	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin.fbx");
-
+	//GLOBALSTATEMACHINE.m_ResourceSub.import("Idle.fbx");
+	
 	// Get our mesh
 	auto pMesh = static_cast<CVS_Mesh*>(GLOBALSTATEMACHINE.m_ResourceSub.get("HeroTPP", CVS_Resource::eType::Mesh));
 
