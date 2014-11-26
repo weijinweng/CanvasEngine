@@ -1,8 +1,14 @@
 cmake_minimum_required( VERSION 2.8 )
-find_package(OpenGL REQUIRED)
+
+
+#----- Enable Unicode -----
+#add_definitions(-DUNICODE -D_UNICODE)
 
 ADD_DEFINITIONS("-DGLEW_STATIC")
-ADD_DEFINITIONS("-DCVS_PRECOMPILED_H=<stdafx.h>")
+ADD_DEFINITIONS("-DFBXSDK_SHARED")
+
+#---
+find_package(OpenGL REQUIRED)
 
 SET( INCLUDE_DIRS
 ${glew_INCLUDE_DIRS}

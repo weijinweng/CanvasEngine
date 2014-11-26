@@ -1,7 +1,6 @@
 #ifndef CVS_RENDER
 #define CVS_RENDER
 
-#include CVS_PRECOMPILED_H
 #include "CVS_SubSystem.h"
 #include "CVS_2DTools.h"
 #include "CVS_GUI.h"
@@ -92,6 +91,7 @@ public:
 	std::vector<CVS_RenderScene*> scenes;
 	std::vector<CVS_Mesh*> meshes;
 	std::vector<CVS_Texture*> textures;
+	std::vector<CVS_Animation*> animations;
 
 	CVS_RenderSystem();
 	bool Initialize();
@@ -109,9 +109,14 @@ public:
 	CVS_Texture* createNewTexture(UINT target);
 	CVS_Texture* createNewTexture(char*);
 
+	//Assimp
 	std::vector<CVS_Mesh*> addMeshesFromaiScene(const aiScene* scene);
-	std::vector<CVS_Mesh*> _initMeshesFromFbxNodeRecursive(FbxNode* _pNode);
-	std::vector<CVS_Mesh*> addMeshesFromFbxScene(const FbxScene* scene);
+
+	/*
+	std::vector<CVS_Mesh*> _RecursionSwitcher(FbxNode* _pNode, EFbxParseMode _parseMode, std::map<FbxNode*, CVS_Bone*>& _boneMap, std::map<FbxNode*, CVS_Mesh*>& _meshMap);
+	std::vector<CVS_Mesh*> _populateFromFbxNodeRecursive(FbxNode* _pNode, EFbxParseMode _parseMode, std::map<FbxNode*, CVS_Bone*>& _boneMap, std::map<FbxNode*, CVS_Mesh*>& _meshMap);
+	std::vector<CVS_Mesh*> populateRenderSceneFromFbxScene(FbxScene* _scene);
+	*/
 	CVS_IVEC2 getGlyphSize(char character, unsigned int font);
 	bool loadFont(std::string name, char* fontPath);
 };

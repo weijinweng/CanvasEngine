@@ -240,6 +240,11 @@ elseif(${mode} STREQUAL "WIN32")
 	add_executable (${PROJECT_NAME} WIN32 ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS} ${MY_RESOURCES})
 endif()
 
+#------ force include -----
+if( NOT MY_PRECOMPILED_HEADER STREQUAL "" AND NOT MY_PRECOMPILED_SOURCE STREQUAL "")
+	#get_target_property(FLAGS ${PROJECT_NAME} COMPILE_FLAGS)
+	set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "${FLAGS} /FI\"${MY_PRECOMPILED_HEADER}\"")
+endif()
 #------ set filter directory -----
 string(REPLACE "/" ";" sourceDirList "${CMAKE_SOURCE_DIR}")
 string(REPLACE "/" ";" currSourceDirList "${CMAKE_CURRENT_SOURCE_DIR}")

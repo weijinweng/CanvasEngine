@@ -87,13 +87,13 @@
 #include "infutil.h"
 #undef  NO_INFLATE_MASK
 
-  /* infutil.c must be included before infcodes.c */
+  /* infutil_2.h must be included before infcodes_2.h */
 #include "zutil.c"
 #include "inftrees.c"
-#include "infutil.c"
-#include "infcodes.c"
-#include "infblock.c"
-#include "inflate.c"
+#include "infutil_2.h"
+#include "infcodes_2.h"
+#include "infblock_2.h"
+#include "inflate.h"
 #include "adler32.c"
 
 #if defined( _MSC_VER )

@@ -1,6 +1,9 @@
 #ifndef CVS_PRECOMPILED
 #define CVS_PRECOMPILED
 
+// Platform Abstraction Layer
+#include "Platform.h"
+
 //SDL libraries
 #include <SDL.h>
 #include <SDL_image.h>
@@ -11,6 +14,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include <queue>
 #include <map>
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
@@ -52,6 +56,13 @@
 
 #define RAD_CONV 0.0174532925
 
+// TODO: move this somewhere else...
+// CVS_Utils
+// {
+#define ZERO_MEM(a) memset(a, 0, sizeof(a))
+#define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+// }
+
 //CVS enumerators
 enum CVS_Enum{
 	CVS_NULL = 0,
@@ -69,6 +80,7 @@ enum CVS_Enum{
 
 GLenum convertToGLEnum(CVS_Enum enumerator);
 void copyAiMatrixToGLM(const aiMatrix4x4 *from, glm::mat4 &to);
+void FbxAMatrixToMat4(const FbxAMatrix* _in, glm::mat4& _out);
 int iClamp(int value, int min, int max);
 
 typedef glm::vec3 cvec3;

@@ -1,6 +1,6 @@
 #ifndef CVS_RENDERPROGRAM
 #define CVS_RENDERPROGRAM
-#include CVS_PRECOMPILED_H
+
 
 struct CVS_Texture{
 	UINT target;

@@ -1,7 +1,9 @@
 #include "CVS_RenderComponents.h"
 #include "Canvas.h"
 
-
+//todo: change to skeleton
+#include "CVS_Bone.h"
+#include "CVS_Mesh.h"
 
 CVS_RenderProgramInstance::CVS_RenderProgramInstance(CVS_RenderProgram* program)
 {
@@ -11,12 +13,30 @@ CVS_RenderProgramInstance::CVS_RenderProgramInstance(CVS_RenderProgram* program)
 	{
 		printf("error uni\n");
 	}
-	mvpLoc = glGetUniformLocation(program->programID, "MVP");
+
+	this->mvpLoc = glGetUniformLocation(program->programID, "MVP");
 	if (mvpLoc < 0)
 	{
 		printf("Error uni\n");
 	}
+
 	this->modelLoc = glGetUniformLocation(program->programID, "M");
+	if (modelLoc < 0)
+	{
+		printf("Error uni\n");
+	}
+
+	char uniformName[12];
+	for (int i = 0; i < MAX_BONES; i++)
+	{
+		sprintf_s(uniformName, sizeof(uniformName), "gBones[%d]", i);
+		m_boneLoc[i] = glGetUniformLocation(program->programID, uniformName);
+		if (m_boneLoc[i] < 0)
+		{
+			printf("Error uni\n");
+			assert(0);
+		}
+	}
 }
 
 void CVS_RenderProgramInstance::Render(CVS_View* view)
@@ -31,12 +51,18 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 
 	for(int i = 0, e = this->children.size(); i < e; ++i)
 	{
-		cmat4 Model = this->children[i]->modelMatrix;
+		cmat4 Model = this->children[i]->modelMatrix * this->children[i]->mesh->m_offset;
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(Model));
 		
 		cmat4 MVP = view->Pers * view->View * Model;
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 		
+		for (int j = 0, e = MAX_BONES; j < e; ++j)
+		{
+			auto boneMat = this->children[i]->m_boneMats;
+			glUniformMatrix4fv(m_boneLoc[j], 1, GL_FALSE, glm::value_ptr(boneMat[j]));
+		}
+
 		for (int i = 0, e = children[i]->textures.size(); i < e; ++i)
 		{
 			glActiveTexture(GL_TEXTURE0 + i);
@@ -45,7 +71,10 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 		}
 
 		if (children[i]->mesh != NULL)
-			children[i]->mesh->Draw();
+		{
+			children[i]->mesh->Draw(CVS_Renderable::EDrawMode::Default);
+			children[i]->mesh->Draw(CVS_Renderable::EDrawMode::Skeleton);
+		}
 	}
 }
 

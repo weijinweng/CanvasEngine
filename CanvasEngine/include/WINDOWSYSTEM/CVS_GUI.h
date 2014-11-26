@@ -1,7 +1,7 @@
 #ifndef CVS_GUI
 #define CVS_GUI
 
-#include CVS_PRECOMPILED_H
+
 #include"CVS_SubSystem.h"
 
 struct CVS_Window;

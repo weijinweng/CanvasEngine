@@ -1,6 +1,6 @@
 #ifndef CVS_WORLD_H
 #define CVS_WORLD_H
-#include CVS_PRECOMPILED_H
+
 #include "CVS_Transform.h"
 #include "CVS_RenderSystem.h"
 
@@ -30,7 +30,7 @@ struct CVS_CameraComponent:public CVS_GameComponent{
 };
 
 struct CVS_RenderComponent:public CVS_GameComponent{
-	CVS_RenderNode* node;
+	CVS_RenderNode* m_pNode;
 	CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene* scene);
 	void Update();
 };
@@ -56,9 +56,9 @@ public:
 
 struct CVS_Scene{
 public:
-	std::vector<CVS_GameObject*> objects;
-	CVS_WorldSystem* system;
-	CVS_RenderScene* scene;
+	std::vector<CVS_GameObject*> m_objects;
+	CVS_WorldSystem* m_pWorld;
+	CVS_RenderScene* m_pScene;
 	CVS_Scene(CVS_WorldSystem* system, CVS_RenderScene* scene);
 	void Update();
 	bool loadFile(char* filepath);

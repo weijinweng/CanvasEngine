@@ -1,7 +1,7 @@
 #ifndef CVS_LIGHT_H
 #define CVS_LIGHT_H
 
-#include CVS_PRECOMPILED_H
+
 #include "CVS_Transform.h"
 
 struct CVS_LightProperties{

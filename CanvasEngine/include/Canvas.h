@@ -2,8 +2,9 @@
 #define CANVAS_H
 
 #include "resource.h"
-#include CVS_PRECOMPILED_H
+
 #include "CVS_WindowSystem.h"
+#include "CVS_ResourceSystem.h"
 #include "CVS_World.h"
 
 struct CVS_SceneView;
@@ -48,6 +49,7 @@ public:
 	CVS_WindowSystem m_WindowSub;
 	CVS_GuiManager m_GUISub;
 	CVS_WorldSystem m_WorldSub;
+	CVS_ResourceSystem m_ResourceSub;
 	//CVS_GameSystem m_GameSub;
 	bool initialize();
 	void update();

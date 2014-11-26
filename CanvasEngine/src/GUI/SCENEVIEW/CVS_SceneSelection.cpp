@@ -1,7 +1,8 @@
 #include "Canvas.h"
 #include "CVS_GUI.h"
 
-
+//todo: fix this
+#include "CVS_Mesh.h"
 
 
 
@@ -77,7 +78,8 @@ void CVS_Selection::Render(CVS_RenderScene* scene, CVS_View* view)
 
 		glUniformMatrix4fv(this->MVPLoc, 1, GL_FALSE, glm::value_ptr(mat));
 
-		scene->nodes[i]->mesh->Draw();
+		scene->nodes[i]->mesh->Draw(CVS_Renderable::EDrawMode::Default);
+		scene->nodes[i]->mesh->Draw(CVS_Renderable::EDrawMode::Skeleton);
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glClearColor(0.7, 0.7, 0.7, 1.0);

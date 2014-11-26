@@ -1,6 +1,6 @@
 #ifndef CVS_WINDOWSYSTEM
 #define CVS_WINDOWSYSTEM
-#include CVS_PRECOMPILED_H
+
 #include "CVS_SubSystem.h"
 #include "CVS_RenderSystem.h"
 #include "CVS_GUI.h"

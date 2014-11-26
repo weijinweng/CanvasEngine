@@ -1,6 +1,9 @@
 #include "Canvas.h"
 #include "CVS_World.h"
 
+//TODO: remove this include
+#include "CVS_Mesh.h"
+
 CVS_GameComponent::CVS_GameComponent(CVS_GameObject* object) :object(object)
 {
 
@@ -8,15 +11,16 @@ CVS_GameComponent::CVS_GameComponent(CVS_GameObject* object) :object(object)
 
 CVS_RenderComponent::CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene* scene) :CVS_GameComponent(object)
 {
-	this->node = scene->createNewNode();
-	this->node->msgData = this;
+	this->m_pNode = scene->createNewNode();
+	this->m_pNode->msgData = this;
 	printf("%p\n", this);
 	this->priority;
 }
 
 void CVS_RenderComponent::Update()
 {
-	this->node->modelMatrix = object->transformNode.transform.transform;
+	this->m_pNode->modelMatrix = object->transformNode.transform.transform;
+	this->m_pNode->mesh->UpdateSkeleton(this->m_pNode);
 }
 
 CVS_GameObject::CVS_GameObject(const aiNode* node,
@@ -30,7 +34,7 @@ CVS_GameObject::CVS_GameObject(const aiNode* node,
 	this->name = std::string(node->mName.C_Str());
 	CVS_RenderComponent* RenderComponent = new CVS_RenderComponent(this, scene);
 	
-	RenderComponent->node->setMesh(meshes[node->mMeshes[0]]);
+	RenderComponent->m_pNode->setMesh(meshes[node->mMeshes[0]]);
 	
 	this->addComponent(RenderComponent);
 
@@ -115,179 +119,9 @@ void CVS_GameObject::addComponent(CVS_GameComponent* component)
 }
 CVS_Scene::CVS_Scene(CVS_WorldSystem* system, CVS_RenderScene* renderer)
 {
-	this->scene = renderer;
-	this->system = system;
+	this->m_pScene = renderer;
+	this->m_pWorld = system;
 }
-
-// TODO: Move this to a fbx importer wrapper
-FbxScene* CVS_Scene::_loadFBXScene(char* filepath)
-{
-	auto fbxManager = FbxManager::Create();
-	auto ioSettings = FbxIOSettings::Create(fbxManager, IOSROOT);
-	fbxManager->SetIOSettings(ioSettings);
-
-	auto importer = FbxImporter::Create(fbxManager, "");
-
-	// Create the importer.
-	int fileFormat = -1;
-	if (!fbxManager->GetIOPluginRegistry()->DetectReaderFileFormat(filepath, fileFormat))
-	{
-		// Unrecognizable file format. Try to fall back to FbxImporter::eFBX_BINARY
-		fileFormat = fbxManager->GetIOPluginRegistry()->FindReaderIDByDescription("FBX binary (*.fbx)");;
-	}
-
-	if (!importer->Initialize(filepath, -1, fbxManager->GetIOSettings()))
-	{
-		printf("Call to FbxImporter::Initialize() failed.\n");
-		printf("Error returned: %s\n\n", importer->GetStatus().GetErrorString());
-		exit(-1);
-	}
-
-	auto scene = FbxScene::Create(fbxManager, "My scene");
-	if (!scene)
-	{
-		FBXSDK_printf("Error: Unable to create FBX scene!\n");
-		exit(1);
-	}
-
-	if (importer->Import(scene) == true)
-	{
-		// Convert Axis System to what is used in this example, if needed
-		FbxAxisSystem SceneAxisSystem = scene->GetGlobalSettings().GetAxisSystem();
-		FbxAxisSystem OurAxisSystem(FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded);
-		if (SceneAxisSystem != OurAxisSystem)
-		{
-			OurAxisSystem.ConvertScene(scene);
-		}
-
-		// Requires the complete fbxsdk library
-// 		// Convert Unit System to what is used in this example, if needed
-// 		FbxSystemUnit SceneSystemUnit = scene->GetGlobalSettings().GetSystemUnit();
-// 		if (SceneSystemUnit.GetScaleFactor() != 1.0)
-// 		{
-// 			//The unit in this example is centimeter.
-// 			FbxSystemUnit::cm.ConvertScene(scene);
-// 		}
-
-		FbxArray<FbxString*> mAnimStackNameArray;
-		// Get the list of all the animation stack.
-		scene->FillAnimStackNameArray(mAnimStackNameArray);
-
-		// Convert mesh, NURBS and patch into triangle mesh
-		FbxGeometryConverter lGeomConverter(fbxManager);
-		lGeomConverter.Triangulate(scene, true);
-
-		// Split meshes per material, so that we only have one material per mesh (for VBO support)
-		lGeomConverter.SplitMeshesPerMaterial(scene, true);
-	}
-	else
-	{
-		printf("Unable to import file %s.\n", filepath);
-		printf("Error reported: ", importer->GetStatus().GetErrorString());
-	}
-	importer->Destroy();
-	ioSettings->Destroy();
-
-	return scene;
-}
-
-CVS_GameObject* _initGameObjectRecursive(FbxNode* _pNode, CVS_Scene* _pScene, std::vector<CVS_Mesh*> _meshes, int& /*Must be 0 on first call*/_recursionIndex)
-{
-	// Assumption: Depth first search of FbxNodes is always traversed in the same order
-	CVS_GameObject* pParent;
-	// Not all nodes are meshes
-	if (_pNode->GetMesh())
-	{
-		// Create an instance first to reduce constructor complexity
-		pParent = new CVS_GameObject(_pNode->GetName());
-		_pScene->objects.push_back(pParent);
-
-		auto pRenderComp = new CVS_RenderComponent(pParent, _pScene->scene);
-		pRenderComp->node->setMesh(_meshes[_recursionIndex]);
-		pParent->addComponent(pRenderComp);
-
-		// Fill all attributes here
-		double pDouble[3];
-		auto hAllProps = _pNode->GetPropertyHandle();
-		auto hProp = hAllProps.Find("PreRotation", true);
-		hProp.Get(pDouble, EFbxType::eFbxDouble3);
-		pParent->transformNode.transform.orientation = cquat(cvec3(pDouble[0] * RAD_CONV, pDouble[1] * RAD_CONV, pDouble[2] * RAD_CONV));
-
-		hProp = hAllProps.Find("Lcl Translation", true);
-		hProp.Get(pDouble, EFbxType::eFbxDouble3);
-		// Note: y and z are flipped here because we want Y-up translation
-		pParent->transformNode.transform.translation = cvec3(pDouble[0], pDouble[2], pDouble[1]);
-
-		hProp = hAllProps.Find("Lcl Rotation", true);
-		hProp.Get(pDouble, EFbxType::eFbxDouble3);
-		pParent->transformNode.transform.orientation *= cquat(cvec3(pDouble[0] * RAD_CONV, pDouble[1] * RAD_CONV, pDouble[2] * RAD_CONV));
-
-		hProp = hAllProps.Find("Lcl Scaling", true);
-		hProp.Get(pDouble, EFbxType::eFbxDouble3);
-		pParent->transformNode.transform.scale = cvec3(pDouble[0], pDouble[1], pDouble[2]);
-
-		// Increment recursion counter
-		++_recursionIndex;
-
-		printf("_InitGameObjectRecursive: Created GameObject %s\n", pParent->name.c_str());
-	}
-	else
-	{
-		pParent = nullptr;
-		printf("_InitGameObjectRecursive: Skipped Non-mesh Node. %s\n", _pNode->GetName());
-	}
-
-
-	// Process children regardless of whether parent is a mesh node
-	const int childCount = _pNode->GetChildCount();
-	for (int i = 0; i < childCount; ++i)
-	{
-		auto pChild = _initGameObjectRecursive(_pNode->GetChild(i), _pScene, _meshes, _recursionIndex);
-		// Only push when it is a child
-		if (pChild && pParent)
-		{
-			pParent->children.push_back(pChild);
-		}
-	}
-
-	return pParent;
-}
-
-bool CVS_Scene::loadFile(char* filename)
-{
-	std::string file = filename;
-	std::string extension = file.substr(file.find_last_of('.'), file.size());
-	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-
-	std::vector<CVS_Mesh*> meshes;
-	int childCount = 0;
-	if (extension == ".fbx")
-	{
-		printf("CVS_Scene: Loading %s.\n", filename);
-		auto fbxScene = _loadFBXScene(filename);
-
-		std::vector<CVS_Mesh*> meshes = GLOBALSTATEMACHINE.m_RenderSub.addMeshesFromFbxScene(fbxScene);
-		int numObjInitialized = 0;
-		CVS_GameObject* pRootObj = _initGameObjectRecursive(fbxScene->GetRootNode(), this, meshes, numObjInitialized);
-		if (numObjInitialized != meshes.size())
-		{
-			printf("CVS_Scene::loadFile numObjInitialized does not match vector size.\n");
-		}
-	}
-	else // Default loader
-	{
-		Assimp::Importer importer;
-		const aiScene* aiscene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
-		std::vector<CVS_Mesh*> meshes = GLOBALSTATEMACHINE.m_RenderSub.addMeshesFromaiScene(aiscene);
-		childCount = aiscene->mRootNode->mNumChildren;
-		for (int i = 0, e = childCount; i < e; ++i)
-		{
-			CVS_GameObject* newObject = new CVS_GameObject(aiscene->mRootNode->mChildren[i], this->scene, meshes);
-		}
-	}
-	return true;
-}
-
 
 bool CVS_WorldSystem::Initialize()
 {
@@ -298,7 +132,7 @@ bool CVS_WorldSystem::Update()
 {
 	for (auto i : this->scenes)
 	{
-		for (auto j : i->objects)
+		for (auto j : i->m_objects)
 		{
 			j->Update();
 		}

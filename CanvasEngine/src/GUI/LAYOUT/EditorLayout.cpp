@@ -43,5 +43,5 @@ void CVS_EditorLayout::onResize()
 
 void CVS_EditorLayout::setScene(CVS_Scene* scene)
 {
-	this->view->Scene = scene->scene;
+	this->view->Scene = scene->m_pScene;
 }
