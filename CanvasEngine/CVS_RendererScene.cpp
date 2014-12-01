@@ -23,10 +23,6 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 	program->setAsCurrentProgram();
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view->View));
 
-	int lightPos = glGetUniformLocation(program->programID, "LightPosition_worldspace");
-	glUniform3f(lightPos, 3, 3, 3);
-
-
 	for (int i = 0, e = this->children.size(); i < e; ++i)
 	{
 		cmat4 Model = this->children[i]->modelMatrix;
@@ -45,6 +41,53 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 		if (children[i]->mesh != NULL)
 			children[i]->mesh->Draw();
 	}
+}
+
+void CVS_RenderProgramInstance::BoundingSphereCull(CVS_View* view)
+{
+	numActive = 0;
+	for (int i = 0, e = children.size(); i < e; ++i)
+	{
+		if (children[i]->CheckActiveBSphere(view))
+		{
+			this->activeChildren[numActive] = children[i];
+			numActive++;
+		}
+	}
+}
+
+void CVS_RenderProgramInstance::CulledRender(CVS_View* view)
+{
+	program->setAsCurrentProgram();
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view->View));
+
+	for (int i = 0, e = this->children.size(); i < e; ++i)
+	{
+		if (this->children[i]->CheckActiveBSphere(view))
+		{
+			cmat4 Model = this->children[i]->modelMatrix;
+			glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(Model));
+
+			cmat4 MVP = view->Pers * view->View * Model;
+			glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
+
+			for (int j = 0, e = children[j]->textures.size(); j < e; ++j)
+			{
+				glActiveTexture(GL_TEXTURE0 + j);
+				glBindTexture(children[i]->textures[j].texture->target, children[i]->textures[j].texture->textureID);
+				glUniform1i(children[i]->textures[j].uniformLoc, j);
+			}
+
+			if (children[i]->mesh != NULL)
+				children[i]->mesh->Draw();
+		}
+	}
+}
+
+void CVS_RenderProgramInstance::addChild(CVS_RenderNode* node)
+{
+	this->children.push_back(node);
+	this->activeChildren.resize(this->children.size());
 }
 
 
@@ -68,3 +111,18 @@ void CVS_RenderScene::Draw(CVS_View* view)
 	}
 }
 
+void CVS_RenderScene::FrustumCull(CVS_View* view)
+{
+	for (int i = 0, e = programs.size(); i < e; ++i)
+	{
+		programs[i]->BoundingSphereCull(view);
+	}
+}
+
+void CVS_RenderScene::OptimizedDraw(CVS_View* view)
+{
+	for (int i = 0, e = programs.size(); i < e; ++i)
+	{
+		programs[i]->CulledRender(view);
+	}
+}

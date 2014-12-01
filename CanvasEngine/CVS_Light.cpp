@@ -2,7 +2,7 @@
 
 CVS_LightProperties::CVS_LightProperties() :position(0, 0, 0, 1.0)
 , ambient(1.0, 1.0, 1.0, 1.0), diffuse(1.0f, 1.0f, 1.0f, 1.0f),
-specular(1.0, 1.0, 1.0, 1.0), constAttenuation(0.0f), linearAttenuation(1.0f),
+specular(1.0, 1.0, 1.0, 1.0), constAttenuation(0.0f), linearAttenuation(0.3f),
 quadraticAttenuation(0.0f), type(CVS_LGT_PT), spotCosCutoff(1.0f), rad(1.0f)
 {}
 

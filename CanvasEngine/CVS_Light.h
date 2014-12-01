@@ -29,6 +29,8 @@ struct CVS_LightProperties{
 
 	float rad;
 
+	GLuint ShadowMap;
+
 	CVS_LightProperties();
 	void CalculateBoundRadius();
 };

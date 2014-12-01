@@ -239,10 +239,15 @@ bool Editor::Initialize()
 	mMainScene = testScene;
 	CVS_Light* light = new CVS_Light();
 	CVS_Light* light2 = new CVS_Light();
+	CVS_Light* light3 = new CVS_Light();
+
 	light->SetPosition(cvec3(0, 5, 0));
-	light2->SetPosition(cvec3(200, 5, 0));
+	light2->SetPosition(cvec3(20, 5, 0));
+	light3->SetPosition(cvec3(-20, 5, 0));
+
 	testScene->scene->lights.push_back(light);
-	light->DirectionalLight(cvec3(1, 0, 0));
+	testScene->scene->lights.push_back(light2);
+	testScene->scene->lights.push_back(light3);
 
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);

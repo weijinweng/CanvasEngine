@@ -30,7 +30,6 @@ CVS_GameObject::CVS_GameObject(const aiNode* node,
 	}
 	this->name = std::string(node->mName.C_Str());
 	CVS_RenderComponent* RenderComponent = new CVS_RenderComponent(this, scene);
-	
 
 	RenderComponent->node->setMesh(meshes[node->mMeshes[0]]);
 	
@@ -48,18 +47,37 @@ CVS_GameObject::CVS_GameObject(const aiNode* node,
 		RenderComponent->node->SetTexture("diffuseMap", difTex);
 	}
 
+	if (aimaterial->GetTextureCount(aiTextureType_SPECULAR))
+	{
+		aiString path;
+
+		aimaterial->GetTexture(aiTextureType_SPECULAR, 0, &path);
+		
+		CVS_Texture* specTex = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(const_cast<char*>(path.C_Str()));
+		RenderComponent->node->SetTexture("specMap", specTex);
+	}
+
 	if (aimaterial->GetTextureCount(aiTextureType_HEIGHT) > 0)
 	{
 		aiString path;
 		aimaterial->GetTexture(aiTextureType_HEIGHT, 0, &path);
 
-		printf("Added normal map %s\n", path.C_Str());
+
 
 		CVS_Texture* normTex = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(const_cast<char*>(path.C_Str()));
 		RenderComponent->node->SetTexture("normalMap", normTex);
 	}
 	
-	
+	if (aimaterial->GetTextureCount(aiTextureType_OPACITY) > 0)
+	{
+		aiString path;
+		aimaterial->GetTexture(aiTextureType_OPACITY, 0, &path);
+
+
+		printf("Got alpha mask %s\n", path.C_Str());
+		CVS_Texture* normTex = GLOBALSTATEMACHINE.m_RenderSub.createNewTexture(const_cast<char*>(path.C_Str()));
+		RenderComponent->node->SetTexture("alphaMask", normTex);
+	}
 
 	this->addComponent(RenderComponent);
 

@@ -140,10 +140,7 @@ int CVS_SceneView::ParseMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 
 	case WM_RBUTTONDOWN:
 	{
-						   CVS_View view = Cam->getView();
-						   mSelection->Render(Scene, &view);
-						   SelectData data = mSelection->getPrimitiveID(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-						   ((Editor*)GLOBALSTATEMACHINE.m_App)->Message(RENDER_SELECTION, 0, (LONG_PTR)data.ObjectID);
+
 	}
 		return 0;
 	case WM_LBUTTONDOWN:

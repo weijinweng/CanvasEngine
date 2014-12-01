@@ -44,6 +44,18 @@ void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
 	glm::vec2 nullUV(0, 0);
 	this->name = std::string(mesh->mName.data);
 
+	cvec3 max = cvec3(0, 0, 0);
+
+	cvec3 caller_p, cen;
+
+	double dx, dy, dz;
+	double rad_sq, xspan, yspan, zspan, maxspan, rad;
+	double old_to_p, old_to_p_sq, old_to_new;
+	cvec3 xmin, xmax, ymin, ymax, zmin, zmax, dia1, dia2;
+
+	xmin.x = ymin.y = zmin.z = FLT_MAX;
+	xmax.x = ymax.y = zmax.z = -FLT_MAX;
+
 	for (int i = 0, e = mesh->mNumVertices; i < e; i++)
 	{
 		glm::vec3 pos = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
@@ -51,7 +63,92 @@ void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
 		glm::vec3 normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 
 		this->vertices.push_back(Vertex(pos, uv, normal));
+
+		caller_p = pos;
+
+		if (caller_p.x<xmin.x)
+			xmin = caller_p; 
+		if (caller_p.x>xmax.x)
+			xmax = caller_p;
+		if (caller_p.y<ymin.y)
+			ymin = caller_p;
+		if (caller_p.y>ymax.y)
+			ymax = caller_p;
+		if (caller_p.z<zmin.z)
+			zmin = caller_p;
+		if (caller_p.z>zmax.z)
+			zmax = caller_p;
 	}
+
+
+	dx = xmax.x - xmin.x;
+	dy = xmax.y - xmin.y;
+	dz = xmax.z - xmin.z;
+	xspan = dx * dx + dy * dy + dz * dz;
+
+	dx = ymax.x - ymin.x;
+	dy = ymax.y - ymin.y;
+	dz = ymax.z - ymin.z;
+	yspan = dx * dx + dy * dy + dz * dz;
+
+	dx = zmax.x - zmin.x;
+	dy = zmax.y - zmin.y;
+	dz = zmax.z - zmin.z;
+	zspan = dx * dx + dy * dy + dz * dz;
+
+	dia1 = xmin; dia2 = xmax; 
+	maxspan = xspan;
+
+	if (yspan > maxspan)
+	{
+		maxspan = yspan;
+		dia1 = ymin; dia2 = ymax;
+	}
+	if (zspan > maxspan)
+	{
+		dia1 = zmin; dia2 = zmax;
+	}
+
+	cen.x = (dia1.x + dia2.x) / 2.0;
+	cen.y = (dia1.y + dia2.y) / 2.0;
+	cen.z = (dia1.z + dia2.z) / 2.0;
+
+	dx = dia2.x - cen.x;
+	dy = dia2.y - cen.y;
+	dz = dia2.z - cen.z;
+
+	rad_sq = dx * dx + dy * dy + dz * dz;
+	rad = sqrt(rad_sq);
+
+	for (int i = 0, e = vertices.size(); i < e; ++i)
+	{
+		caller_p = vertices[i].position;
+
+		dx = caller_p.x - cen.x;
+		dy = caller_p.y - cen.y;
+		dz = caller_p.z - cen.z;
+		old_to_p_sq = dx * dx + dy * dy + dz * dz;
+		if (old_to_p_sq > rad_sq)
+		{
+			old_to_p = sqrt(old_to_p_sq);
+
+			rad = (rad + old_to_p) / 2.0;
+			rad_sq = rad*rad;
+			old_to_new = old_to_p - rad;
+
+			cen.x = (rad*cen.x + old_to_new*caller_p.x) / old_to_p;
+			cen.y = (rad*cen.y + old_to_new*caller_p.y) / old_to_p;
+			cen.z = (rad*cen.z + old_to_new*caller_p.z) / old_to_p;
+
+
+		}
+	}
+	printf("\n New sphere: cen,rad = %f %f %f   %f",
+		cen.x, cen.y, cen.z, rad);
+
+	bSphere.radius = rad;
+	bSphere.center = cen;
+
 
 
 	for (int i = 0, e = mesh->mNumFaces; i < e; i++)
@@ -86,8 +183,6 @@ void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
 	}
 
 	this->initialize();
-
-
 
 	return;
 }
@@ -138,7 +233,7 @@ void CVS_Mesh::Draw()
 bool CVS_Mesh::LoadFromFile(char* filepath)
 {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(filepath, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(filepath, aiProcess_GenUVCoords | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_FlipUVs);
 	if (scene)
 	{
 		if (scene->mNumMeshes)

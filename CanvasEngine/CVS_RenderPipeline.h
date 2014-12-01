@@ -20,19 +20,38 @@ enum GTex{
 };
 
 struct CVS_DeferredPipeline : public CVS_RenderPipeline{
+	struct VCT{
+
+		void Voxelize();
+		void Pass();
+		void DrawVoxels();
+	};
+
 	struct AOBuffer{
 		GLuint m_AoFrameBuffer;
+		GLuint m_PingPongBlur;
 		GLuint m_DepthTexture;
 		GLuint m_AoTexture;
+		GLuint m_AoNoise;
 		CVS_RenderProgram* AOShader;
+		CVS_RenderProgram* HBAOShader;
+		CVS_RenderProgram* XBlurShader;
+		CVS_RenderProgram* YBlurShader;
 
 		int dep_map;
 		int dcLoc;
 		int iP;
 
+		int HBAO_dep_map;
+		int HBAO_noise_map;
+		int HBAO_dc;
+		int HBAO_iP;
+		int HBAO_focal_length;
+
 		void SetUp();
 		void UpdateSize();
 		void PassAO(CVS_RenderScene* scene, CVS_View* view);
+		void PassHBAO(CVS_RenderScene* scene, CVS_View* view);
 	};
 	struct GBuffer{
 		GLuint m_FrameBuffer;
@@ -45,6 +64,7 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 		void UpdateSize();
 	};
 	struct LGHPass{
+		
 		int iP;
 		int V;
 		int MVP;
@@ -66,7 +86,7 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 		int pos_map;
 		int color_map;
 		int norm_map;
-		int dep_map;
+		int uv_map;
 		int AO_map;
 
 		int cam;
@@ -79,8 +99,13 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 		CVS_Mesh* mQuad;
 		CVS_Mesh* mSpotCone;
 
+		CVS_RenderProgram* dirProgram;
+		CVS_RenderProgram* spotProgram;
 		CVS_RenderProgram* program;
 
+		GLuint m_ShadowFrameBuffer;
+
+		void ShadowPass(CVS_RenderScene*, CVS_View*);
 		void SetUp();
 
 		void pass(CVS_RenderScene* scene, CVS_View* view);

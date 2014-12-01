@@ -26,10 +26,8 @@ void CVS_DeferredPipeline::LGHPass::SetUp()
 	pos_map = program->getUniformHash("pos_map");
 	color_map = program->getUniformHash("color_map");
 	norm_map = program->getUniformHash("norm_map");
-	dep_map = program->getUniformHash("depth_map");
+	uv_map = program->getUniformHash("uv_map");
 	AO_map = program->getUniformHash("AO_map");
-
-	cam = program->getUniformHash("cam");
 
 	rad = program->getUniformHash("rad");
 
@@ -66,39 +64,28 @@ void CVS_DeferredPipeline::LGHPass::pass(CVS_RenderScene* scene, CVS_View* view)
 	glUniform1i(norm_map, 2);
 
 	glActiveTexture(GL_TEXTURE0 + 3);
-	glBindTexture(GL_TEXTURE_2D, pipeline->buffer.m_DepthTexture);
-	glUniform1i(dep_map, 3);
+	glBindTexture(GL_TEXTURE_2D, pipeline->AO.m_AoTexture);
+	glUniform1i(AO_map, 3);
 
 	glActiveTexture(GL_TEXTURE0 + 4);
-	glBindTexture(GL_TEXTURE_2D, pipeline->AO.m_AoTexture);
-	glUniform1i(AO_map, 4);
+	glBindTexture(GL_TEXTURE_2D, pipeline->buffer.m_Buffers[UV_TEX]);
+	glUniform1i(uv_map, 4);
 
 	CVS_IRECT rec = ((CVS_DeferredPipeline*)GLOBALSTATEMACHINE.m_RenderSub.pipeline)->dc;
 	glUniform2f(dcLoc, (float)rec.w, (float)rec.h);
 
-
-
-	cvec4 campos = view->View * cvec4(0, 0, 0, 1);
-	campos *= -1.0f;
-
 	glUniformMatrix4fv(V, 1, GL_FALSE, glm::value_ptr(view->View));
-	glUniformMatrix4fv(iP, 1, GL_FALSE, glm::value_ptr(glm::inverse(view->Pers)));
 
 	for (int i = 0, e = scene->lights.size(); i < e; ++i)
 	{
 
-
-
 		CVS_LightProperties prop = scene->lights[i]->properties;
 
-		glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(view->Pers * view->View * prop.transform.transform));
-
+	
 		glUniform4fv(pos, 1, glm::value_ptr(prop.position));
 		glUniform4fv(amb, 1, glm::value_ptr(prop.ambient));
 		glUniform4fv(dif, 1, glm::value_ptr(prop.diffuse));
 		glUniform4fv(spe, 1, glm::value_ptr(prop.specular));
-
-		glUniform3f(cam, campos.x, campos.y, campos.z);
 
 		glUniform1f(con, prop.constAttenuation);
 		glUniform1f(lin, prop.linearAttenuation);
@@ -108,20 +95,17 @@ void CVS_DeferredPipeline::LGHPass::pass(CVS_RenderScene* scene, CVS_View* view)
 
 		glUniform1f(rad, prop.rad);
 
-		switch (prop.type)
+		if (prop.type == CVS_LightProperties::CVS_LGT_PT)
 		{
-			case CVS_LightProperties::CVS_LGT_PT:
-			{
-												GLOBALSTATEMACHINE.m_RenderSub.primitives.Sphere->Draw();
-			}
-			case CVS_LightProperties::CVS_LGT_DIR:
-			{
-											glDisable(GL_CULL_FACE);
-											GLOBALSTATEMACHINE.m_RenderSub.primitives.Sphere->Draw();
-											glEnable(GL_CULL_FACE);
-			}
+			glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+			GLOBALSTATEMACHINE.m_RenderSub.primitives.Quad->Draw();
 		}
+		else if (prop.type == CVS_LightProperties::CVS_LGT_DIR)
+		{
+			glUniformMatrix4fv(MVP, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+			GLOBALSTATEMACHINE.m_RenderSub.primitives.Quad->Draw();
 
+		}
 	}
 	glCullFace(GL_BACK);
 
@@ -130,10 +114,17 @@ void CVS_DeferredPipeline::LGHPass::pass(CVS_RenderScene* scene, CVS_View* view)
 void CVS_DeferredPipeline::AOBuffer::SetUp()
 {
 	AOShader = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("HBAO/SSAO", "./Shaders/HSAO.vert", "./Shaders/HSAO.frag");
+	HBAOShader = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("HBAO", "./Shaders/HSAO.vert", "./Shaders/HBAO.frag");
 
 	dep_map = AOShader->getUniformHash("depth_map");
 	dcLoc = AOShader->getUniformHash("dc");
 	iP = AOShader->getUniformHash("iP");
+
+	HBAO_dep_map = HBAOShader->getUniformHash("depth_map");
+	HBAO_noise_map = HBAOShader->getUniformHash("noise_map");
+	HBAO_dc = HBAOShader->getUniformHash("dc");
+	HBAO_iP = HBAOShader->getUniformHash("iP");
+	HBAO_focal_length = HBAOShader->getUniformHash("FocalLen");
 
 	CVS_DeferredPipeline* pipeline =(CVS_DeferredPipeline*) GLOBALSTATEMACHINE.m_RenderSub.pipeline;
 
@@ -180,6 +171,72 @@ void CVS_DeferredPipeline::AOBuffer::SetUp()
 		MessageBox(NULL, "Error Framebuffer AO incomplete", "Error", MB_OK);
 	}
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+	glGenTextures(1, &m_AoNoise);
+	glBindTexture(GL_TEXTURE_2D, m_AoNoise);
+
+	float* noise = new float[4 * 4 * 4];
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			glm::vec2 xy = glm::circularRand(1.0f);
+			float z = glm::linearRand(0.0f, 1.0f);
+			float w = glm::linearRand(0.0f, 1.0f);
+
+			int startPos = 4 * (i * 4 + j);
+			noise[startPos + 0] = xy[0]; 
+			noise[startPos + 1] = xy[1];
+			noise[startPos + 2] = z;
+			noise[startPos + 3] = w;
+		}
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 4, 4, 0, GL_RGBA, GL_FLOAT, noise);
+	
+	glGenTextures(1, &m_PingPongBlur);
+	glBindTexture(GL_TEXTURE_2D, m_PingPongBlur);
+	
+	glTexImage2D(GL_TEXTURE_2D,
+		0, GL_RGB32F, dc.w ? dc.w : 100, dc.h ? dc.h : 100,
+		0, GL_RGB, GL_FLOAT, NULL);
+	
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void CVS_DeferredPipeline::AOBuffer::PassHBAO(CVS_RenderScene* scene, CVS_View* view)
+{
+	glDisable(GL_CULL_FACE);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_AoFrameBuffer);
+
+	HBAOShader->setAsCurrentProgram();
+	CVS_DeferredPipeline* pipeline = (CVS_DeferredPipeline*)GLOBALSTATEMACHINE.m_RenderSub.pipeline;
+	glUniformMatrix4fv(HBAO_iP, 1, GL_FALSE, glm::value_ptr(glm::inverse(view->Pers)));
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, pipeline->buffer.m_DepthTexture);
+	glUniform1i(HBAO_dep_map, 0);
+
+	glActiveTexture(GL_TEXTURE0 + 1);
+	glBindTexture(GL_TEXTURE_2D, m_AoNoise);
+	glUniform1i(HBAO_noise_map, 1);
+
+	glUniform2f(HBAO_dc, (float)pipeline->dc.w, (float)pipeline->dc.h);
+
+	float Focal1 = view->Pers[1][1];
+	float Focal2 = view->Pers[0][0];
+
+	glUniform2f(HBAO_focal_length, Focal1, Focal2);
+
+	GLOBALSTATEMACHINE.m_RenderSub.primitives.Quad->Draw();
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glEnable(GL_CULL_FACE);
 }
 
 void CVS_DeferredPipeline::AOBuffer::PassAO(CVS_RenderScene* scene, CVS_View* view)
@@ -216,10 +273,17 @@ void CVS_DeferredPipeline::AOBuffer::UpdateSize()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-
 	glBindTexture(GL_TEXTURE_2D, m_DepthTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, dc.w, dc.h, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 
+	glBindTexture(GL_TEXTURE_2D, m_PingPongBlur);
+
+	glTexImage2D(GL_TEXTURE_2D,
+		0, GL_RGB32F, dc.w ? dc.w : 100, dc.h ? dc.h : 100,
+		0, GL_RGB, GL_FLOAT, NULL);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
 bool CVS_DeferredPipeline::GBuffer::SetUp()
@@ -338,15 +402,13 @@ void CVS_DeferredPipeline::Render(CVS_RenderScene* Scene, CVS_View view)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	Scene->Draw(&view);
 
-
+	Scene->OptimizedDraw(&view);
 
 	//Light pass
 	buffer.RBind();
 	glDisable(GL_DEPTH_TEST);
-	this->AO.PassAO(Scene, &view);
-	glClear(GL_COLOR_BUFFER_BIT);
+	this->AO.PassHBAO(Scene, &view);
 	light.pass(Scene, &view);
 }
 

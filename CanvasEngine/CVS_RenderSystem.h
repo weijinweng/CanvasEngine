@@ -84,6 +84,8 @@ public:
 	GLuint gridVAO;
 	CVS_RenderProgram* m_DefaultProgram;
 	CVS_Texture* m_DefaultTexture;
+	CVS_Texture* m_DefaultSpecTexture;
+	CVS_Texture* m_DefaultMaskTexture;
 	std::vector<CVS_Renderer*> renderers;
 	std::map<std::string, CVS_RenderProgram*> programs;
 	std::vector<CVS_VertexObject*> vertexArrays;

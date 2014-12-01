@@ -3,14 +3,13 @@
 void CVS_Primitive::init()
 {
 	Sphere = GLOBALSTATEMACHINE.m_RenderSub.createMesh("./CVS_Sphere.obj");
-	printf("Sphere vertex count %d\n", Sphere->indices.size());
+
 	Cube = GLOBALSTATEMACHINE.m_RenderSub.createMesh("./CVS_Box.obj");
-	printf("Sphere vertex count %d\n", Cube->indices.size());
+
 	Quad = GLOBALSTATEMACHINE.m_RenderSub.createMesh("./CVS_Quad.obj");
-	printf("Sphere vertex count %d\n", Quad->indices.size());
 }
 
-CVS_RenderSystem::CVS_RenderSystem():m_glContext(NULL)
+CVS_RenderSystem::CVS_RenderSystem() :m_glContext(NULL), m_DefaultSpecTexture(NULL)
 {
 	this->pipeline = new CVS_DeferredPipeline();
 }
@@ -177,7 +176,9 @@ CVS_Renderer* CVS_RenderSystem::createNewRenderer(HDC glHdc)
 
 		this->pipeline->SetUp();
 
-		this->m_DefaultTexture = createNewTexture("./Textures/Default.png");
+		this->m_DefaultTexture = createNewTexture("./textures/Default.png");
+		this->m_DefaultSpecTexture = createNewTexture("./textures/Default_spec.png");
+		this->m_DefaultMaskTexture = createNewTexture("./textures/Default_mask.png");
 
 		this->primitives.init();
 	}
