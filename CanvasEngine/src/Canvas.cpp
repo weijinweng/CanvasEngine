@@ -97,6 +97,7 @@ bool CVS_StateMachine::initialize()
 {
 	auto hr = true;
 	hr &= m_RenderSub.Initialize();
+	hr &= m_AnimationSub.Initialize();
 	hr &= m_ResourceSub.Initialize();
 	hr &= m_WindowSub.Initialize();
 
@@ -239,19 +240,28 @@ bool Editor::Initialize()
 	}
 	GLOBALSTATEMACHINE.m_App = this;
 
-
-
 	m_MainWindow = GLOBALSTATEMACHINE.m_WindowSub.createNewWindow("Canvas Editor", 0, 0, 1600, 900, CVS_NULL);
 	m_MainWindow->gui->Layout = new CVS_EditorLayout(m_MainWindow->gui);
 	m_MainWindow->CreateMenuMain();
 
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
 	// Load FBX to Resource System
-	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin.fbx");
-	//GLOBALSTATEMACHINE.m_ResourceSub.import("Idle.fbx");
+	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin/mannequin.fbx");
+	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin/Run.fbx");
 	
 	// Get our mesh
-	auto pMesh = static_cast<CVS_Mesh*>(GLOBALSTATEMACHINE.m_ResourceSub.get("HeroTPP", CVS_Resource::eType::Mesh));
+	auto pMesh = static_cast<CVS_Mesh*>(GLOBALSTATEMACHINE.m_ResourceSub.get("HeroTPP", CVS_Resource::EType::Mesh));
+	if (!pMesh)
+	{
+		assert(0);
+	}
+
+	// Get our animation
+	auto pAnim = static_cast<CVS_Animation*>(GLOBALSTATEMACHINE.m_ResourceSub.get("Run-Take0", CVS_Resource::EType::Animation));
+	if (!pAnim)
+	{
+		assert(0);
+	}
 
 	// Create new GameObject, set mesh
 	auto pGameObject = new CVS_GameObject("Mannequin");
@@ -262,6 +272,11 @@ bool Editor::Initialize()
 	pRenderComp->m_pNode->setMesh(pMesh);
 	pGameObject->addComponent(pRenderComp);
 
+	auto pAnimationComp = new CVS_AnimationComponent(pGameObject, pRenderComp);
+	pAnimationComp->m_pAnimation = pAnim;
+	pGameObject->addComponent(pAnimationComp);
+	pAnimationComp->PlayAnim(pAnim, true);
+	
 	((CVS_EditorLayout*)m_MainWindow->gui->Layout)->setScene(testScene);
 	mMainScene = testScene;
 	/*
@@ -298,6 +313,7 @@ bool Editor::Run()
 		for (int i = 0, e = updatables.size(); i < e; ++i)
 		{
 			GLOBALSTATEMACHINE.m_WorldSub.Update();
+			GLOBALSTATEMACHINE.m_AnimationSub.Update();
 			updatables[i]->Render();
 		}
 

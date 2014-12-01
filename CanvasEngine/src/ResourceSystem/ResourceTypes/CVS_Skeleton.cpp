@@ -28,21 +28,28 @@ void CVS_Skeleton::AssignBoneIndex(CVS_Bone* _pParent)
 
 void CVS_Skeleton::Init()
 {
-	AssignBoneIndex(m_pRootBone);
+	//AssignBoneIndex(m_pRootBone);
 }
 
 bool CVS_Skeleton::hasBone(const char* _boneName)
 {
-	return m_pRootBone->hasBone(_boneName);
+	return false;// m_pRootBone->hasBone(_boneName);
 }
 
 void CVS_Skeleton::SetRootBone(CVS_Bone* _pBone)
 {
-	m_pRootBone = _pBone;
-	this->m_name = m_pRootBone->m_name;
+	//m_pRootBone = _pBone;
+	//this->m_name = m_pRootBone->m_name;
 }
 
-CVS_Skeleton::CVS_Skeleton() : CVS_Resource("DefaultSkeletonName", eType::Skeleton)
+CVS_Skeleton::CVS_Skeleton() : CVS_Resource("Skeleton", EType::Skeleton)
 {
 
+}
+
+CVS_SkeletonPose::CVS_SkeletonPose(CVS_Skeleton* _pSkeleton) : m_pSkeleton(_pSkeleton)
+{
+	auto skeletonSize = _pSkeleton->m_bones.size();
+	m_aLocalPose.resize(skeletonSize);
+	m_aGlobalPose.resize(skeletonSize);
 }

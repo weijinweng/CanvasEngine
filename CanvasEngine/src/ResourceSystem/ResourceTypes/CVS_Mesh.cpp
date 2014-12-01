@@ -379,13 +379,13 @@ int CVS_Mesh::initFromFbxNode(FbxNode* _pNode)
 	return true;
 }
 
-void _UpdateBoneRecursive(CVS_Bone* _pBone, CVS_RenderNode* _pRenderNode, cmat4 _parentTransform = cmat4())
+void CVS_Mesh::CalculateGlobalTransform(CVS_Bone* _pBone, cmat4 _parentTransform)
 {
 	auto M = _parentTransform;
 	auto t = _pBone->m_translation;
 	auto r = _pBone->m_rotation;
 	auto s = _pBone->m_scaling;
-	auto o = _pBone->m_offset;
+	auto o = _pBone->m_bindPoseInv;
 	/*
 	auto T = cvec3();
 	auto R = cquat();
@@ -400,22 +400,22 @@ void _UpdateBoneRecursive(CVS_Bone* _pBone, CVS_RenderNode* _pRenderNode, cmat4 
 
 	auto SVec3 = cvec3();
 
-	if (_pBone->m_pParent)
+	if (false)
 	{
-		T = _pBone->m_pParent->m_translation;
-		R = _pBone->m_pParent->m_rotation;
-		S = _pBone->m_pParent->m_scaling;
+		//T = _pBone->m_pParent->m_translation;
+		//R = _pBone->m_pParent->m_rotation;
+		//S = _pBone->m_pParent->m_scaling;
 
 		RVec3 = glm::degrees(glm::eulerAngles(R));
 
-		SVec3 = _pBone->m_pParent->m_scaling;
-		SVec3 = cvec3(1 / SVec3.x, 1 / SVec3.y, 1 / SVec3.z);
+		//SVec3 = _pBone->m_pParent->m_scaling;
+		//SVec3 = cvec3(1 / SVec3.x, 1 / SVec3.y, 1 / SVec3.z);
 
 		R_SQ = glm::normalize(glm::quat_cast(M * glm::scale(cmat4(), SVec3)));
 		R_SVec3 = glm::degrees(glm::eulerAngles(R_SQ));
 
 	}
-	*/
+	//*/
 	// Translate
 
 	// Rotation
@@ -433,31 +433,42 @@ void _UpdateBoneRecursive(CVS_Bone* _pBone, CVS_RenderNode* _pRenderNode, cmat4 
 	//_pBone->m_translation = TRt;
 	//_pBone->m_rotation = Rr;
 	//_pBone->m_scaling = Ss;
-
 	//*
+	/*
 	_pBone->m_transform =
 	M *
 	glm::translate(cmat4(), t) *
 	glm::mat4_cast(r) *
 	glm::scale(cmat4(), s);
 	//*/
-
-	for (int i = 0, e = _pBone->m_children.size(); i < e; ++i)
-	{
-		_UpdateBoneRecursive(_pBone->m_children[i], _pRenderNode, _pBone->m_transform);
-	}
-
-	// Local offset comes in after updating children
-	// With shared portion of global transform
-	_pBone->m_transform *= o;
-	_pRenderNode->m_boneMats[_pBone->m_index] = _pBone->m_transform;
+	//*
+	_pBone->m_transform =
+		M *
+		_pBone->m_transform;
+	//*/
 }
 
 void CVS_Mesh::UpdateSkeleton(CVS_RenderNode* _pRenderNode)
 {
 	if (m_pSkeleton)
 	{
-		_UpdateBoneRecursive(m_pSkeleton->m_pRootBone, _pRenderNode);
+		// First calculate absolute positions
+		for (int i = 0, e = m_pSkeleton->m_bones.size(); i < e; ++i)
+		{
+			auto* pBone = &m_pSkeleton->m_bones[i];
+			auto& parentTransform = (pBone->m_parentIndex == 0xFF) ? cmat4() : _pRenderNode->m_pSkeletonPose->m_aGlobalPose[pBone->m_parentIndex];// m_pSkeleton->m_bones[pBone->m_parentIndex].m_transform;
+			// Before we send it to the render node, we must multiply the transform matrix by its local inverse bind pose matrix
+			_pRenderNode->m_pSkeletonPose->m_aGlobalPose[i] = parentTransform * _pRenderNode->m_pSkeletonPose->m_aLocalPose[i].toMat4();
+		}
+
+		// Then apply inverse bind pose matrix
+		// First calculate absolute positions
+		for (int i = 0, e = m_pSkeleton->m_bones.size(); i < e; ++i)
+		{
+			auto* pBone = &m_pSkeleton->m_bones[i];
+			// Before we send it to the render node, we must multiply the transform matrix by its local inverse bind pose matrix
+			_pRenderNode->m_pSkeletonPose->m_aGlobalPose[i] *= pBone->m_bindPoseInv;
+		}
 	}
 }
 

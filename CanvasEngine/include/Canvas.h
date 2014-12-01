@@ -5,6 +5,7 @@
 
 #include "CVS_WindowSystem.h"
 #include "CVS_ResourceSystem.h"
+#include "CVS_AnimationSystem.h"
 #include "CVS_World.h"
 
 struct CVS_SceneView;
@@ -50,6 +51,7 @@ public:
 	CVS_GuiManager m_GUISub;
 	CVS_WorldSystem m_WorldSub;
 	CVS_ResourceSystem m_ResourceSub;
+	CVS_AnimationSystem m_AnimationSub;
 	//CVS_GameSystem m_GameSub;
 	bool initialize();
 	void update();

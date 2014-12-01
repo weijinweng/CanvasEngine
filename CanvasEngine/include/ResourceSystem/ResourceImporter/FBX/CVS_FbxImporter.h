@@ -1,8 +1,11 @@
 #pragma once
 #include "CVS_ResourceImporter.h"
-#include "CVS_Skeleton.h"
 #include "CVS_Mesh.h"
 
+class CVS_Animation;
+class CVS_AnimationLayer;
+class CVS_AnimationNode;
+class CVS_AnimationCurve;
 class CVS_InternalResource;
 struct CVS_FbxImporter : public CVS_ResourceImporter
 {
@@ -42,20 +45,29 @@ private:
 	FbxScene* _initFBXScene(const char* _filepath);
 	FbxNodeOffsetStruct getNodeOffset(FbxNode* _pNode);
 	bool extractResource(FbxScene* _pFbxScene);
+	bool hasAnyMesh(FbxScene* _pFbxScene);
 
 	// Skeletons
-	void ImportSkeletons(FbxNode* _pNode);
-	bool _processSkeletonNodeRecursive(FbxNode* _pNode);
+	void ImportSkeletons(FbxScene* _pScene);
+	bool isBone(FbxNode* _pNode);
+	bool _initJointWithFbxNode(FbxNode* _pNode);
 	bool InitBoneFromFbxNode(CVS_Bone* _pBone, FbxNode* _pNode);
 
 	// Meshes
-	void ImportMeshes(FbxNode* _pNode);
-	bool _processMeshNodeRecursive(FbxNode* _pNode);
+	void ImportMeshes(FbxScene* _pScene);
+	bool isMesh(FbxNode* _pNode);
+	bool InitMeshSkeletonWithCurrentFbxScene(CVS_Mesh* _pMesh, FbxNode* _pNode);
 	bool InitMeshFromFbxNode(CVS_Mesh* _pMesh, FbxNode* _pNode);
 	void _PrintClusterInfo(FbxCluster* _pCluster, int _index);
 
 	// Animations
-	void ImportAnimations(FbxNode* _pNode, EFbxImportMode _parseMode);
+	void ImportAnimations(FbxScene* _pScene);
+	void InitAnimsInFbxScene(FbxScene* _pScene);
+	void InitAnimFromFbxAnimStack(FbxNode* _pNode, FbxAnimStack* _pFbxAnimStack, CVS_Animation* _pAnimation);
+	void InitAnimNodeFromFbxAnimLayer(FbxNode* _pNode, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationLayer* _pAnimLayer);
+	void InitAnimNodesFromFbxAnimLayerRecursive(FbxNode* _pNode, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationLayer* _pAnimLayer);
+	bool InitAnimNodeFromFbxNode(CVS_AnimationNode* _pAnimNode, FbxNode* _pFbxNode, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationLayer* _pAnimLayer);
+	void InitAnimCurveFromFbxProperty(FbxProperty* _pFbxProperty, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationCurve* _pAnimCurve);
 	void _DisplayCurveKeys(FbxAnimCurve* pCurve);
 	static double FrameRateToDouble(FbxTime::EMode fp, double customFPSVal = -1.0);
 	static int InterpolationFlagToIndex(int flags);
@@ -65,11 +77,16 @@ private:
 	static int TangentVelocityFlagToIndex(int flags);
 
 	// temp data
+	std::string m_fileName;
 	std::vector<CVS_Skeleton*> m_skeletons;
 	std::vector<CVS_Mesh*> m_meshes;
-	std::map<FbxNode*, CVS_InternalResource*> m_skeletonRootBones;
-	std::map<FbxNode*, CVS_InternalResource*> m_allBones;
-	std::map<FbxNode*, CVS_InternalResource*> m_animations;
+	std::vector<CVS_Animation*> m_animations;
+
+	float m_globalAnimationFrameRate;
+
+	std::vector<FbxNode*> m_fbxPossibleSkeletons;
+	std::map<FbxNode*, short> m_allFbxBoneIndices;
+	std::map<FbxAnimLayer*, std::map<FbxNode*, CVS_InternalResource*>> m_layerNodeMaps;
 
 	FbxManager* m_pFbxManager;
 	FbxIOSettings* m_pIoSettings;

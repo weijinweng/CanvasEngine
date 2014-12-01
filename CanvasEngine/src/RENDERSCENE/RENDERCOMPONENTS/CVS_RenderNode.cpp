@@ -9,7 +9,6 @@ CVS_TextureReference::CVS_TextureReference(CVS_Texture* texture, int loc) :textu
 
 CVS_RenderNode::CVS_RenderNode(CVS_RenderProgramInstance* parent) : mesh(NULL)
 {
-	m_boneMats.resize(MAX_BONES);
 	parent->children.push_back(this);
 	for (int i = 0, e = parent->program->uniforms.size(); i < e; ++i)
 	{
@@ -24,5 +23,11 @@ CVS_RenderNode::CVS_RenderNode(CVS_RenderProgramInstance* parent) : mesh(NULL)
 void CVS_RenderNode::setMesh(CVS_Mesh* mesh)
 {
 	this->mesh = mesh;
+	auto pSkeleton = mesh->m_pSkeleton;
+	auto skeletonSize = pSkeleton->m_bones.size();
+	if (pSkeleton)
+	{
+		m_pSkeletonPose = new CVS_SkeletonPose(pSkeleton);
+	}
 	printf("Set mesh %d\n", mesh->m_indices.size());
 }

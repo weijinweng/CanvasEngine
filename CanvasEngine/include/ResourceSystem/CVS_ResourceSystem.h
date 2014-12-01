@@ -16,7 +16,7 @@ public:
 	virtual bool End();
 
 	bool import(const char* _filePath);
-	CVS_Resource* get(const char* _resourceName, CVS_Resource::eType _type);
+	CVS_Resource* get(const char* _resourceName, CVS_Resource::EType _type);
 
 	// Data types
 	std::vector<CVS_ResourceImporter*> m_importers;

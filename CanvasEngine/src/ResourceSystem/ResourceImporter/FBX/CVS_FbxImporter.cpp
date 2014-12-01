@@ -1,21 +1,20 @@
 #include "CVS_FbxImporter.h"
 #include "CVS_Mesh.h"
+#include "CVS_Skeleton.h"
 #include "CVS_Bone.h"
+#include "CVS_Animation.h"
 
 //Standard curve node names
-#define FBXSDK_CURVENODE_TRANSLATION	'T'
-#define FBXSDK_CURVENODE_ROTATION		'R'
-#define FBXSDK_CURVENODE_SCALING		'S'
-#define FBXSDK_CURVENODE_COMPONENT_X	'X'
-#define FBXSDK_CURVENODE_COMPONENT_Y	'Y'
-#define FBXSDK_CURVENODE_COMPONENT_Z	'Z'
-#define FBXSDK_CURVENODE_COLOR			'C'
+#define FBXSDK_CURVENODE_TRANSLATION	"Translation"
+#define FBXSDK_CURVENODE_ROTATION		"Rotation"
+#define FBXSDK_CURVENODE_SCALING		"Scaling"
+#define FBXSDK_CURVENODE_COMPONENT_X	"X"
+#define FBXSDK_CURVENODE_COMPONENT_Y	"Y"
+#define FBXSDK_CURVENODE_COMPONENT_Z	"Z"
+#define FBXSDK_CURVENODE_COLOR			"C"
 #define FBXSDK_CURVENODE_COLOR_RED		FBXSDK_CURVENODE_COMPONENT_X
 #define FBXSDK_CURVENODE_COLOR_GREEN	FBXSDK_CURVENODE_COMPONENT_Y
 #define FBXSDK_CURVENODE_COLOR_BLUE		FBXSDK_CURVENODE_COMPONENT_Z
-
-static const char AnimChannels[] = { FBXSDK_CURVENODE_TRANSLATION, FBXSDK_CURVENODE_ROTATION, FBXSDK_CURVENODE_SCALING };
-static const char AnimComponents[] = { FBXSDK_CURVENODE_COMPONENT_X, FBXSDK_CURVENODE_COMPONENT_Y, FBXSDK_CURVENODE_COMPONENT_Z };
 
 CVS_FbxImporter::~CVS_FbxImporter()
 {
@@ -41,6 +40,10 @@ bool CVS_FbxImporter::init()
 
 bool CVS_FbxImporter::import(const char* _filePath)
 {
+	char fileName[20];
+	_splitpath_s(_filePath, NULL, 0, NULL, 0, fileName, 20, NULL, 0);
+	m_fileName = fileName;
+
 	auto pFbxScene = _initFBXScene(_filePath);
 	if (!pFbxScene)
 	{
@@ -160,132 +163,116 @@ CVS_FbxImporter::FbxNodeOffsetStruct CVS_FbxImporter::getNodeOffset(FbxNode* _pN
 
 bool CVS_FbxImporter::extractResource(FbxScene* _pFbxScene)
 {
-	// No constructor nor copy constructor, virtually a singleton 
-	FbxGlobalSettings& gSettings = _pFbxScene->GetGlobalSettings();
+	// THE ORDER IS VERY IMPORTANT
 
-	std::vector<CVS_Mesh*> meshes;
-
-	auto pRootNode = _pFbxScene->GetRootNode();
-	// import skeleton
-	ImportSkeletons(pRootNode);
-	//ImportAllNodes(pRootNode, EFbxImportMode::Skeleton);
-	// import mesh
-	ImportMeshes(pRootNode);
-	//ImportAllNodes(pRootNode, EFbxImportMode::Mesh);
-	// import animation
-	//ImportAllNodes(pRootNode, EFbxImportMode::Animation);
-
-	//*
-	//GETTING ANIMAION DATA
-	char pTimeString[256];
-
-	auto timeMode = gSettings.GetTimeMode();
-	printf("Time Mode : %s\n", FbxGetTimeModeName(timeMode));
-	double fps = FrameRateToDouble(timeMode);
-	FbxTimeSpan pTimeSpan;
-	gSettings.GetTimelineDefaultTimeSpan(pTimeSpan);
-	FbxTime     lStart, lEnd;
-	lStart = pTimeSpan.GetStart();
-	lEnd = pTimeSpan.GetStop();
-	printf("Timeline default timespan: \n");
-	printf("     Start: %s\n", lStart.GetTimeString(pTimeString, FbxUShort(256)));
-	printf("     Stop : %s\n", lEnd.GetTimeString(pTimeString, FbxUShort(256)));
-
-	// Get animation information
-	// Now only supports one take
-	for (int i = 0; i < _pFbxScene->GetSrcObjectCount<FbxAnimStack>(); ++i)
+	if (hasAnyMesh(_pFbxScene))
 	{
-		auto lAnimStack = _pFbxScene->GetSrcObject<FbxAnimStack>(i);
-
-		auto stackName = lAnimStack->GetName();
-		printf("Animation Stack %d Name: %s\n", i, stackName);
-		auto start = lAnimStack->GetLocalTimeSpan().GetStart();
-		auto stop = lAnimStack->GetLocalTimeSpan().GetStop();
-		auto animationLength = stop.GetFrameCount(timeMode) - start.GetFrameCount(timeMode);// TODO: do we really need +1?;
-		printf("     Start: %d\n", start.GetFrameCount(timeMode));
-		printf("     Stop : %d\n", stop.GetFrameCount(timeMode));
-		// For Each layer
-		int numLayers = lAnimStack->GetMemberCount<FbxAnimLayer>();
-		for (int j = 0; j < numLayers; ++j)
-		{
-			FbxAnimLayer* pAnimLayer = lAnimStack->GetMember<FbxAnimLayer>(j);
-
-			auto layerName = pAnimLayer->GetName();
-			printf("Animation Stack Name: %s\n", layerName);
-
-			// Start with root node
-			FbxNode* pNodeItr = _pFbxScene->GetRootNode();
-			// Breadth first inline recursion
-			std::queue<FbxNode*> nodes;
-			while (pNodeItr != NULL)
-			{
-				FbxAnimCurve* lAnimCurve = pNodeItr->LclTranslation.GetCurve(pAnimLayer, FBXSDK_CURVENODE_COMPONENT_X);
-				// For each node, extract all channels
-				for (int i = 0; i < 3; i++)
-				{
-					// Extract Translation Curve
-					auto lAnimCurve = pNodeItr->LclTranslation.GetCurve(pAnimLayer, AnimComponents[i]);
-					if (lAnimCurve)
-					{
-						printf("        %c%c\n", AnimChannels[0], AnimComponents[i]);
-						//ProcessCurve(lAnimCurve);
-					}
-
-					// Extract Rotation Curve
-					lAnimCurve = pNodeItr->LclRotation.GetCurve(pAnimLayer, AnimComponents[i]);
-					if (lAnimCurve)
-					{
-						printf("        %c%c\n", AnimChannels[0], AnimComponents[i]);
-						//ProcessCurve(lAnimCurve);
-					}
-
-					// Extract Scaling Curve
-					lAnimCurve = pNodeItr->LclScaling.GetCurve(pAnimLayer, AnimComponents[i]);
-					if (lAnimCurve)
-					{
-						printf("        %c%c\n", AnimChannels[0], AnimComponents[i]);
-						//ProcessCurve(lAnimCurve);
-					}
-				}
-
-				for (int i = 0; i < pNodeItr->GetChildCount(false); ++i)
-				{
-					nodes.push(pNodeItr->GetChild(i));
-				}
-
-				if (nodes.size() > 0)
-				{
-					pNodeItr = nodes.front();
-					nodes.pop();
-				}
-				else
-				{
-					pNodeItr = NULL;
-				}
-			}
-		}
+		// import skeleton
+		ImportSkeletons(_pFbxScene);
+		// import mesh
+		ImportMeshes(_pFbxScene);
 	}
-	//*/
+	else
+	{
+		// import animation
+		ImportAnimations(_pFbxScene);
+	}
+	
 	return true;
 }
 
-// Skeleton
-void CVS_FbxImporter::ImportSkeletons(FbxNode* _pNode)
+bool CVS_FbxImporter::hasAnyMesh(FbxScene* _pFbxScene)
 {
-	// Skip RootNode by default
-	// If we don't skip, RootNode will be parsed as a bone, NG
-	for (int i = 0, e = _pNode->GetChildCount(); i < e; i++)
+	auto pTempNode = _pFbxScene->GetRootNode();
+	std::queue<FbxNode*> queue;
+	queue.push(pTempNode);
+
+	while (pTempNode)
 	{
-		_processSkeletonNodeRecursive(_pNode->GetChild(i));
+		// do stuff
+		auto pNodeAttribute = pTempNode->GetNodeAttribute();
+		if (pNodeAttribute)
+		{
+			if (pNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
+			{
+				return true;
+			}
+		}
+
+		// remove self
+		queue.pop();
+
+		// add child tasks
+		for (int i = 0, e = pTempNode->GetChildCount(); i < e; ++i)
+		{
+			queue.push(pTempNode->GetChild(i));
+		}
+
+		pTempNode = queue.empty() ? nullptr : queue.front();
+	}
+
+	return false;
+}
+
+// Skeleton
+void CVS_FbxImporter::ImportSkeletons(FbxScene* _pScene)
+{
+	std::queue<FbxNode*> taskQueue;
+	std::queue<short> indexQueue;
+
+	auto pRootNode = _pScene->GetRootNode();
+	// Ignore scene root
+	for (int i = 0, e = pRootNode->GetChildCount(); i < e; ++i)
+	{
+		taskQueue.push(pRootNode->GetChild(i));
+	}
+	auto pTempNode = taskQueue.front();
+	while (pTempNode)
+	{
+		if (isBone(pTempNode))
+		{
+			auto pSkeleton = new CVS_Skeleton;
+			m_skeletons.push_back(pSkeleton);
+			// size of vector = the end of vector
+			auto oldSize = 0, newSize = 0;
+			int currentIndex = 0;
+			while (pTempNode)
+			{
+				// do stuff
+				if (isBone(pTempNode))
+				{
+					m_allFbxBoneIndices[pTempNode] = currentIndex;
+					auto pParent = pTempNode->GetParent();
+					pSkeleton->m_bones.push_back(CVS_Bone());
+					pSkeleton->m_bones.back().m_parentIndex = (m_allFbxBoneIndices.find(pParent) == m_allFbxBoneIndices.end()) ? 0xFF : m_allFbxBoneIndices[pParent];
+					InitBoneFromFbxNode(&pSkeleton->m_bones[currentIndex], pTempNode);
+					++currentIndex;
+				}
+
+				// remove self
+				taskQueue.pop();
+
+				// fill child tasks
+				for (int i = 0, e = pTempNode->GetChildCount(); i < e; ++i)
+				{
+					taskQueue.push(pTempNode->GetChild(i));
+				}
+
+				pTempNode = taskQueue.empty() ? nullptr : taskQueue.front();
+
+			};
+
+		}
 	}
 
 	for (auto i : m_skeletons)
 	{
 		i->Init();
+		m_pResourcePool->push_back(i);
 	}
 }
 
-bool CVS_FbxImporter::_processSkeletonNodeRecursive(FbxNode* _pNode)
+bool CVS_FbxImporter::isBone(FbxNode* _pNode)
 {
 	auto pNodeAttribute = _pNode->GetNodeAttribute();
 	if (pNodeAttribute)
@@ -294,58 +281,10 @@ bool CVS_FbxImporter::_processSkeletonNodeRecursive(FbxNode* _pNode)
 		if (pNodeAttribute->GetAttributeType() != FbxNodeAttribute::eNull &&
 			pNodeAttribute->GetAttributeType() != FbxNodeAttribute::eSkeleton)
 		{
-			// Process children
-			for (int i = 0, e = _pNode->GetChildCount(); i < e; ++i)
-			{
-				_processSkeletonNodeRecursive(_pNode->GetChild(i));
-			}
 			return false;
 		}
 	}
-	auto pBone = new CVS_Bone;
 
-	// todo: pack em in a struct?
-	auto offset = getNodeOffset(_pNode);
-	pBone->m_translation = offset.vecLclTranslation;
-	pBone->m_rotation = offset.vecLclRotation;
-	pBone->m_scaling = offset.vecLclScaling;
-	pBone->m_geoTranslation = offset.vecGeoTranslation;
-	pBone->m_geoRotation = offset.vecGeoRotation;
-	pBone->m_geoScaling = offset.vecGeoScaling;
-
-	if (InitBoneFromFbxNode(pBone, _pNode))
-	{
-		// Add bone to all bone list
-		m_allBones[_pNode] = pBone;
-		// Resolving the bone tree relies on correctly traversing the scene nodes
-		// Try to find its parent
-		auto pParentFbxNode = _pNode->GetParent();
-		if (pParentFbxNode)
-		{
-			CVS_Bone* pParentBone = static_cast<CVS_Bone*>(m_allBones[pParentFbxNode]);
-			if (!pParentBone)
-			{
-				// A whole new tree, so we create a new skeleton
-				auto pSkeleton = new CVS_Skeleton;
-				pSkeleton->m_pRootBone = pBone;
-				pSkeleton->m_name = pBone->m_name;
-				m_skeletons.push_back(pSkeleton);
-				m_pResourcePool->push_back(pSkeleton);
-			}
-			else
-			{
-				// Create Link between parent and our new bone
-				pParentBone->m_children.push_back(pBone);
-				pBone->m_pParent = pParentBone;
-			}
-		}
-	}
-
-	// Process children
-	for (int i = 0, e = _pNode->GetChildCount(); i < e; ++i)
-	{
-		_processSkeletonNodeRecursive(_pNode->GetChild(i));
-	}
 	return true;
 }
 
@@ -355,8 +294,16 @@ bool CVS_FbxImporter::InitBoneFromFbxNode(CVS_Bone* _pBone, FbxNode* _pNode)
 	// We assume Empty nodes and nodes containing FbxNulls and FbxSkeletons
 	// *Are all bones*
 	_pBone->m_name = _pNode->GetName();
-	_pBone->m_type = CVS_InternalResource::eType::Bone;
+	_pBone->m_type = CVS_InternalResource::EType::Bone;
 
+	// todo: pack em in a struct?
+	auto offset = getNodeOffset(_pNode);
+	_pBone->m_translation = offset.vecLclTranslation;
+	_pBone->m_rotation = offset.vecLclRotation;
+	_pBone->m_scaling = offset.vecLclScaling;
+	_pBone->m_geoTranslation = offset.vecGeoTranslation;
+	_pBone->m_geoRotation = offset.vecGeoRotation;
+	_pBone->m_geoScaling = offset.vecGeoScaling;
 
 	auto attribute = _pNode->GetNodeAttribute();
 	if (attribute)
@@ -410,168 +357,59 @@ bool CVS_FbxImporter::InitBoneFromFbxNode(CVS_Bone* _pBone, FbxNode* _pNode)
 }
 
 // Meshes
-void CVS_FbxImporter::ImportMeshes(FbxNode* _pNode)
+void CVS_FbxImporter::ImportMeshes(FbxScene* _pScene)
 {
-	// Skip RootNode by default
-	for (int i = 0, e = _pNode->GetChildCount(); i < e; i++)
+	std::queue<FbxNode*> taskQueue;
+
+	auto pRootNode = _pScene->GetRootNode();
+	// Ignore scene root
+	for (int i = 0, e = pRootNode->GetChildCount(); i < e; ++i)
 	{
-		_processMeshNodeRecursive(_pNode->GetChild(i));
+		taskQueue.push(pRootNode->GetChild(i));
 	}
+	auto pTempNode = taskQueue.front();
+
+	while (pTempNode)
+	{
+		// do stuff
+		if (isMesh(pTempNode))
+		{
+			auto pMesh = new CVS_Mesh;
+			m_meshes.push_back(pMesh);
+			InitMeshFromFbxNode(pMesh, pTempNode);
+			// TODO: possibly allow custom skeleton
+			pMesh->m_pSkeleton = m_skeletons[0];
+			InitMeshSkeletonWithCurrentFbxScene(pMesh, pTempNode);
+		}
+		// remove self
+		taskQueue.pop();
+		// fill child tasks
+		for (int i = 0, e = pTempNode->GetChildCount(); i < e; ++i)
+		{
+			taskQueue.push(pTempNode->GetChild(i));
+		}
+		pTempNode = taskQueue.empty() ? nullptr : taskQueue.front();
+	};
 
 	for (auto i : m_meshes)
 	{
 		i->Init();
+		m_pResourcePool->push_back(i);
 	}
 }
 
-bool CVS_FbxImporter::_processMeshNodeRecursive(FbxNode* _pNode)
+bool CVS_FbxImporter::isMesh(FbxNode* _pNode)
 {
 	auto pNodeAttribute = _pNode->GetNodeAttribute();
 	if (pNodeAttribute)
 	{
-		if (pNodeAttribute->GetAttributeType() != FbxNodeAttribute::eMesh)
+		if (pNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
 		{
-			// Process children
-			for (int i = 0, e = _pNode->GetChildCount(); i < e; ++i)
-			{
-				_processMeshNodeRecursive(_pNode->GetChild(i));
-			}
-			return false;
-		}
-		auto pMesh = new CVS_Mesh;
-		// Get the mesh offset
-		auto offset = getNodeOffset(_pNode);
-		pMesh->m_offset = offset.matLclTranslation * offset.matLclRotation * offset.matLclScaling * offset.matGlobalTransform;
-		if (InitMeshFromFbxNode(pMesh, _pNode))
-		{
-#pragma region
-			auto pFbxMesh = _pNode->GetMesh();
-			int skinCount = pFbxMesh->GetDeformerCount(FbxDeformer::eSkin);
-			if (skinCount)
-			{
-				for (int skinIndex = 0; skinIndex != skinCount; ++skinIndex)
-				{
-					auto pSkin = (FbxSkin *)pFbxMesh->GetDeformer(skinIndex, FbxDeformer::eSkin);
-					if (skinCount > 1)
-					{
-						printf("CVS_Mesh::initFromFbxNode: Mesh contains more than 1 skin.\n");
-						assert(0);
-					}
-
-					// Allocate memory for vertex bone data
-					pMesh->m_vertexBones.reserve(pMesh->m_vertices.size());
-					// for each skin, find the correct skeleton
-					// TODO: might be buggy when there's nore than 1 skeleton per mesh
-					CVS_Skeleton* pSkeleton = nullptr;
-					int clusterCount = (pSkin)->GetClusterCount();
-					for (int clusterIndex = 0; clusterIndex != clusterCount; ++clusterIndex)
-					{
-						auto pCluster = ((FbxSkin *)pFbxMesh->GetDeformer(skinIndex, FbxDeformer::eSkin))->GetCluster(clusterIndex);
-
-						_PrintClusterInfo(pCluster, clusterIndex);
-
-						// For each cluster, we check against the bone map to make sure
-						// everything comes from the same skeleton tree
-						auto pSkeletonNode = pCluster->GetLink();
-
-						CVS_Bone* pBone = nullptr;
-						pBone = static_cast<CVS_Bone*>(m_allBones[pSkeletonNode]);
-						if (!pBone)
-						{
-							printf("CVS_Mesh::initFromFbxNode: Current deformer's bone link not found in bonemap\n");
-							assert(0);
-						}
-
-						// Check if the parent is the same skeleton we currently have
-						// If no skeleton currently in place, use it directly
-						auto pParent = pBone->getSkeleton();
-						if (pSkeleton)
-						{
-							if (pSkeleton != pParent)
-							{
-								printf("CVS_Mesh::initFromFbxNode: Current mesh seems to have 2 rigs affecting it as the same time. Check your mesh.\n");
-								assert(0);
-							}
-						}
-						else
-						{
-							pSkeleton = pParent;
-						}
-
-						// Inject data into vertices
-						int* lIndices = pCluster->GetControlPointIndices();
-						double* lWeights = pCluster->GetControlPointWeights();
-
-						for (int j = 0, e = pCluster->GetControlPointIndicesCount(); j < e; j++)
-						{
-							int i = lIndices[j];
-							float f = lWeights[j];
-							pMesh->m_vertexBones[i].AddBoneData(pBone->m_index, f);
-						}
-
-						FbxAMatrix transformMatrix;
-						FbxAMatrix transformLinkMatrix;
-						FbxAMatrix globalBindposeInverseMatrix;
-
-						pCluster->GetTransformMatrix(transformMatrix); // The transformation of the mesh at binding time
-						pCluster->GetTransformLinkMatrix(transformLinkMatrix); // The transformation of the cluster(joint) at binding time from joint space to world space
-						globalBindposeInverseMatrix = transformLinkMatrix.Inverse();
-
-						auto pMat = cmat4();
-						auto pMatLink = cmat4();
-						auto pBindPoseInverse = cmat4();
-						FbxAMatrixToMat4(&transformMatrix, pMat);
-						FbxAMatrixToMat4(&transformLinkMatrix, pMatLink);
-						FbxAMatrixToMat4(&globalBindposeInverseMatrix, pBindPoseInverse);
-
-						pBone->m_offset *= pBindPoseInverse * pMat;
-					}
-					if (pMesh->m_pSkeleton)
-					{
-						printf("CVS_Mesh::initFromFbxNode: Current mesh seems to have 2 skins.\n");
-						assert(0);
-					}
-					else
-					{
-						pMesh->m_pSkeleton = pSkeleton;
-					}
-				}
-
-			}
-			else
-			{
-				// TODO: fix shader support for static mesh
-
-				// If there's no bone at all, we make a dummy
-				// to pass to shaders
-				/*
-				if (!pMesh->m_pSkeleton)
-				{
-				auto pDummyBone = new CVS_Bone;
-				pDummyBone->m_name = "DummyBone";
-				pDummyBone->m_color = cvec3(1.0f, 1.0f, 1.0f);
-				pDummyBone->m_index = MAX_BONES - 1;
-				this->m_pSkeleton = pDummyBone;
-				// 			for (int i = 0, e = m_vertexBones.size(); i < e; i++)
-				// 			{
-				// 				m_vertexBones[i].AddBoneData(0, 1.0f);
-				// 			}
-				}
-				//*/
-			}
-#pragma endregion Add Bones
-			m_meshes.push_back(pMesh);
-			printf("Init mesh %s\n", pMesh->m_name.c_str());
-			m_pResourcePool->push_back(pMesh);
+			return true;
 		}
 	}
 
-	// Process children
-	for (int i = 0, e = _pNode->GetChildCount(); i < e; ++i)
-	{
-		_processMeshNodeRecursive(_pNode->GetChild(i));
-	}
-	return true;
+	return false;
 }
 
 bool CVS_FbxImporter::InitMeshFromFbxNode(CVS_Mesh* _pMesh, FbxNode* _pNode)
@@ -591,6 +429,10 @@ bool CVS_FbxImporter::InitMeshFromFbxNode(CVS_Mesh* _pMesh, FbxNode* _pNode)
 
 	// Count the polygon count of each material
 	auto lPolyCount = pInMesh->GetPolygonCount();
+
+	// Get the mesh offset
+	auto offset = getNodeOffset(_pNode);
+	_pMesh->m_offset = offset.matLclTranslation * offset.matLclRotation * offset.matLclScaling * offset.matGlobalTransform;
 
 #pragma region
 	FbxLayerElementArrayTemplate<int>* lMaterialIndices = NULL;
@@ -669,7 +511,7 @@ bool CVS_FbxImporter::InitMeshFromFbxNode(CVS_Mesh* _pMesh, FbxNode* _pNode)
 		// Here, but the API tell us the geometry layout the exact opposite.
 		// If it contains split normals, it tells you it's by control point, and vice versa
 		// DON'T TRUST ANYONE
-		if (hasNormal && lNormalMappingMode == FbxGeometryElement::eByControlPoint)
+		if (hasNormal && lNormalMappingMode != FbxGeometryElement::eByControlPoint)
 		{
 			bAllByControlPoint = false;
 		}
@@ -681,7 +523,7 @@ bool CVS_FbxImporter::InitMeshFromFbxNode(CVS_Mesh* _pMesh, FbxNode* _pNode)
 		{
 			hasUV = false;
 		}
-		if (hasUV && lUVMappingMode == FbxGeometryElement::eByControlPoint)
+		if (hasUV && lUVMappingMode != FbxGeometryElement::eByControlPoint)
 		{
 			bAllByControlPoint = false;
 		}
@@ -827,6 +669,95 @@ bool CVS_FbxImporter::InitMeshFromFbxNode(CVS_Mesh* _pMesh, FbxNode* _pNode)
 	return true;
 }
 
+bool CVS_FbxImporter::InitMeshSkeletonWithCurrentFbxScene(CVS_Mesh* _pMesh, FbxNode* _pNode)
+{
+	auto pFbxMesh = _pNode->GetMesh();
+	int skinCount = pFbxMesh->GetDeformerCount(FbxDeformer::eSkin);
+	if (skinCount)
+	{
+		for (int skinIndex = 0; skinIndex != skinCount; ++skinIndex)
+		{
+			auto pSkin = (FbxSkin *)pFbxMesh->GetDeformer(skinIndex, FbxDeformer::eSkin);
+			if (skinCount > 1)
+			{
+				printf("CVS_Mesh::initFromFbxNode: Mesh contains more than 1 skin.\n");
+				assert(0);
+			}
+			static int what = 0;
+
+			// Allocate memory for vertex bone data
+			_pMesh->m_vertexBones.reserve(_pMesh->m_vertices.size());
+			// for each skin, find the correct skeleton
+			// TODO: might be buggy when there's nore than 1 skeleton per mesh
+			CVS_Skeleton* pSkeleton = nullptr;
+			int clusterCount = (pSkin)->GetClusterCount();
+			for (int clusterIndex = 0; clusterIndex != clusterCount; ++clusterIndex)
+			{
+				auto pCluster = ((FbxSkin *)pFbxMesh->GetDeformer(skinIndex, FbxDeformer::eSkin))->GetCluster(clusterIndex);
+				_PrintClusterInfo(pCluster, clusterIndex);
+
+				// For each cluster, we check against the bone map to make sure
+				// everything comes from the same skeleton tree
+				auto pBoneNode = pCluster->GetLink();
+				auto boneIndex = m_allFbxBoneIndices[pBoneNode];
+				auto pBone = &_pMesh->m_pSkeleton->m_bones[boneIndex];
+
+				// get bone inverse bind pose
+				FbxAMatrix transformMatrix;
+				pCluster->GetTransformMatrix(transformMatrix); // The transformation of the mesh at binding time
+				FbxAMatrix transformLinkMatrix;
+				pCluster->GetTransformLinkMatrix(transformLinkMatrix); // The transformation of the cluster(joint) at binding time from joint space to world space
+				FbxAMatrix globalBindposeInverseMatrix = transformLinkMatrix.Inverse();
+				auto pMat = cmat4();
+				auto pMatLink = cmat4();
+				auto pBindPoseInverse = cmat4();
+				FbxAMatrixToMat4(&transformMatrix, pMat);
+				FbxAMatrixToMat4(&transformLinkMatrix, pMatLink);
+				FbxAMatrixToMat4(&globalBindposeInverseMatrix, pBindPoseInverse);
+				pBone->m_bindPoseInv *= pBindPoseInverse * pMat;
+
+				// Inject data into vertices
+				int* lIndices = pCluster->GetControlPointIndices();
+				double* lWeights = pCluster->GetControlPointWeights();
+				for (int j = 0, e = pCluster->GetControlPointIndicesCount(); j < e; j++)
+				{
+
+					int index = lIndices[j];
+					if (index == 0)
+					{
+						what++;
+					}
+
+					_pMesh->m_vertexBones[index].AddBoneData(boneIndex, lWeights[j]);
+				}
+			}
+		}
+
+	}
+	else
+	{
+		// TODO: fix shader support for static mesh
+
+		// If there's no bone at all, we make a dummy
+		// to pass to shaders
+		/*
+		if (!pMesh->m_pSkeleton)
+		{
+		auto pDummyBone = new CVS_Bone;
+		pDummyBone->m_name = "DummyBone";
+		pDummyBone->m_color = cvec3(1.0f, 1.0f, 1.0f);
+		pDummyBone->m_index = MAX_BONES - 1;
+		this->m_pSkeleton = pDummyBone;
+		// 			for (int i = 0, e = m_vertexBones.size(); i < e; i++)
+		// 			{
+		// 				m_vertexBones[i].AddBoneData(0, 1.0f);
+		// 			}
+		}
+		//*/
+	}
+	return true;
+}
+
 void CVS_FbxImporter::_PrintClusterInfo(FbxCluster* _pCluster, int _index)
 {
 	static const char* lClusterModes[] = { "Normalize", "Additive", "Total1" };
@@ -892,9 +823,256 @@ void CVS_FbxImporter::_PrintClusterInfo(FbxCluster* _pCluster, int _index)
 }
 
 // Animations
-void CVS_FbxImporter::ImportAnimations(FbxNode* _pNode, EFbxImportMode _parseMode)
+void CVS_FbxImporter::ImportAnimations(FbxScene* _pScene)
+{
+	//GETTING ANIMAION DATA
+	char pTimeString[20];
+	auto& gSettings = _pScene->GetGlobalSettings();
+	auto timeMode = gSettings.GetTimeMode();
+	printf("Time Mode : %s\n", FbxGetTimeModeName(timeMode));
+	m_globalAnimationFrameRate = FrameRateToDouble(timeMode);
+	FbxTimeSpan pTimeSpan;
+	gSettings.GetTimelineDefaultTimeSpan(pTimeSpan);
+	auto lStart = pTimeSpan.GetStart();
+	auto lEnd = pTimeSpan.GetStop();
+	printf("Timeline default timespan: \n");
+	printf("     Start: %s\n", lStart.GetTimeString(pTimeString, FbxUShort(20)));
+	printf("     Stop : %s\n", lEnd.GetTimeString(pTimeString, FbxUShort(20)));
+
+	// Print a brief info of all anim stacks
+	for (int iFbxAnimStack = 0, e = _pScene->GetSrcObjectCount<FbxAnimStack>(); iFbxAnimStack < e; ++iFbxAnimStack)
+	{
+		// Stack Name
+		auto pFbxAnimStack = _pScene->GetSrcObject<FbxAnimStack>(iFbxAnimStack);
+		auto stackName = pFbxAnimStack->GetName();
+		printf("Animation Stack %d Name: %s\n", iFbxAnimStack, stackName);
+		// Time
+		auto start = pFbxAnimStack->GetLocalTimeSpan().GetStart();
+		auto stop = pFbxAnimStack->GetLocalTimeSpan().GetStop();
+		auto animationLength = stop.GetFrameCount(timeMode) - start.GetFrameCount(timeMode);// TODO: do we really need +1?;
+		printf("     Start: %d\n", start.GetFrameCount(timeMode));
+		printf("     Stop : %d\n", stop.GetFrameCount(timeMode));
+	}
+
+	InitAnimsInFbxScene(_pScene);
+}
+
+void CVS_FbxImporter::InitAnimsInFbxScene(FbxScene* _pScene)
+{
+	for (int iFbxAnimStack = 0, e = _pScene->GetSrcObjectCount<FbxAnimStack>(); iFbxAnimStack < e; ++iFbxAnimStack)
+	{
+		auto pFbxAnimStack = _pScene->GetSrcObject<FbxAnimStack>(iFbxAnimStack);
+		// Init Animation from stack
+		auto pAnimation = new CVS_Animation;
+		pAnimation->m_frameRate = m_globalAnimationFrameRate;
+
+		auto& gSettings = _pScene->GetGlobalSettings();
+		auto timeMode = gSettings.GetTimeMode();
+		auto start = pFbxAnimStack->GetLocalTimeSpan().GetStart();
+		auto stop = pFbxAnimStack->GetLocalTimeSpan().GetStop();
+		// Time
+		pAnimation->m_frameCount = stop.GetFrameCount(timeMode) - start.GetFrameCount(timeMode) + 1;// TODO: why do we need +1?;
+
+
+		InitAnimFromFbxAnimStack(_pScene->GetRootNode(), pFbxAnimStack, pAnimation);
+		m_pResourcePool->push_back(pAnimation);
+		char fileNameTag[10];
+		// TODO: improve naming
+		sprintf_s(fileNameTag, "-Take%d", iFbxAnimStack);
+		pAnimation->m_name = m_fileName + fileNameTag;
+	}
+}
+
+void CVS_FbxImporter::InitAnimFromFbxAnimStack(FbxNode* _pNode, FbxAnimStack* _pFbxAnimStack, CVS_Animation* _pAnimation)
+{
+	// Fill with animation layer data
+	for (int i = 0, e = _pFbxAnimStack->GetMemberCount<FbxAnimLayer>(); i < e; ++i)
+	{
+		FbxAnimLayer* pFbxAnimLayer = _pFbxAnimStack->GetMember<FbxAnimLayer>(i);
+		auto layerName = pFbxAnimLayer->GetName();
+		printf("Animation Layer Name: %s\n", layerName);
+		auto pAnimationLayer = new CVS_AnimationLayer;
+
+		std::queue<FbxNode*> taskQueue;
+
+		auto pRootNode = _pNode; // _pScene->GetRootNode();
+		// Ignore scene root
+		for (int i = 0, e = pRootNode->GetChildCount(); i < e; ++i)
+		{
+			taskQueue.push(pRootNode->GetChild(i));
+		}
+		auto pTempNode = taskQueue.front();
+
+		while (pTempNode)
+		{
+			// do stuff
+			if (isBone(pTempNode))
+			{
+				pAnimationLayer->m_animNodes.push_back(CVS_AnimationNode());
+				auto pAnimationNode = &pAnimationLayer->m_animNodes.back();
+				InitAnimNodeFromFbxNode(pAnimationNode, pTempNode, pFbxAnimLayer, pAnimationLayer);
+			}
+			// remove self
+			taskQueue.pop();
+			// fill child tasks
+			for (int i = 0, e = pTempNode->GetChildCount(); i < e; ++i)
+			{
+				taskQueue.push(pTempNode->GetChild(i));
+			}
+			pTempNode = taskQueue.empty() ? nullptr : taskQueue.front();
+		};
+
+
+
+
+
+		// Fill attributes and push back
+		pAnimationLayer->m_name = layerName;
+		pAnimationLayer->m_weight = pFbxAnimLayer->Weight;
+		_pAnimation->m_animLayers.push_back(pAnimationLayer);
+	}
+}
+
+void CVS_FbxImporter::InitAnimNodeFromFbxAnimLayer(FbxNode* _pNode, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationLayer* _pAnimLayer)
 {
 
+}
+
+void CVS_FbxImporter::InitAnimNodesFromFbxAnimLayerRecursive(FbxNode* _pNode, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationLayer* _pAnimLayer)
+{
+	auto pAnimationNode = new CVS_AnimationNode;
+	pAnimationNode->m_name = _pNode->GetName();
+	if (InitAnimNodeFromFbxNode(pAnimationNode, _pNode, _pFbxAnimLayer, _pAnimLayer))
+	{
+		// Add bone to all bone list
+		auto& allNodesInCurrentLayer = m_layerNodeMaps[_pFbxAnimLayer];
+		allNodesInCurrentLayer[_pNode] = pAnimationNode;
+		// Resolving the bone tree relies on correctly traversing the scene nodes
+		// Try to find its parent
+		auto pParentFbxNode = _pNode->GetParent();
+		if (pParentFbxNode)
+		{
+			auto pParentAnimNode = static_cast<CVS_AnimationNode*>(allNodesInCurrentLayer[pParentFbxNode]);
+			if (!pParentAnimNode)
+			{
+				// WTF??
+				printf("NOT POSSIBLE.\n");
+				assert(0);
+			}
+			else
+			{
+				// Create Link between parent and our new bone
+				pParentAnimNode->m_children.push_back(pAnimationNode);
+				pAnimationNode->m_pParent = pParentAnimNode;
+			}
+		}
+		else
+		{
+			if (_pAnimLayer->m_pRootAnimNode)
+			{
+				printf("err multiple root nodes for anim layer.\n");
+				assert(0);
+			}
+			_pAnimLayer->m_pRootAnimNode = pAnimationNode;
+		}
+	}
+
+	// Process children
+	for (int i = 0, e = _pNode->GetChildCount(); i < e; ++i)
+	{
+		InitAnimNodesFromFbxAnimLayerRecursive(_pNode->GetChild(i), _pFbxAnimLayer, _pAnimLayer);
+	}
+}
+
+bool CVS_FbxImporter::InitAnimNodeFromFbxNode(CVS_AnimationNode* _pAnimNode, FbxNode* _pFbxNode, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationLayer* _pAnimLayer)
+{
+	_pAnimNode->m_name = _pFbxNode->GetName();
+
+	// For each node, extract all channels
+	static const char* AnimCurveTypes[] = { FBXSDK_CURVENODE_TRANSLATION, FBXSDK_CURVENODE_ROTATION, FBXSDK_CURVENODE_SCALING };
+	static const char* AnimComponents[] = { FBXSDK_CURVENODE_COMPONENT_X, FBXSDK_CURVENODE_COMPONENT_Y, FBXSDK_CURVENODE_COMPONENT_Z };
+	FbxProperty pProperties[CVS_AnimationNode::ECurveType::NumCurveTypes] = {
+		_pFbxNode->LclTranslation,
+		_pFbxNode->LclRotation,
+		_pFbxNode->LclScaling
+	};
+
+	auto pTCurve = pProperties[0].GetCurve(_pFbxAnimLayer);
+	auto pRCurve = pProperties[1].GetCurve(_pFbxAnimLayer);
+	auto pSCurve = pProperties[2].GetCurve(_pFbxAnimLayer);
+
+	int curveKeyCount[3] = {
+		pTCurve ? pTCurve->KeyGetCount() : 0,
+		pRCurve ? pRCurve->KeyGetCount() : 0,
+		pSCurve ? pRCurve->KeyGetCount() : 0
+	};
+
+	bool hasAnyCurve = curveKeyCount[0] + curveKeyCount[1] + curveKeyCount[2];
+
+	if (hasAnyCurve)
+	{
+		// Loop through all curves
+		for (int iCurveType = 0; iCurveType < CVS_AnimationNode::ECurveType::NumCurveTypes; iCurveType++)
+		{
+			if (curveKeyCount[iCurveType])
+			{
+				auto pAnimCurve = new CVS_AnimationCurve;
+				pAnimCurve->m_name = _pFbxNode->GetName();
+				_pAnimNode->m_channels[iCurveType] = pAnimCurve;
+				printf("        %s: %s\n", pAnimCurve->m_name.c_str(), AnimCurveTypes[iCurveType]);
+				InitAnimCurveFromFbxProperty(&pProperties[iCurveType], _pFbxAnimLayer, pAnimCurve);
+
+				if (iCurveType == CVS_AnimationNode::ECurveType::Rotation)
+				{
+					auto q = cquat(glm::radians(pAnimCurve->m_keyFrames[0].m_keyValue));
+					auto offset = getNodeOffset(_pFbxNode);
+					auto translation = offset.vecLclTranslation;
+					auto rotation = offset.vecLclRotation;
+					auto scaling = offset.vecLclScaling;
+					auto geoTranslation = offset.vecGeoTranslation;
+					auto geoRotation = offset.vecGeoRotation;
+					auto geoScaling = offset.vecGeoScaling;
+
+
+					auto newq = rotation * q;
+					auto vq = glm::degrees(glm::eulerAngles(q));
+					int qwfqwf = 0;
+				}
+
+			}
+		}
+	}
+	return true;
+}
+
+void CVS_FbxImporter::InitAnimCurveFromFbxProperty(FbxProperty* _pFbxProperty, FbxAnimLayer* _pFbxAnimLayer, CVS_AnimationCurve* _pAnimCurve)
+{
+
+	static const char* AnimComponents[] = { FBXSDK_CURVENODE_COMPONENT_X, FBXSDK_CURVENODE_COMPONENT_Y, FBXSDK_CURVENODE_COMPONENT_Z };
+	char    keyTimeString[24];
+	FbxAnimCurve* pCurves[3] = {
+		_pFbxProperty->GetCurve(_pFbxAnimLayer, AnimComponents[0]),
+		_pFbxProperty->GetCurve(_pFbxAnimLayer, AnimComponents[1]),
+		_pFbxProperty->GetCurve(_pFbxAnimLayer, AnimComponents[2]) };
+
+	CVS_AnimationKeyFrame tempFrame;
+	_pAnimCurve->m_keyFrames.reserve(pCurves[0]->KeyGetCount());
+	for (int iKey = 0, keyCount = pCurves[0]->KeyGetCount(); iKey < keyCount; iKey++)
+	{
+		auto keyTime = pCurves[0]->KeyGetTime(iKey);
+		keyTime.GetTimeString(keyTimeString, FbxUShort(24));
+		printf("Key: %s    ", keyTimeString);
+		for (int iComponent = 0; iComponent < 3; ++iComponent)
+		{
+			auto keyValue = static_cast<float>(pCurves[iComponent]->KeyGetValue(iKey));
+			// Fill data for key frame
+			tempFrame.m_interpolationType = static_cast<CVS_AnimationKeyFrame::EInterpolationType>(pCurves[iComponent]->KeyGetInterpolation(iKey));
+			tempFrame.m_keyValue[iComponent] = keyValue;
+			printf("%s %.2f  ", AnimComponents[iComponent], keyValue);
+		}
+		printf("\n");
+		_pAnimCurve->m_keyFrames.push_back(tempFrame);
+	}
 }
 
 void CVS_FbxImporter::_DisplayCurveKeys(FbxAnimCurve* pCurve)
@@ -914,6 +1092,8 @@ void CVS_FbxImporter::_DisplayCurveKeys(FbxAnimCurve* pCurve)
 
 	for (lCount = 0; lCount < lKeyCount; lCount++)
 	{
+		auto key = pCurve->KeyGet(lCount);
+
 		lKeyValue = static_cast<float>(pCurve->KeyGetValue(lCount));
 		lKeyTime = pCurve->KeyGetTime(lCount);
 

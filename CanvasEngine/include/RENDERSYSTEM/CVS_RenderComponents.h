@@ -6,6 +6,7 @@
 #include "CVS_RenderProgram.h"
 #include "CVS_Light.h"
 #include "CVS_Resource.h"
+#include "CVS_Skeleton.h"
 
 struct CVS_VertexObject;
 struct CVS_RenderNode;
@@ -146,7 +147,7 @@ struct CVS_RenderNode
 	CVS_RenderProgramInstance* parent;
 	CVS_Mesh* mesh;
 	std::vector<CVS_TextureReference> textures;
-	std::vector<cmat4> m_boneMats;
+	CVS_SkeletonPose* m_pSkeletonPose;
 	cmat4 modelMatrix;
 	CVS_RenderNode(CVS_RenderProgramInstance* parent);
 	int voidGetTextureHash(std::string texture);

@@ -6,7 +6,7 @@
 #include "CVS_FbxImporter.h"
 
 // Change to virtual path instead of name and type
-CVS_Resource* CVS_ResourceSystem::get(const char* _fileName, CVS_Resource::eType _type)
+CVS_Resource* CVS_ResourceSystem::get(const char* _fileName, CVS_Resource::EType _type)
 {
 	for (auto i : m_resources)
 	{

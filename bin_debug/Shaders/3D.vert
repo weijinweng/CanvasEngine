@@ -30,11 +30,6 @@ void main(){
 	BoneTransform     += gBones[BoneIDs_2[0]] * Weights_2[0];
 	BoneTransform     += gBones[BoneIDs_2[1]] * Weights_2[1];
 
-	//BoneTransform[0][0] = 2.0f;
-	//BoneTransform[1][1] = 2.0f;
-	//BoneTransform[2][2] = 2.0f;
-	//BoneTransform[3][3] = 2.0f;
-
 	gl_Position = MVP * BoneTransform * vec4(vertexPosition_modelspace,1);
 	Position_worldspace = (M * vec4(vertexPosition_modelspace, 1)).xyz;
 	vec3 vertexPosition_cameraspace = (V * M * vec4(vertexPosition_modelspace, 1)).xyz;

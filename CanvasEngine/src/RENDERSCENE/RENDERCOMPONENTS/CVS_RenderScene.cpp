@@ -1,9 +1,8 @@
 #include "CVS_RenderComponents.h"
 #include "Canvas.h"
 
-//todo: change to skeleton
-#include "CVS_Bone.h"
 #include "CVS_Mesh.h"
+#include "CVS_Skeleton.h"
 
 CVS_RenderProgramInstance::CVS_RenderProgramInstance(CVS_RenderProgram* program)
 {
@@ -57,10 +56,10 @@ void CVS_RenderProgramInstance::Render(CVS_View* view)
 		cmat4 MVP = view->Pers * view->View * Model;
 		glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 		
-		for (int j = 0, e = MAX_BONES; j < e; ++j)
+		auto& globalPose = this->children[i]->m_pSkeletonPose->m_aGlobalPose;
+		for (int j = 0, e = globalPose.size(); j < e; ++j)
 		{
-			auto boneMat = this->children[i]->m_boneMats;
-			glUniformMatrix4fv(m_boneLoc[j], 1, GL_FALSE, glm::value_ptr(boneMat[j]));
+			glUniformMatrix4fv(m_boneLoc[j], 1, GL_FALSE, glm::value_ptr(globalPose[j]));
 		}
 
 		for (int i = 0, e = children[i]->textures.size(); i < e; ++i)

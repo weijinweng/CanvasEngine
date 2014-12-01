@@ -21,7 +21,7 @@ int CVS_Bone::initFromFbxNode(FbxNode* _pNode)
 	// *Are all bones*
 
 	m_name = _pNode->GetName();
-	m_type = CVS_InternalResource::eType::Bone;
+	m_type = CVS_InternalResource::EType::Bone;
 
 
 	auto attribute = _pNode->GetNodeAttribute();
@@ -83,17 +83,17 @@ int CVS_Bone::initFromFbxNode(FbxNode* _pNode)
 
 CVS_Skeleton* CVS_Bone::getSkeleton()
 {
-	return static_cast<CVS_Skeleton*>(GLOBALSTATEMACHINE.m_ResourceSub.get(getRootBone()->m_name.c_str(), CVS_Resource::eType::Skeleton));
+	return static_cast<CVS_Skeleton*>(GLOBALSTATEMACHINE.m_ResourceSub.get(getRootBone()->m_name.c_str(), CVS_Resource::EType::Skeleton));
 }
 
 CVS_Bone* CVS_Bone::getRootBone()
 {
-	auto pParent = m_pParent;
-	while (pParent->m_pParent)
-	{
-		pParent = pParent->m_pParent;
-	}
-	return pParent;
+// 	auto pParent = m_pParent;
+// 	while (pParent->m_pParent)
+// 	{
+// 		pParent = pParent->m_pParent;
+// 	}
+	return nullptr;
 }
 
 bool CVS_Bone::hasBone(const char* _boneName)
@@ -113,7 +113,7 @@ bool CVS_Bone::hasBone(const char* _boneName)
 	}
 }
 
-CVS_Bone::CVS_Bone() : m_pParent(nullptr), m_index(), m_offset(), m_transform(), m_size(), m_limbLength(), m_rotation(), m_translation()
+CVS_Bone::CVS_Bone() : m_index(), m_bindPoseInv(), m_transform(), m_size(), m_limbLength(), m_rotation(), m_translation()
 {
 
 }

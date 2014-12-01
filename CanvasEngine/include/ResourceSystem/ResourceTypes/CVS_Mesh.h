@@ -32,6 +32,7 @@ struct CVS_Mesh : public CVS_Renderable, public CVS_Resource
 	void initializeFromAiMesh(const aiMesh* mesh);
 	virtual void Draw(EDrawMode _drawMode);
 	void DrawSkeleton(CVS_Skeleton* _pSkeleton);
+	void CalculateGlobalTransform(CVS_Bone* _pBone, cmat4 _parentTransform = cmat4());
 	void UpdateSkeleton(CVS_RenderNode* _pRenderNode);
-	CVS_Mesh() : CVS_Resource("DefaultMeshName", CVS_Resource::eType::Mesh), m_pSkeleton(), m_VAO() {}
+	CVS_Mesh() : CVS_Resource("Mesh", CVS_Resource::EType::Mesh), m_pSkeleton(), m_VAO() {}
 };
