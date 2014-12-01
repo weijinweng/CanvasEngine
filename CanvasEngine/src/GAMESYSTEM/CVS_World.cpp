@@ -20,7 +20,7 @@ CVS_RenderComponent::CVS_RenderComponent(CVS_GameObject* object, CVS_RenderScene
 void CVS_RenderComponent::Update()
 {
 	this->m_pNode->modelMatrix = object->transformNode.transform.transform;
-	this->m_pNode->mesh->UpdateSkeleton(this->m_pNode);
+	//this->m_pNode->mesh->UpdateSkeleton(this->m_pNode);
 }
 
 CVS_GameObject::CVS_GameObject(const aiNode* node,
