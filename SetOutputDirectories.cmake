@@ -16,3 +16,7 @@ SET( CMAKE_INCLUDE_CURRENT_DIR ON )
 if(WIN32)
 add_definitions( "-DPLATFORM_WINDOWS" )
 endif(WIN32)
+
+if(MACOS)
+add_definitions( "-DPLATFORM_MACOS" )
+endif(MACOS)

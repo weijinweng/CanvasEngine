@@ -1,8 +1,8 @@
+# ONLY for msvc
+if(MSVC)
 # Find user and system name
 SET(SYSTEM_NAME $ENV{USERDOMAIN} CACHE STRING SystemName)
 SET(USER_NAME $ENV{USERNAME} CACHE STRING UserName)
-
-if(MSVC)
 # Find Visual Studio Version
 if(MSVC_VERSION EQUAL 1800)
 set (TEMPLATE_MSVC_VERSION "12.0")
