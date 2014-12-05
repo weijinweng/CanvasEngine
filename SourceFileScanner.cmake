@@ -197,8 +197,8 @@ list(APPEND RCC++_IncludeDirs "${currentDir}\@")
 ENDFOREACH(currentDir ${CURRENT_INCLUDE_DIRS})
 
 #message(${RCC++_IncludeDirs})
-string(REPLACE "/" "\\\\" WINDOWS_FORMAT_CURRENT_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
-add_definitions("-DCURRENT_INCLUDE_DIRS=${WINDOWS_FORMAT_CURRENT_DIRS}")
+#string(REPLACE "/" "\\\\" WINDOWS_FORMAT_CURRENT_DIRS "${CMAKE_CURRENT_SOURCE_DIR}")
+#add_definitions("-DCURRENT_INCLUDE_DIRS=${WINDOWS_FORMAT_CURRENT_DIRS}")
 
 #------ set target -----
 include(GenerateIDESettings)
