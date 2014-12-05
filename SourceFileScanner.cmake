@@ -126,6 +126,7 @@ function(setup_solution SOLUTION_NAME)
 		set(_headerFile "")
 		foreach (_headerFile ${MY_HEADERS})
 			get_filename_component(_dir ${_headerFile} PATH)
+			FILE(RELATIVE_PATH newdir ${CMAKE_CURRENT_BINARY_DIR} ${_dir})
 			list (APPEND CURRENT_INCLUDE_DIRS ${_dir})
 		endforeach()
 		list(REMOVE_DUPLICATES CURRENT_INCLUDE_DIRS)
@@ -200,7 +201,7 @@ string(REPLACE "/" "\\\\" WINDOWS_FORMAT_CURRENT_DIRS "${CMAKE_CURRENT_SOURCE_DI
 add_definitions("-DCURRENT_INCLUDE_DIRS=${WINDOWS_FORMAT_CURRENT_DIRS}")
 
 #------ set target -----
-include(GenerateVcxprojUserSettings)
+include(GenerateIDESettings)
 
 include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
 include_directories(${includeDirs})
