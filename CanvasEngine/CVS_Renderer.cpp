@@ -67,6 +67,11 @@ void CVS_RenderPipeline::SetSize(int w, int h)
 
 }
 
+void CVS_RenderPipeline::GenShadowMap(int type, unsigned int* mapID)
+{
+
+}
+
 CVS_Renderer::CVS_Renderer(HDC glHdc)
 {
 	wglMakeCurrent(glHdc, GLOBALSTATEMACHINE.m_RenderSub.m_glContext);

@@ -64,6 +64,27 @@
     <Filter Include="Source Files\Src\RENDERSYSTEM\RENDERER">
       <UniqueIdentifier>{91e0dc46-3a0d-476f-a240-5c8a712e4c47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\REFACTOR">
+      <UniqueIdentifier>{0815c1b4-0e0b-4cb2-bee5-a3622aa11439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\REFACTOR\WINDOW">
+      <UniqueIdentifier>{bfd6228d-61e0-4d19-83e4-fb12b9608a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\REFACTOR\WINDOW\GUI">
+      <UniqueIdentifier>{7218e637-a407-4ede-af33-7ab9a0453800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\REFACTOR">
+      <UniqueIdentifier>{d189ad64-0391-4364-bf81-e44cb145b886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\REFACTOR\SUBSYSTEMS">
+      <UniqueIdentifier>{74cff031-266a-4b1b-9202-a7c92eaf5fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\REFACTOR\CORE">
+      <UniqueIdentifier>{32deabd1-6a7e-407d-8279-f66d1f3efff0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\REFACTOR\RENDERSYSTEM">
+      <UniqueIdentifier>{0abc9b19-3361-4e91-b5d8-eaacda6d97a8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,9 +144,6 @@
     <ClCompile Include="CVS_RenderNode.cpp">
       <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
     </ClCompile>
-    <ClCompile Include="CVS_Camera.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
-    </ClCompile>
     <ClCompile Include="CVS_Texture.cpp">
       <Filter>Source Files\Src\RENDERSYSTEM</Filter>
     </ClCompile>
@@ -140,6 +158,18 @@
     </ClCompile>
     <ClCompile Include="CVS_Light.cpp">
       <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
+    </ClCompile>
+    <ClCompile Include="CVS_Camera.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CanvasCore.cpp">
+      <Filter>Source Files\Src\REFACTOR\SUBSYSTEMS</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Src\REFACTOR\SUBSYSTEMS</Filter>
+    </ClCompile>
+    <ClCompile Include="SubSystem.cpp">
+      <Filter>Source Files\Src\REFACTOR\SUBSYSTEMS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +235,36 @@
     </ClInclude>
     <ClInclude Include="CVS_RenderPipeline.h">
       <Filter>Header Files\RENDERSYSTEMS</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasSDK.h">
+      <Filter>Header Files\REFACTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files\REFACTOR</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasCore.h">
+      <Filter>Header Files\REFACTOR\CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files\REFACTOR\WINDOW</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Header Files\REFACTOR\RENDERSYSTEM</Filter>
+    </ClInclude>
+    <ClInclude Include="Properties.h">
+      <Filter>Header Files\REFACTOR\CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="Display.h">
+      <Filter>Header Files\REFACTOR\WINDOW</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowProperties.h">
+      <Filter>Header Files\REFACTOR\WINDOW</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>Header Files\REFACTOR\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\REFACTOR\WINDOW\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

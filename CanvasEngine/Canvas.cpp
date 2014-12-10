@@ -32,6 +32,7 @@ int CVS_Timer::setFrame(UINT precision)
 	switch (precision)
 	{
 	case 0:
+		//TODO:! PRECISION REQUIREMENTS
 		deltaTime = newTime.QuadPart / (1000);
 		return deltaTime;
 	case 1:
@@ -242,12 +243,13 @@ bool Editor::Initialize()
 	CVS_Light* light3 = new CVS_Light();
 
 	light->SetPosition(cvec3(0, 5, 0));
-	light2->SetPosition(cvec3(20, 5, 0));
+	light2->SetPosition(cvec3(20, 2, 0));
 	light3->SetPosition(cvec3(-20, 5, 0));
 
-	testScene->scene->lights.push_back(light);
 	testScene->scene->lights.push_back(light2);
+	testScene->scene->lights.push_back(light);
 	testScene->scene->lights.push_back(light3);
+
 
 	/*CVS_Tab* tab = m_MainWindow->CreateNewTab("Lol", 1400,30,200,900);
 	CVS_Tab* tab2 = m_MainWindow->CreateNewTab("FUCK", 0, 30, 200, 900);

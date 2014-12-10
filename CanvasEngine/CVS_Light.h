@@ -29,7 +29,7 @@ struct CVS_LightProperties{
 
 	float rad;
 
-	GLuint ShadowMap;
+
 
 	CVS_LightProperties();
 	void CalculateBoundRadius();
@@ -38,6 +38,7 @@ struct CVS_LightProperties{
 struct CVS_Light{
 	CVS_LightProperties properties;
 	CVS_Light();
+	GLuint mShadowMap;
 	void DirectionalLight(cvec3 lightDirection);
 	void PointLight(cvec3 lightpos);
 	void SetPosition(cvec3 position);

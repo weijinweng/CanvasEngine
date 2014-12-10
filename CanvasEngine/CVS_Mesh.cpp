@@ -143,8 +143,8 @@ void CVS_Mesh::initializeFromAiMesh(const aiMesh* mesh)
 
 		}
 	}
-	printf("\n New sphere: cen,rad = %f %f %f   %f",
-		cen.x, cen.y, cen.z, rad);
+	//printf("\n New sphere: cen,rad = %f %f %f   %f",
+	//	cen.x, cen.y, cen.z, rad);
 
 	bSphere.radius = rad;
 	bSphere.center = cen;

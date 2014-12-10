@@ -31,6 +31,7 @@ CVS_Light::CVS_Light()
 {
 	this->properties.CalculateBoundRadius();
 	printf("rad of light is %f\n", properties.rad);
+	glGenTextures(1, &mShadowMap);
 }
 
 void CVS_Light::SetPosition(cvec3 pos)
@@ -47,6 +48,8 @@ void CVS_Light::DirectionalLight(glm::vec3 direction)
 	properties.constAttenuation = 1.0f;
 	properties.linearAttenuation = 0.0f;
 	properties.quadraticAttenuation = 0.0f;
+
+	GLOBALSTATEMACHINE.m_RenderSub.pipeline->GenShadowMap(CVS_LightProperties::CVS_LGT_DIR, &mShadowMap);
 }
 
 void CVS_Light::PointLight(glm::vec3 pos)

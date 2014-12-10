@@ -3,7 +3,9 @@
 void CVS_DeferredPipeline::LGHPass::SetUp()
 {
 	program = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("DeferredLight", "./Shaders/DeferredLight.vert", "./Shaders/DeferredLight.frag");
-	
+	//m_ShadowMapDir = GLOBALSTATEMACHINE.m_RenderSub.createNewShader("ShadowMap", "./Shaders/ShadowMap2D.vert", "./Shaders/ShadowMap2D.frag");
+
+	//Get CVS_Inputs
 	V = program->getUniformHash("V");
 	iP = program->getUniformHash("iP");
 	MVP = program->getUniformHash("MVP");
@@ -109,6 +111,16 @@ void CVS_DeferredPipeline::LGHPass::pass(CVS_RenderScene* scene, CVS_View* view)
 	}
 	glCullFace(GL_BACK);
 
+}
+
+void CVS_DeferredPipeline::LGHPass::ShadowPass(CVS_RenderScene* scene, CVS_View* view)
+{
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_ShadowFrameBuffer);
+
+	for (int i = 0, e = scene->lights.size(); i < e; ++i)
+	{
+		
+	}
 }
 
 void CVS_DeferredPipeline::AOBuffer::SetUp()
@@ -424,4 +436,20 @@ void CVS_DeferredPipeline::SetSize(int w, int h)
 
 	buffer.UpdateSize();
 	AO.UpdateSize();
+}
+
+void CVS_DeferredPipeline::GenShadowMap(int type, GLuint* mapID)
+{
+	switch (type)
+	{
+	case CVS_LightProperties::CVS_LGT_DIR:
+		glBindTexture(GL_TEXTURE_2D_ARRAY, *mapID);
+		glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT24, 2048, 2048, 3, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+		glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, 1024, 1024, 0, GL_DEPTH_COMPONENT24, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	}
 }

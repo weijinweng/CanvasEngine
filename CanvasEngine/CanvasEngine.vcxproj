@@ -74,6 +74,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="CanvasCore.cpp" />
     <ClCompile Include="CVS_2DTools.cpp" />
     <ClCompile Include="CVS_Button.cpp" />
     <ClCompile Include="CVS_EditBox.cpp" />
@@ -97,10 +98,15 @@
     <ClCompile Include="CVS_World.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="CVS_Camera.cpp" />
+    <ClCompile Include="SubSystem.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Canvas.h" />
+    <ClInclude Include="CanvasCore.h" />
+    <ClInclude Include="CanvasSDK.h" />
     <ClInclude Include="CVS_2DTools.h" />
     <ClInclude Include="CVS_Button.h" />
     <ClInclude Include="CVS_GroupBox.h" />
@@ -118,9 +124,16 @@
     <ClInclude Include="CVS_GUISystem.h" />
     <ClInclude Include="CVS_World.h" />
     <ClInclude Include="CVS_Transform.h" />
+    <ClInclude Include="Display.h" />
+    <ClInclude Include="GUI.h" />
     <ClInclude Include="Manifest.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Properties.h" />
+    <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="wglext.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="WindowProperties.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CanvasEngine.rc" />

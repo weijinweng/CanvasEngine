@@ -9,6 +9,7 @@ struct CVS_RenderPipeline{
 	virtual void SetUp();
 	virtual void Render(CVS_RenderScene* scene, CVS_View view);
 	virtual void SetSize(int w, int h);
+	virtual void GenShadowMap(int properties, GLuint*);
 };
 
 enum GTex{
@@ -26,7 +27,6 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 		void Pass();
 		void DrawVoxels();
 	};
-
 	struct AOBuffer{
 		GLuint m_AoFrameBuffer;
 		GLuint m_PingPongBlur;
@@ -52,6 +52,7 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 		void UpdateSize();
 		void PassAO(CVS_RenderScene* scene, CVS_View* view);
 		void PassHBAO(CVS_RenderScene* scene, CVS_View* view);
+
 	};
 	struct GBuffer{
 		GLuint m_FrameBuffer;
@@ -102,9 +103,15 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 		CVS_RenderProgram* dirProgram;
 		CVS_RenderProgram* spotProgram;
 		CVS_RenderProgram* program;
+		CVS_RenderProgram* m_ShadowMapDir;
+		CVS_RenderProgram* m_ShadowMapSpot;
+		CVS_RenderProgram* m_ShadowMapPoint;
 
 		GLuint m_ShadowFrameBuffer;
 
+		void CSM(CVS_Light* light, CVS_View* view);
+		void MultiPassPointLight(CVS_Light* light, CVS_View* view);
+		void SpotLight(CVS_Light* light, CVS_View* view);
 		void ShadowPass(CVS_RenderScene*, CVS_View*);
 		void SetUp();
 
@@ -120,4 +127,5 @@ struct CVS_DeferredPipeline : public CVS_RenderPipeline{
 	void SetUp();
 	void Render(CVS_RenderScene* scene, CVS_View view);
 	void SetSize(int w, int h);
+	void GenShadowMap(int properties, GLuint*);
 };
