@@ -13,258 +13,177 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\RENDERSYSTEMS">
-      <UniqueIdentifier>{ad7d6a94-687d-4276-9655-dbf3c94b65cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\WINDOWSYSTEM">
-      <UniqueIdentifier>{5b6399f4-071d-4959-864e-ded44657877d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Src">
       <UniqueIdentifier>{af093a47-a462-4a26-a095-38a5431f4bab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\WORLDSYSTEMS">
-      <UniqueIdentifier>{7327f5b5-2fad-41da-a470-98a50f6b460b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GAMESYSTEMS">
-      <UniqueIdentifier>{96ff00bd-8fb5-4171-9f59-d147870b83af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI">
-      <UniqueIdentifier>{ac9d6d77-1902-48fb-8d63-e08d5ec01b2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI">
-      <UniqueIdentifier>{0918c13b-bd40-4082-bfb0-c157c5e8bd60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\EDITBOX">
-      <UniqueIdentifier>{df6438b6-b725-4dee-9b03-91934d5ab627}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\BUTTON">
-      <UniqueIdentifier>{0194bb7a-8da7-4972-bcbd-91fbf6968986}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\LAYOUT">
-      <UniqueIdentifier>{5977e20a-6119-4cb4-8052-d87e8d86188c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\TABCONTROL">
-      <UniqueIdentifier>{58397dfe-1833-43f0-83c5-80c9b7be1d27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\SCENEVIEW">
-      <UniqueIdentifier>{cce4bf8e-8c85-4666-be4f-bb44c3f76e11}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\TOOLBAR">
-      <UniqueIdentifier>{224252c0-d8a7-4a09-988e-c669151e2da2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\RENDERSYSTEM">
-      <UniqueIdentifier>{8e4c3f73-4c3a-4dbd-be3a-0d8a7d399a47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT">
-      <UniqueIdentifier>{dd946141-a76e-40b5-bc14-07438adf2276}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\GUI\TREEVIEW">
-      <UniqueIdentifier>{eb2f5cb4-f891-4d38-b33c-b8e9829c1871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Src\RENDERSYSTEM\RENDERER">
-      <UniqueIdentifier>{91e0dc46-3a0d-476f-a240-5c8a712e4c47}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\REFACTOR">
       <UniqueIdentifier>{0815c1b4-0e0b-4cb2-bee5-a3622aa11439}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\REFACTOR\WINDOW">
-      <UniqueIdentifier>{bfd6228d-61e0-4d19-83e4-fb12b9608a7e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\REFACTOR\WINDOW\GUI">
-      <UniqueIdentifier>{7218e637-a407-4ede-af33-7ab9a0453800}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Src\REFACTOR">
       <UniqueIdentifier>{d189ad64-0391-4364-bf81-e44cb145b886}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Src\REFACTOR\SUBSYSTEMS">
-      <UniqueIdentifier>{74cff031-266a-4b1b-9202-a7c92eaf5fdd}</UniqueIdentifier>
+    <Filter Include="Source Files\Src\APP">
+      <UniqueIdentifier>{dae311db-7adc-4555-8e2b-6514ae739f5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\REFACTOR\CORE">
+    <Filter Include="Header Files\CANVAS">
+      <UniqueIdentifier>{152a25bc-ca9f-4b20-999c-5adbb86f8567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE">
       <UniqueIdentifier>{32deabd1-6a7e-407d-8279-f66d1f3efff0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\REFACTOR\RENDERSYSTEM">
+    <Filter Include="Source Files\Src\CANVAS">
+      <UniqueIdentifier>{70232833-6bda-40a5-bc68-9f2cc19afb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\PROPERTIES">
+      <UniqueIdentifier>{ab1637d9-1c97-4b78-ad3f-35e992dd66cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\WINDOW">
+      <UniqueIdentifier>{bfd6228d-61e0-4d19-83e4-fb12b9608a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\WINDOW\GUI">
+      <UniqueIdentifier>{7218e637-a407-4ede-af33-7ab9a0453800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\ENGINE">
+      <UniqueIdentifier>{984141d6-9d45-44b0-b974-84367cb75156}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM">
       <UniqueIdentifier>{0abc9b19-3361-4e91-b5d8-eaacda6d97a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE">
+      <UniqueIdentifier>{74cff031-266a-4b1b-9202-a7c92eaf5fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\WINDOW">
+      <UniqueIdentifier>{c4abddc1-a72d-4be0-aa9f-d463d583feaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\PROPERTIES">
+      <UniqueIdentifier>{ea839b4b-4cea-444b-a3fb-7c9aec25eaa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\GUI">
+      <UniqueIdentifier>{0611615f-ef9b-43ed-b41b-f347dee14b4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CVS_Window.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_2DTools.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_World.cpp">
-      <Filter>Source Files\Src\GAMESYSTEMS</Filter>
-    </ClCompile>
-    <ClCompile Include="Canvas.cpp">
-      <Filter>Source Files\Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Source Files\Src\GAMESYSTEMS</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_GUI.cpp">
-      <Filter>Source Files\Src\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_EditBox.cpp">
-      <Filter>Source Files\Src\GUI\EDITBOX</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_Button.cpp">
-      <Filter>Source Files\Src\GUI\BUTTON</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_LayOut.cpp">
-      <Filter>Source Files\Src\GUI\LAYOUT</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_TabControl.cpp">
-      <Filter>Source Files\Src\GUI\TABCONTROL</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_TabSlot.cpp">
-      <Filter>Source Files\Src\GUI\TABCONTROL</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_SceneView.cpp">
-      <Filter>Source Files\Src\GUI\SCENEVIEW</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_ToolBar.cpp">
-      <Filter>Source Files\Src\GUI\TOOLBAR</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RenderSystem.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RenderProgram.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RendererScene.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_Mesh.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RenderNode.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_Texture.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_TreeView.cpp">
-      <Filter>Source Files\Src\GUI\TREEVIEW</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_Renderer.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERER</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_RenderPipeline.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERER</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_Light.cpp">
-      <Filter>Source Files\Src\RENDERSYSTEM\RENDERCOMPONENT</Filter>
-    </ClCompile>
-    <ClCompile Include="CVS_Camera.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="CanvasCore.cpp">
-      <Filter>Source Files\Src\REFACTOR\SUBSYSTEMS</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Source Files\Src\REFACTOR\SUBSYSTEMS</Filter>
+      <Filter>Source Files\Src\CANVAS</Filter>
     </ClCompile>
     <ClCompile Include="SubSystem.cpp">
-      <Filter>Source Files\Src\REFACTOR\SUBSYSTEMS</Filter>
+      <Filter>Source Files\Src\CANVAS</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files\Src\CANVAS</Filter>
+    </ClCompile>
+    <ClCompile Include="Transcript.cpp">
+      <Filter>Source Files\Src\CANVAS</Filter>
+    </ClCompile>
+    <ClCompile Include="CanvasMain.cpp">
+      <Filter>Source Files\Src\CANVAS</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Source Files\Src\APP</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\WINDOW</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowProperties.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\WINDOW</Filter>
+    </ClCompile>
+    <ClCompile Include="Properties.cpp">
+      <Filter>Source Files\Src\CANVAS\PROPERTIES</Filter>
+    </ClCompile>
+    <ClCompile Include="OSImage.cpp">
+      <Filter>Source Files\Src\CANVAS\PROPERTIES</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSystem.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\WINDOW</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageDialog.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\WINDOW</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\WINDOW</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Source Files\Src\CANVAS\PROPERTIES</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CVS_Precompiled.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Canvas.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_SubSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_WindowSystem.h">
-      <Filter>Header Files\WINDOWSYSTEM</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_2DTools.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_RenderProgram.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_World.h">
-      <Filter>Header Files\WORLDSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_Transform.h">
-      <Filter>Header Files\WORLDSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_RenderComponents.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_Light.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Manifest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_RenderSystem.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="wglext.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_Button.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_GUISystem.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_Gui.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_SceneView.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_GroupBox.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_TreeView.h">
-      <Filter>Header Files\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="CVS_RenderPipeline.h">
-      <Filter>Header Files\RENDERSYSTEMS</Filter>
-    </ClInclude>
-    <ClInclude Include="CanvasSDK.h">
-      <Filter>Header Files\REFACTOR</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files\REFACTOR</Filter>
-    </ClInclude>
     <ClInclude Include="CanvasCore.h">
-      <Filter>Header Files\REFACTOR\CORE</Filter>
+      <Filter>Header Files\CANVAS\CORE</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
-      <Filter>Header Files\REFACTOR\WINDOW</Filter>
+      <Filter>Header Files\CANVAS\CORE\WINDOW</Filter>
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
-      <Filter>Header Files\REFACTOR\RENDERSYSTEM</Filter>
-    </ClInclude>
-    <ClInclude Include="Properties.h">
-      <Filter>Header Files\REFACTOR\CORE</Filter>
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM</Filter>
     </ClInclude>
     <ClInclude Include="Display.h">
-      <Filter>Header Files\REFACTOR\WINDOW</Filter>
+      <Filter>Header Files\CANVAS\CORE\WINDOW</Filter>
     </ClInclude>
     <ClInclude Include="WindowProperties.h">
-      <Filter>Header Files\REFACTOR\WINDOW</Filter>
+      <Filter>Header Files\CANVAS\CORE\WINDOW</Filter>
     </ClInclude>
     <ClInclude Include="GUI.h">
-      <Filter>Header Files\REFACTOR\WINDOW\GUI</Filter>
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
-      <Filter>Header Files\REFACTOR\WINDOW\GUI</Filter>
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Header Files\CANVAS\CORE\ENGINE</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasMain.h">
+      <Filter>Header Files\CANVAS</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasSDK.h">
+      <Filter>Header Files\CANVAS</Filter>
+    </ClInclude>
+    <ClInclude Include="Manifest.h">
+      <Filter>Header Files\CANVAS</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files\CANVAS</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\CANVAS</Filter>
+    </ClInclude>
+    <ClInclude Include="wglext.h">
+      <Filter>Header Files\CANVAS</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Properties.h">
+      <Filter>Header Files\CANVAS\CORE\PROPERTIES</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Header Files\CANVAS\CORE\PROPERTIES</Filter>
+    </ClInclude>
+    <ClInclude Include="OSImage.h">
+      <Filter>Header Files\CANVAS\CORE\PROPERTIES</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="LayOut.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageDialog.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolBar.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

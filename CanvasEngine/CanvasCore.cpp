@@ -2,17 +2,29 @@
 #include "Window.h"
 using namespace Canvas;
 
-StateMachine CVS_Server;
-
-void RegisterSubSystem(SubSystem* sys)
+bool Canvas::PullEvent(Event& e)
 {
-	CVS_Server.addSubSystem(sys->name, sys);
+	return CVS_Server.getNextEvent(e);
 }
 
-bool Initialize(uint32 flag)
+
+bool Canvas::Initialize(uint32 flag, HINSTANCE instance, HINSTANCE prevInstance, int nCmdShow)
 {
 	RegisterSubSystem(new WindowSystem());
 
-	CVS_Server.Init(flag);
+	return CVS_Server.Init(flag, instance, prevInstance);
+}
+
+
+
+void Canvas::Run()
+{
+
+	CVS_Server.Run();
+}
+
+bool Canvas::End()
+{
+	return CVS_Server.End();
 }
 

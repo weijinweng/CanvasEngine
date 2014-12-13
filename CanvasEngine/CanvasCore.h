@@ -2,6 +2,7 @@
 
 #include "pch.h"
 #include "Properties.h"
+#include "CanvasMain.h"
 
 //Reserve 100 to 200 for Canvas core systems
 #define CVS_GL 100
@@ -29,7 +30,7 @@ namespace Canvas{
 	struct Time{
 		uint32 year;
 		uint32 month;
-		uint32 day_week;
+		uint32 day;
 		uint32 hour;
 		uint32 minute;
 		uint32 seconds;
@@ -40,12 +41,12 @@ namespace Canvas{
 	//Timer for time.
 	class Timer{
 #ifdef CVS_WIN32
-		static int frequency;
+		static LONGLONG frequency;
 		LARGE_INTEGER counter;
 #endif
-		int m_lasttime;
-		int m_deltatime;
-		int m_stopwatchtime;
+		LONGLONG m_lasttime;
+		LONGLONG m_deltatime;
+		LONGLONG m_stopwatchtime;
 	public:
 		//Define current time.
 
@@ -83,37 +84,52 @@ namespace Canvas{
 	public:
 		unsigned int getLines();
 		void print();
-		char* getString();
+		const char* getString();
 		void BeginTranscript(std::string header,std::string name);
-		void addPushData(std::string string);
+		void Log(std::string string);
 		void EndTranscript();
 	};
 
-	bool Initialize(uint32);
+	bool Initialize(uint32, HINSTANCE, HINSTANCE, int);
 	void Run();
 	bool End();
 	Time GetOSTime();
 	
-	class RegisterFactory{
-		std::map<std::string, SubSystem*> m_systems;
+	struct Event{
+		UINT msg;
+		void* sParam;
+		long lParam;
 	};
 
 	//Canvas Main StateMachine
-	struct StateMachine{
+	class StateMachine{
 		std::map< std::string, SubSystem*> m_systems;
 		std::vector<SubSystem*> m_update_sub;
-		void Update();
+		std::queue<Event> m_events;
+		uint32 m_init_flags;
+		Transcript logger;
+	public:
+#ifdef CVS_WIN32
+		HINSTANCE App_Instance;
+		HINSTANCE Prev_Instance;
+		bool Init(uint32, HINSTANCE, HINSTANCE);
+		HINSTANCE getAppInstance();
+#endif
 		bool Init(uint32);
 		void Run();
 		bool End();
-		void getSubSystem(std::string);
-		void addSubSystem(std::string, SubSystem*);
+		SubSystem* getSubSystem(std::string);
+		void addEvent(uint32 msg, void*, LONG_PTR);
+		void addSubSystem(SubSystem*);
+		void addToUpdate(std::string name);
+		bool getNextEvent(Event& e);
 	};
 
-	template <typename T>
+
+	int CVSToWinApi(int flags);
+	bool PullEvent(Event & e);
 	void RegisterSubSystem(SubSystem*);
-
-
+	void SubScribeToUpdate(std::string);
 };
 
 extern Canvas::StateMachine CVS_Server;
