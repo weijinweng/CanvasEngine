@@ -102,9 +102,9 @@ MACRO(create_project mode in_macros includes linkLibs)
 	
 	#----- CREATE TARGET -----
 	if(${mode} STREQUAL "STATIC")
-		add_library (${PROJECT_NAME} STATIC ${MY_SRC} ${MY_HEADERS} ${MY_MISC})
+		add_library (${PROJECT_NAME} STATIC ${MY_SRC} ${MY_HEADERS} ${MY_MISC} ${MY_RESOURCES})
 	elseif(${mode} STREQUAL "DYNAMIC" OR ${mode} STREQUAL "SHARED" )
-		add_library (${PROJECT_NAME} SHARED ${MY_SRC} ${MY_HEADERS} ${MY_MISC})
+		add_library (${PROJECT_NAME} SHARED ${MY_SRC} ${MY_HEADERS} ${MY_MISC} ${MY_RESOURCES})
 	elseif(${mode} STREQUAL "CONSOLE")
 		add_executable (${PROJECT_NAME} ${MY_SRC} ${MY_HEADERS} ${MY_SHADERS} ${MY_RESOURCES} ${MY_MISC})
 	elseif(${mode} STREQUAL "WIN32")
