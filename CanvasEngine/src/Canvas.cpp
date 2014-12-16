@@ -247,7 +247,7 @@ bool Editor::Initialize()
 	CVS_Scene* testScene = GLOBALSTATEMACHINE.m_WorldSub.createNewScene();
 	// Load FBX to Resource System
 	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin/mannequin.fbx");
-	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin/Run.fbx");
+	GLOBALSTATEMACHINE.m_ResourceSub.import("mannequin/Walk.fbx");
 	
 	// Get our mesh
 	auto pMesh = static_cast<CVS_Mesh*>(GLOBALSTATEMACHINE.m_ResourceSub.get("HeroTPP", CVS_Resource::EType::Mesh));
@@ -257,7 +257,7 @@ bool Editor::Initialize()
 	}
 
 	// Get our animation
-	auto pAnim = static_cast<CVS_Animation*>(GLOBALSTATEMACHINE.m_ResourceSub.get("Run-Take0", CVS_Resource::EType::Animation));
+	auto pAnim = static_cast<CVS_Animation*>(GLOBALSTATEMACHINE.m_ResourceSub.get("Walk-Take0", CVS_Resource::EType::Animation));
 	if (!pAnim)
 	{
 		assert(0);

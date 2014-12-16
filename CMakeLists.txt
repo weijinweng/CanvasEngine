@@ -6,27 +6,46 @@ cmake_minimum_required( VERSION 2.8 )
 #  RelWithDebInfo : w/  debug symbols, w/  optimization
 #  MinSizeRel     : w/o debug symbols, w/  optimization, stripped binaries
 
-# Include necessary submodules
-if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/../CMake")
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
-else()
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+SET( CMakeScriptRepo "https://github.com/piaoasd123/CMake.git" )
+# Grab CMake Script
+# Requires Git.exe added to system path
+find_package(Git)
+if(GIT_FOUND)
+	message(STATUS "Git Executable: ${GIT_EXECUTABLE}")
+	message(STATUS "CMake Script: ${CMakeScriptRepo}")
+	if(EXISTS ${CMAKE_SOURCE_DIR}/CMake/)
+		execute_process(COMMAND ${GIT_EXECUTABLE}
+			"pull" ${CMakeScriptRepo}
+			WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/CMake/")
+	else()
+		execute_process(COMMAND ${GIT_EXECUTABLE}
+			"clone" ${CMakeScriptRepo}
+			WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+	endif()
 endif()
-include(SetOutputDirectories )
-include(SourceFileScanner)
+# Set module path
+if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/../CMake")
+	set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
+else()
+	set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+endif()
+message(STATUS "CMake Path: ${CMAKE_MODULE_PATH}")
 
-#create solution
-parse_directory_name(SOLUTION_NAME)
-project( ${SOLUTION_NAME} )
+# Include all modules
+include( CustomModules )
 
-# Add compile flags and preprocessor definitions
-add_definitions( "-D_CRT_SECURE_NO_WARNINGS" "/FC")
+# --------------------------------------
+# DO NOT EDIT ANYTHING ABOVE THIS LINE |
+# --------------------------------------
+
+# Add global compile flags and preprocessor definitions
+add_definitions(
+"-D_CRT_SECURE_NO_WARNINGS"
+"/FC")
+
 # Enable Unicode
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /UMBCS /D_UNICODE /DUNICODE")
 
-# directx sdk 
-#find_package(DirectX REQUIRED)
-
-#At last, cache include dirs and scan source files
-setup_solution(SOLUTION_NAME)
+# Automatic build generation procedure
+include( CreateBuild )
 #EOF

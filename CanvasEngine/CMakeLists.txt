@@ -1,48 +1,47 @@
-cmake_minimum_required( VERSION 2.8 )
-
-
-#----- Enable Unicode -----
-#add_definitions(-DUNICODE -D_UNICODE)
-
-ADD_DEFINITIONS("-DGLEW_STATIC")
-ADD_DEFINITIONS("-DFBXSDK_SHARED")
-
-#---
+# Use GL and DX
 find_package(OpenGL REQUIRED)
+find_package(DirectX REQUIRED)
+# Preprocessor Definitions
+SET( MACROS
+	FBXSDK_SHARED
+	GLEW_STATIC
+)
+# Can include project name and directory
+SET( INCLUDE
+	# ----- OpenGL & Window -----
+	glew
+	glm
+	fbxsdk
+	SDL2
+	SDL2_image
+	SDL2_ttf
+	# ----- App Specific -----
+	zlib
+	assimp
+)
+# Can include project name and absolute path to library
+SET( LINK
+	# ----- OpenGL & Window -----
+	${OPENGL_LIBRARIES}
+	glew
+	SDL2
+	SDL2_image
+	SDL2_ttf
+	# ----- App Specific -----
+	zlib
+	libpng
+	jpeg
+	${fbxsdk_SOURCE_DIR}/lib/x86/debug/libfbxsdk.lib
+	assimp
+	Gdiplus.lib
+	Comctl32.lib
+	Dwmapi.lib
+	Msimg32.lib
+	"${DirectX_LIBRARY_PATHS}/x86/DxErr.lib"
+	"${DirectX_LIBRARY_PATHS}/x86/dxguid.lib"
+	"${DirectX_LIBRARY_PATHS}/x86/dinput8.lib"
+)
 
-SET( INCLUDE_DIRS
-${glew_INCLUDE_DIRS}
-${glm_INCLUDE_DIRS}
-${SDL2_INCLUDE_DIRS}
-${SDL2_image_INCLUDE_DIRS}
-${SDL2_ttf_INCLUDE_DIRS}
-${FreeType_INCLUDE_DIRS}
-${assimp_INCLUDE_DIRS}
-${fbxsdk_INCLUDE_DIRS}
-)
-SET( LINK_DIRS
-${DirectX_LIBRARY_PATHS}
-)
-SET( LINK_LIBS
-${OPENGL_LIBRARIES}
-FreeType
-assimp
-SDL2
-SDL2_image
-SDL2_ttf
-glew
-glm
-zlib
-libpng
-jpeg
-#${fbxsdk_SOURCE_DIR}/lib/x86/debug/libfbxsdk-md.lib
-${fbxsdk_SOURCE_DIR}/lib/x86/debug/libfbxsdk.lib
-Gdiplus.lib
-Comctl32.lib
-Dwmapi.lib
-Msimg32.lib
-)
-
-parse_directory_name(PROJECT_NAME)
-project( ${PROJECT_NAME} )
-create_project_ex(WIN32 "${INCLUDE_DIRS}" "${LINK_DIRS}" "${LINK_LIBS}")
+# Create project -- DO NOT EDIT ANYTHING BELOW THIS LINE --
+# mode can be set to DYNAMIC, STATIC, CONSOLE, or WIN32
+create_project(WIN32 "${MACROS}" "${INCLUDE}" "${LINK}")
