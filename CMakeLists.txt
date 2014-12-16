@@ -25,7 +25,7 @@ add_definitions( "-D_CRT_SECURE_NO_WARNINGS" "/FC")
 #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /UMBCS /D_UNICODE /DUNICODE")
 
 # directx sdk 
-find_package(DirectX REQUIRED)
+#find_package(DirectX REQUIRED)
 
 #At last, cache include dirs and scan source files
 setup_solution(SOLUTION_NAME)

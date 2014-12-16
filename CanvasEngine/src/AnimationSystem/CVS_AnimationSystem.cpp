@@ -10,7 +10,7 @@ bool CVS_AnimationSystem::End()
 
 bool CVS_AnimationSystem::Update()
 {
-	auto dt = (float)m_pTimer->delta() / 1000;
+	auto dt = (float)m_pTimer->split() / 1000;
 
 	for (auto i : m_registeredClips)
 	{
@@ -20,7 +20,7 @@ bool CVS_AnimationSystem::Update()
 		for (auto j : i.second)
 		{
 			// Update animation
-			j->m_dt += dt;
+			j->m_dt = dt;
 			// Evaluate Animation
 			auto pAnimationSample = evaluate(j->m_pAnimation, j->m_dt);
 			localPose = pAnimationSample->m_aLocalPose;
