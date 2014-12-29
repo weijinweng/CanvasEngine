@@ -25,6 +25,7 @@ namespace Canvas{
 	public:
 		GUI_Entity();
 		GUI_Entity(int x, int y, int w, int h, uint32 style, Window* Parent);
+		GUI_Entity(int x, int y, int w, int h, uint32 style, Window* Parent, std::string classname);
 		virtual int parseMsg(UINT, WPARAM, LPARAM) = 0;
 		virtual void setRight(G_Input);
 		virtual void setLeft(G_Input);

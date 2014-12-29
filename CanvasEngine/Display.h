@@ -33,6 +33,7 @@ namespace Canvas{
 		Brush* m_currentbrush;
 		Pen* m_currentpen;
 		bool initialized;
+		bool m_copy;
 	public:
 #ifdef CVS_WIN32
 		PAINTSTRUCT ps;
@@ -50,6 +51,8 @@ namespace Canvas{
 #endif
 #ifdef CVS_LINUX
 #endif
+		DisplayContext(const DisplayContext &);
+
 		bool Init();
 		void End();
 
@@ -57,6 +60,7 @@ namespace Canvas{
 		void SetLineColor(int, int, int);
 		void SetFillColor(Color_RGB);
 		void SetLineColor(Color_RGB);
+		void SetFont(Font_OS);
 
 		I_Rect getDisplayIRect();
 		B_Rect getDisplayBRect();
@@ -67,9 +71,14 @@ namespace Canvas{
 
 		void DrawFillRect(int x, int y, int w, int h);
 		void DrawRect(int x, int y, int w, int h);
+		void DrawFillRectRound(int x, int y, int w, int h, int, int);
 		void DrawLine(int x, int y, int x2, int y2);
+
 		void DrawUnstyledText(std::string text, int x, int y, int w, int h);
 		void DrawStyledText(std::string text, int x, int y, int w, int h, uint32);
+		void DrawLeftOrientText(std::string text, int x, int y, int w, int h);
+
+		void TransparentBlit(Bitmap, int, int, int, int, Color_RGB);
 
 		void SetBKMode(uint32);
 		void SetBKColor(Color_RGB);

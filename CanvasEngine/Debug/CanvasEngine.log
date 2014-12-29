@@ -1,38 +1,153 @@
-﻿Build started 12/13/2014 12:11:00 AM.
+﻿Build started 12/28/2014 12:14:48 AM.
      1>Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt Editor.cpp
-         Editor.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /D _MBCS /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /FR"Debug\\" /Gd /TP /analyze- /errorReport:prompt ContextGL.cpp DeferreredRenderer.cpp Display.cpp FramebufferGL.cpp HBAO.cpp Material.cpp MeshGL.cpp RenderSystem.cpp ShaderGL.cpp TextureGL.cpp VertexbufferGL.cpp
+         RenderSystem.cpp
      1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(15): warning C4005: 'WINVER' : macro redefinition
                  c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(215) : see previous definition of 'WINVER'
      1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(16): warning C4005: '_WIN32_WINNT' : macro redefinition
                  c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(200) : see previous definition of '_WIN32_WINNT'
-     1>c:\users\weijin\documents\github\canvasengine\canvasengine\editor.cpp(28): warning C4060: switch statement contains no 'case' or 'default' labels
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'class' now seen using 'struct'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(10) : see declaration of 'Canvas::MaterialNode'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\material.h(10): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'struct' now seen using 'class'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48) : see declaration of 'Canvas::MaterialNode'
+         Material.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(15): warning C4005: 'WINVER' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(215) : see previous definition of 'WINVER'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(16): warning C4005: '_WIN32_WINNT' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(200) : see previous definition of '_WIN32_WINNT'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'class' now seen using 'struct'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(10) : see declaration of 'Canvas::MaterialNode'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\material.h(10): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'struct' now seen using 'class'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48) : see declaration of 'Canvas::MaterialNode'
+         Display.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(15): warning C4005: 'WINVER' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(215) : see previous definition of 'WINVER'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(16): warning C4005: '_WIN32_WINNT' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(200) : see previous definition of '_WIN32_WINNT'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'class' now seen using 'struct'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(10) : see declaration of 'Canvas::MaterialNode'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\material.h(10): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'struct' now seen using 'class'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48) : see declaration of 'Canvas::MaterialNode'
+         Generating Code...
+         Compiling...
+         DeferreredRenderer.cpp
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(15): warning C4005: 'WINVER' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(215) : see previous definition of 'WINVER'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\resource.h(16): warning C4005: '_WIN32_WINNT' : macro redefinition
+                 c:\program files (x86)\windows kits\8.1\include\shared\sdkddkver.h(200) : see previous definition of '_WIN32_WINNT'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'class' now seen using 'struct'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(10) : see declaration of 'Canvas::MaterialNode'
+     1>c:\users\weijin\documents\github\canvasengine\canvasengine\material.h(10): warning C4099: 'Canvas::MaterialNode' : type name first seen using 'struct' now seen using 'class'
+                 c:\users\weijin\documents\github\canvasengine\canvasengine\scenenode.h(48) : see declaration of 'Canvas::MaterialNode'
+         Generating Code...
+         Skipping... (no relevant changes detected)
+         VertexbufferGL.cpp
+         TextureGL.cpp
+         ShaderGL.cpp
+         MeshGL.cpp
+         HBAO.cpp
+         FramebufferGL.cpp
+         ContextGL.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_image.lib SDL2_ttf.lib glew32.lib opengl32.lib glu32.lib assimp.lib Dwmapi.lib libfbxsdk.lib comctl32.lib Gdiplus.lib Msimg32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.lib" /MACHINE:X86 Debug\CanvasEngine.res
+         Debug\Bitmap.obj
          Debug\Button.obj
          Debug\CanvasCore.obj
          Debug\CanvasMain.obj
          Debug\Color.obj
+         Debug\ContextGL.obj
+         Debug\DeferreredRenderer.obj
          Debug\Display.obj
          Debug\Editor.obj
+         Debug\Font.obj
+         Debug\FramebufferGL.obj
          Debug\GUI.obj
+         Debug\HBAO.obj
+         Debug\Layout.obj
          Debug\main.obj
+         Debug\Material.obj
          Debug\Menu.obj
+         Debug\Mesh.obj
+         Debug\MeshGL.obj
          Debug\MessageDialog.obj
          Debug\OSImage.obj
          Debug\Properties.obj
+         Debug\RenderSystem.obj
+         Debug\ShaderGL.obj
          Debug\SubSystem.obj
+         Debug\Tab.obj
+         Debug\TextureGL.obj
          Debug\Timer.obj
+         Debug\ToolBar.obj
          Debug\Transcript.obj
+         Debug\TreeView.obj
+         Debug\VertexbufferGL.obj
          Debug\Window.obj
          Debug\WindowProperties.obj
          Debug\WindowSystem.obj
-         CanvasEngine.vcxproj -> C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe
-       BscMake:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\bscmake.exe /nologo /o"C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.bsc" /n Debug\Button.sbr Debug\CanvasCore.sbr Debug\CanvasMain.sbr Debug\Color.sbr Debug\Display.sbr Debug\Editor.sbr Debug\GUI.sbr Debug\main.sbr Debug\Menu.sbr Debug\MessageDialog.sbr Debug\OSImage.sbr Debug\Properties.sbr Debug\SubSystem.sbr Debug\Timer.sbr Debug\Transcript.sbr Debug\Window.sbr Debug\WindowProperties.sbr Debug\WindowSystem.sbr
-     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)).
+     1>ContextGL.obj : error LNK2019: unresolved external symbol "public: __thiscall Canvas::MeshPrimitives::MeshPrimitives(void)" (??0MeshPrimitives@Canvas@@QAE@XZ) referenced in function "public: __thiscall Canvas::ContextGL::ContextGL(class Canvas::Window *)" (??0ContextGL@Canvas@@QAE@PAVWindow@1@@Z)
+     1>ContextGL.obj : error LNK2019: unresolved external symbol "public: bool __thiscall Canvas::MeshPrimitives::Init(class Canvas::DeviceContext *)" (?Init@MeshPrimitives@Canvas@@QAE_NPAVDeviceContext@2@@Z) referenced in function "public: __thiscall Canvas::ContextGL::ContextGL(class Canvas::Window *)" (??0ContextGL@Canvas@@QAE@PAVWindow@1@@Z)
+     1>ContextGL.obj : error LNK2019: unresolved external symbol "public: __thiscall Canvas::DeviceContext::DeviceContext(class Canvas::Window *)" (??0DeviceContext@Canvas@@QAE@PAVWindow@1@@Z) referenced in function "public: __thiscall Canvas::ContextGL::ContextGL(class Canvas::Window *)" (??0ContextGL@Canvas@@QAE@PAVWindow@1@@Z)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::Shader * __thiscall Canvas::DeviceContext::GenShader(void)" (?GenShader@DeviceContext@Canvas@@UAEPAVShader@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::Framebuffer * __thiscall Canvas::ContextGL::GetScreenFramebuffer(void)" (?GetScreenFramebuffer@ContextGL@Canvas@@UAEPAVFramebuffer@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::Texture * __thiscall Canvas::ContextGL::GenTexture(void)" (?GenTexture@ContextGL@Canvas@@UAEPAVTexture@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::Shader * __thiscall Canvas::ContextGL::GenShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?GenShader@ContextGL@Canvas@@UAEPAVShader@2@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@0@Z)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::VertexBuffer * __thiscall Canvas::ContextGL::GenVertexBuffer(void)" (?GenVertexBuffer@ContextGL@Canvas@@UAEPAVVertexBuffer@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::HWBuffer * __thiscall Canvas::ContextGL::GenBuffer(void)" (?GenBuffer@ContextGL@Canvas@@UAEPAVHWBuffer@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual class Canvas::Mesh * __thiscall Canvas::ContextGL::GenMesh(void)" (?GenMesh@ContextGL@Canvas@@UAEPAVMesh@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::ContextGL::AddRenderer(class Canvas::Renderer *)" (?AddRenderer@ContextGL@Canvas@@UAEXPAVRenderer@2@@Z)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::ContextGL::SetViewport(int,int,int,int)" (?SetViewport@ContextGL@Canvas@@UAEXHHHH@Z)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual int __thiscall Canvas::ContextGL::GetWidth(void)" (?GetWidth@ContextGL@Canvas@@UAEHXZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual int __thiscall Canvas::ContextGL::GetHeight(void)" (?GetHeight@ContextGL@Canvas@@UAEHXZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual struct Canvas::MeshPrimitives * __thiscall Canvas::ContextGL::GetPrimitives(void)" (?GetPrimitives@ContextGL@Canvas@@UAEPAUMeshPrimitives@2@XZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::ContextGL::DrawMesh(class Canvas::Mesh *)" (?DrawMesh@ContextGL@Canvas@@UAEXPAVMesh@2@@Z)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual int __thiscall Canvas::ContextGL::GetContextType(void)" (?GetContextType@ContextGL@Canvas@@UAEHXZ)
+     1>ContextGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::ContextGL::Free(void)" (?Free@ContextGL@Canvas@@UAEXXZ)
+     1>DeferreredRenderer.obj : error LNK2019: unresolved external symbol "public: void __thiscall Canvas::RenderScene::SetDefaultMaterial(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?SetDefaultMaterial@RenderScene@Canvas@@QAEXV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function "void __cdecl BindScene(class Canvas::RenderScene *)" (?BindScene@@YAXPAVRenderScene@Canvas@@@Z)
+     1>DeferreredRenderer.obj : error LNK2019: unresolved external symbol "public: __thiscall Canvas::Renderer::Renderer(class Canvas::DeviceContext *)" (??0Renderer@Canvas@@QAE@PAVDeviceContext@1@@Z) referenced in function "public: __thiscall Canvas::DeferredRenderer::DeferredRenderer(class Canvas::DeviceContext *)" (??0DeferredRenderer@Canvas@@QAE@PAVDeviceContext@1@@Z)
+     1>DeferreredRenderer.obj : error LNK2019: unresolved external symbol "public: __thiscall Canvas::DeferredMaterialTemplate::DeferredMaterialTemplate(void)" (??0DeferredMaterialTemplate@Canvas@@QAE@XZ) referenced in function "public: __thiscall Canvas::DeferredRenderer::DeferredRenderer(class Canvas::DeviceContext *)" (??0DeferredRenderer@Canvas@@QAE@PAVDeviceContext@1@@Z)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DeferredRenderer::BindScene(class Canvas::RenderScene *)" (?BindScene@DeferredRenderer@Canvas@@UAEXPAVRenderScene@2@@Z)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual struct glm::detail::tmat4x4<float,0> __thiscall Canvas::DeferredRenderer::GetViewMatrix(void)" (?GetViewMatrix@DeferredRenderer@Canvas@@UAE?AU?$tmat4x4@M$0A@@detail@glm@@XZ)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual struct glm::detail::tmat4x4<float,0> __thiscall Canvas::DeferredRenderer::GetPerspectiveMatrix(void)" (?GetPerspectiveMatrix@DeferredRenderer@Canvas@@UAE?AU?$tmat4x4@M$0A@@detail@glm@@XZ)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual struct glm::detail::tmat4x4<float,0> __thiscall Canvas::DeferredRenderer::GetVPMatrix(void)" (?GetVPMatrix@DeferredRenderer@Canvas@@UAE?AU?$tmat4x4@M$0A@@detail@glm@@XZ)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual struct Canvas::MaterialNode * __thiscall Canvas::DeferredRenderer::CreateDefaultMaterial(void)" (?CreateDefaultMaterial@DeferredRenderer@Canvas@@UAEPAUMaterialNode@2@XZ)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DeferredRenderer::RemoveMaterial(struct Canvas::MaterialNode *)" (?RemoveMaterial@DeferredRenderer@Canvas@@UAEXPAUMaterialNode@2@@Z)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DeferredRenderer::AddMaterial(struct Canvas::MaterialNode *)" (?AddMaterial@DeferredRenderer@Canvas@@UAEXPAUMaterialNode@2@@Z)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DeferredRenderer::Message(unsigned int,unsigned int,long)" (?Message@DeferredRenderer@Canvas@@UAEXIIJ@Z)
+     1>DeferreredRenderer.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DeferredRenderer::RebindScene(void)" (?RebindScene@DeferredRenderer@Canvas@@UAEXXZ)
+     1>FramebufferGL.obj : error LNK2019: unresolved external symbol "public: void __thiscall Canvas::RenderbufferGL::Bind(void)" (?Bind@RenderbufferGL@Canvas@@QAEXXZ) referenced in function "public: virtual void __thiscall Canvas::FramebufferGL::UpdateBuffers(void)" (?UpdateBuffers@FramebufferGL@Canvas@@UAEXXZ)
+     1>FramebufferGL.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Canvas::RenderbufferGL::GetAttachment(void)" (?GetAttachment@RenderbufferGL@Canvas@@QAEIXZ) referenced in function "public: virtual void __thiscall Canvas::FramebufferGL::UpdateBuffers(void)" (?UpdateBuffers@FramebufferGL@Canvas@@UAEXXZ)
+     1>FramebufferGL.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Canvas::RenderbufferGL::GetTarget(void)" (?GetTarget@RenderbufferGL@Canvas@@QAEIXZ) referenced in function "public: virtual void __thiscall Canvas::FramebufferGL::UpdateBuffers(void)" (?UpdateBuffers@FramebufferGL@Canvas@@UAEXXZ)
+     1>FramebufferGL.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Canvas::RenderbufferGL::GetID(void)" (?GetID@RenderbufferGL@Canvas@@QAEIXZ) referenced in function "public: virtual void __thiscall Canvas::FramebufferGL::UpdateBuffers(void)" (?UpdateBuffers@FramebufferGL@Canvas@@UAEXXZ)
+     1>FramebufferGL.obj : error LNK2001: unresolved external symbol "public: virtual class std::list<class Canvas::Texture *,class std::allocator<class Canvas::Texture *> > __thiscall Canvas::FramebufferGL::GetRTs(void)" (?GetRTs@FramebufferGL@Canvas@@UAE?AV?$list@PAVTexture@Canvas@@V?$allocator@PAVTexture@Canvas@@@std@@@std@@XZ)
+     1>FramebufferGL.obj : error LNK2001: unresolved external symbol "public: virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Canvas::FramebufferGL::FetchBufferErrorLog(void)" (?FetchBufferErrorLog@FramebufferGL@Canvas@@UAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ)
+     1>FramebufferGL.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Canvas::TextureGL::GetTypeGL(void)" (?GetTypeGL@TextureGL@Canvas@@QAEIXZ) referenced in function "public: virtual void __thiscall Canvas::FramebufferGL::UpdateBuffers(void)" (?UpdateBuffers@FramebufferGL@Canvas@@UAEXXZ)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: unsigned int __thiscall Canvas::TextureGL::GetTypeGL(void)" (?GetTypeGL@TextureGL@Canvas@@QAEIXZ)
+     1>FramebufferGL.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Canvas::TextureGL::GetIDGL(void)" (?GetIDGL@TextureGL@Canvas@@QAEIXZ) referenced in function "public: virtual void __thiscall Canvas::FramebufferGL::UpdateBuffers(void)" (?UpdateBuffers@FramebufferGL@Canvas@@UAEXXZ)
+     1>HBAO.obj : error LNK2019: unresolved external symbol "public: void __thiscall Canvas::ProcessProgram::Process(void)" (?Process@ProcessProgram@Canvas@@QAEXXZ) referenced in function "public: virtual void __thiscall Canvas::HBAO::Process(void)" (?Process@HBAO@Canvas@@UAEXXZ)
+     1>HBAO.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::ScreenSpaceAO::Process(void)" (?Process@ScreenSpaceAO@Canvas@@UAEXXZ)
+     1>HBAO.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::ScreenSpaceAO::SetParameter(unsigned int,unsigned int)" (?SetParameter@ScreenSpaceAO@Canvas@@UAEXII@Z)
+     1>HBAO.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::HBAO::SetParameter(unsigned int,unsigned int)" (?SetParameter@HBAO@Canvas@@UAEXII@Z)
+     1>MeshGL.obj : error LNK2019: unresolved external symbol "public: unsigned int __thiscall Canvas::VertexBufferGL::GetVAO(void)" (?GetVAO@VertexBufferGL@Canvas@@QAEIXZ) referenced in function "public: virtual unsigned int __thiscall Canvas::MeshGL::GetMeshHash(void)" (?GetMeshHash@MeshGL@Canvas@@UAEIXZ)
+     1>RenderSystem.obj : error LNK2019: unresolved external symbol "public: bool __thiscall Canvas::MaterialLibrary::addTemplate(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class Canvas::MaterialTemplate *)" (?addTemplate@MaterialLibrary@Canvas@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVMaterialTemplate@2@@Z) referenced in function "public: bool __thiscall Canvas::RenderSystem::addMaterial(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,class Canvas::MaterialTemplate *)" (?addMaterial@RenderSystem@Canvas@@QAE_NV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PAVMaterialTemplate@2@@Z)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DrawProgram::DrawNodes(void)" (?DrawNodes@DrawProgram@Canvas@@UAEXXZ)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: virtual int __thiscall Canvas::DrawProgramGL::GetVariableHash(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)" (?GetVariableHash@DrawProgramGL@Canvas@@UAEHV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Canvas::DrawProgramGL::FetchVertexData(int &)" (?FetchVertexData@DrawProgramGL@Canvas@@UAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAH@Z)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall Canvas::DrawProgramGL::FetchFragmentData(int &)" (?FetchFragmentData@DrawProgramGL@Canvas@@UAE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@AAH@Z)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DrawProgramGL::BindTexture(int,unsigned int)" (?BindTexture@DrawProgramGL@Canvas@@UAEXHI@Z)
+     1>ShaderGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::DrawProgramGL::DrawNodes(void)" (?DrawNodes@DrawProgramGL@Canvas@@UAEXXZ)
+     1>TextureGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::Texture::GenMipMap(void)" (?GenMipMap@Texture@Canvas@@UAEXXZ)
+     1>TextureGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::TextureGL::BufferData(void *,int,int,int,int,unsigned int,unsigned int)" (?BufferData@TextureGL@Canvas@@UAEXPAXHHHHII@Z)
+     1>TextureGL.obj : error LNK2001: unresolved external symbol "public: virtual void * __thiscall Canvas::TextureGL::GetData(void)" (?GetData@TextureGL@Canvas@@UAEPAXXZ)
+     1>TextureGL.obj : error LNK2001: unresolved external symbol "public: virtual unsigned int __thiscall Canvas::TextureGL::GetPixelData(int,int)" (?GetPixelData@TextureGL@Canvas@@UAEIHH@Z)
+     1>TextureGL.obj : error LNK2019: unresolved external symbol "unsigned int __cdecl Canvas::ToGLTexFormat(unsigned int)" (?ToGLTexFormat@Canvas@@YAII@Z) referenced in function "public: virtual void __thiscall Canvas::TextureGL::BufferData(void *,int,int,int,unsigned int,unsigned int)" (?BufferData@TextureGL@Canvas@@UAEXPAXHHHII@Z)
+     1>TextureGL.obj : error LNK2019: unresolved external symbol "unsigned int __cdecl Canvas::ToGLDataFormat(unsigned int)" (?ToGLDataFormat@Canvas@@YAII@Z) referenced in function "public: virtual void __thiscall Canvas::TextureGL::BufferData(void *,int,int,int,unsigned int,unsigned int)" (?BufferData@TextureGL@Canvas@@UAEXPAXHHHII@Z)
+     1>VertexbufferGL.obj : error LNK2001: unresolved external symbol "public: virtual void __thiscall Canvas::BufferGL::SetType(unsigned int)" (?SetType@BufferGL@Canvas@@UAEXI@Z)
+     1>VertexbufferGL.obj : error LNK2019: unresolved external symbol "unsigned int __cdecl Canvas::ToGLBufferUsage(unsigned int)" (?ToGLBufferUsage@Canvas@@YAII@Z) referenced in function "public: void __thiscall Canvas::BufferGL::BufferData(void *,int,unsigned int,unsigned int)" (?BufferData@BufferGL@Canvas@@QAEXPAXHII@Z)
+     1>C:\Users\weijin\Documents\GitHub\CanvasEngine\Debug\CanvasEngine.exe : fatal error LNK1120: 58 unresolved externals
+     1>Done Building Project "C:\Users\weijin\Documents\GitHub\CanvasEngine\CanvasEngine\CanvasEngine.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:12.65
+Time Elapsed 00:00:10.82

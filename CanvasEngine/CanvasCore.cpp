@@ -15,8 +15,6 @@ bool Canvas::Initialize(uint32 flag, HINSTANCE instance, HINSTANCE prevInstance,
 	return CVS_Server.Init(flag, instance, prevInstance);
 }
 
-
-
 void Canvas::Run()
 {
 

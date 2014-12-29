@@ -61,6 +61,27 @@
     <Filter Include="Source Files\Src\CANVAS\CORE\GUI">
       <UniqueIdentifier>{0611615f-ef9b-43ed-b41b-f347dee14b4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM">
+      <UniqueIdentifier>{5a5f467c-de5a-4846-b21e-99dc68d67d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\GLRENDERER">
+      <UniqueIdentifier>{855e1c6b-83d3-4281-873a-ddc76596378d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL">
+      <UniqueIdentifier>{c18743c8-088e-430d-8b59-ab692dd3d7da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\DEFERRED">
+      <UniqueIdentifier>{d2a02193-2ab1-4f07-934c-c91a5ade5c21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\DEFERRED">
+      <UniqueIdentifier>{88b92b12-2363-4314-a4f2-e3095d6526c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\AO">
+      <UniqueIdentifier>{b9cad3c3-3bdf-4081-a3ab-ae0995ed4121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\AO">
+      <UniqueIdentifier>{155bafbf-543f-418c-b850-0ef8fef43ddd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -117,6 +138,27 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files\Src\CANVAS\PROPERTIES</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolBar.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Tab.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap.cpp">
+      <Filter>Source Files\Src\CANVAS\PROPERTIES</Filter>
+    </ClCompile>
+    <ClCompile Include="Layout.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeView.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CanvasCore.h">
@@ -124,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Header Files\CANVAS\CORE\WINDOW</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderSystem.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM</Filter>
     </ClInclude>
     <ClInclude Include="Display.h">
       <Filter>Header Files\CANVAS\CORE\WINDOW</Filter>
@@ -184,6 +223,57 @@
     </ClInclude>
     <ClInclude Include="ToolBar.h">
       <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Header Files\CANVAS\CORE</Filter>
+    </ClInclude>
+    <ClInclude Include="Tab.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeView.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderView.h">
+      <Filter>Header Files\CANVAS\CORE\WINDOW\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Blinn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ForwardRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceContextGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystemGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadersGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="FramebufferGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSceneGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

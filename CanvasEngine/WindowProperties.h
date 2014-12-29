@@ -43,5 +43,6 @@ namespace Canvas{
 		void setWindowSize(I_Rect);
 		I_Rect getIRect();
 		B_Rect getBRect();
+		I_Rect getClientIRect();
 	};
 };

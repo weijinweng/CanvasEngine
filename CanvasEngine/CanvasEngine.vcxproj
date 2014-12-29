@@ -73,26 +73,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CanvasCore.cpp" />
     <ClCompile Include="CanvasMain.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="Layout.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MessageDialog.cpp" />
     <ClCompile Include="OSImage.cpp" />
     <ClCompile Include="Properties.cpp" />
     <ClCompile Include="SubSystem.cpp" />
+    <ClCompile Include="Tab.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="ToolBar.cpp" />
     <ClCompile Include="Transcript.cpp" />
+    <ClCompile Include="TreeView.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowProperties.cpp" />
     <ClCompile Include="WindowSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blinn.h" />
+    <ClInclude Include="CanvasGL.h" />
+    <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="ForwardRenderer.h" />
+    <ClInclude Include="FramebufferGL.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MeshGL.h" />
     <ClInclude Include="MessageDialog.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Editor.h" />
@@ -109,9 +123,18 @@
     <ClInclude Include="OSImage.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Properties.h" />
-    <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="DeviceContextGL.h" />
+    <ClInclude Include="RenderSceneGL.h" />
+    <ClInclude Include="RenderSystemGL.h" />
+    <ClInclude Include="RenderView.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ShadersGL.h" />
+    <ClInclude Include="Tab.h" />
+    <ClInclude Include="TextureGL.h" />
     <ClInclude Include="ToolBar.h" />
+    <ClInclude Include="TreeView.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="VertexBufferGL.h" />
     <ClInclude Include="wglext.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowProperties.h" />
