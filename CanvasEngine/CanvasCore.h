@@ -130,6 +130,8 @@ namespace Canvas{
 	bool PullEvent(Event & e);
 	void RegisterSubSystem(SubSystem*);
 	void SubScribeToUpdate(std::string);
+
+	std::string CVSToString(std::string _lexicon_name, uint32 _key);
 };
 
 extern Canvas::StateMachine CVS_Server;

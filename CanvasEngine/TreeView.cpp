@@ -234,8 +234,7 @@ TreeNodeHandle TreeView::Insert(TreeNodeHandle parent, TreeNodeHandle after, std
 	TreeNodeHandle handle;
 	handle.loc = treenodes.size() - 1;
 	handle.parent = this;
-	
-	printf("the tits %d %d\n", treenodes[0].image, image);
+
 
 	parent.addChild(after, handle);
 	m_update = false;

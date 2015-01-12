@@ -85,12 +85,21 @@
     <ClCompile Include="Layout.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialProperties.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MessageDialog.cpp" />
     <ClCompile Include="OSImage.cpp" />
     <ClCompile Include="Properties.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="RMaterialNode.cpp" />
+    <ClCompile Include="RMaterialProperties.cpp" />
+    <ClCompile Include="RMaterialShader.cpp" />
+    <ClCompile Include="RRenderer.cpp" />
+    <ClCompile Include="RShaderNode.cpp" />
+    <ClCompile Include="RDrawProgramNode.cpp" />
     <ClCompile Include="SubSystem.cpp" />
     <ClCompile Include="Tab.cpp" />
+    <ClCompile Include="Texture2DNode.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="ToolBar.cpp" />
     <ClCompile Include="Transcript.cpp" />
@@ -101,12 +110,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Blinn.h" />
+    <ClInclude Include="CameraNode.h" />
     <ClInclude Include="CanvasGL.h" />
     <ClInclude Include="FileSystem.h" />
-    <ClInclude Include="ForwardRenderer.h" />
+    <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="FramebufferGL.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="MeshGL.h" />
+    <ClInclude Include="FrustumGL.h" />
+    <ClInclude Include="LightNode.h" />
+    <ClInclude Include="RScene.h" />
+    <ClInclude Include="ShaderVariable.h" />
+    <ClInclude Include="TextureNode.h" />
+    <ClInclude Include="MaterialNode.h" />
     <ClInclude Include="MessageDialog.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Editor.h" />
@@ -124,10 +138,14 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Properties.h" />
     <ClInclude Include="DeviceContextGL.h" />
-    <ClInclude Include="RenderSceneGL.h" />
-    <ClInclude Include="RenderSystemGL.h" />
+    <ClInclude Include="RendererNode.h" />
+    <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="RenderView.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RPass.h" />
+    <ClInclude Include="RRenderer.h" />
+    <ClInclude Include="SceneNode.h" />
+    <ClInclude Include="ShaderNode.h" />
     <ClInclude Include="ShadersGL.h" />
     <ClInclude Include="Tab.h" />
     <ClInclude Include="TextureGL.h" />
@@ -135,6 +153,7 @@
     <ClInclude Include="TreeView.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBufferGL.h" />
+    <ClInclude Include="ViewGL.h" />
     <ClInclude Include="wglext.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowProperties.h" />

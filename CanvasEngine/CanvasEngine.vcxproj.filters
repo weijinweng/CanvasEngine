@@ -64,23 +64,26 @@
     <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM">
       <UniqueIdentifier>{5a5f467c-de5a-4846-b21e-99dc68d67d4c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\GLRENDERER">
-      <UniqueIdentifier>{855e1c6b-83d3-4281-873a-ddc76596378d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL">
       <UniqueIdentifier>{c18743c8-088e-430d-8b59-ab692dd3d7da}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\DEFERRED">
       <UniqueIdentifier>{d2a02193-2ab1-4f07-934c-c91a5ade5c21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\DEFERRED">
-      <UniqueIdentifier>{88b92b12-2363-4314-a4f2-e3095d6526c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\AO">
       <UniqueIdentifier>{b9cad3c3-3bdf-4081-a3ab-ae0995ed4121}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\AO">
-      <UniqueIdentifier>{155bafbf-543f-418c-b850-0ef8fef43ddd}</UniqueIdentifier>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC">
+      <UniqueIdentifier>{5a51ed74-8945-446e-8ccd-c67489b92762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER">
+      <UniqueIdentifier>{c66ef5f0-3fb4-4dc1-82c1-619637558813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERSCENE">
+      <UniqueIdentifier>{2f4b4446-8136-4dae-8030-e74b2c6609ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL">
+      <UniqueIdentifier>{8cd0aa0c-0b30-407b-82d9-73adc2f11d88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +161,33 @@
     </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM</Filter>
+    </ClCompile>
+    <ClCompile Include="RRenderer.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="RShaderNode.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="RDrawProgramNode.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="RMaterialShader.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="RMaterialNode.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="RMaterialProperties.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialProperties.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2DNode.cpp">
+      <Filter>Source Files\Src\CANVAS\CORE\RENDERSYSTEM\RENDERERGL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,41 +269,71 @@
     <ClInclude Include="Blinn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ForwardRenderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CanvasGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
     </ClInclude>
     <ClInclude Include="DeviceContextGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBufferGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderSystemGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadersGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
-    </ClInclude>
-    <ClInclude Include="CanvasGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
     </ClInclude>
     <ClInclude Include="FramebufferGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    <ClInclude Include="ShadersGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
+    </ClInclude>
+    <ClInclude Include="FrustumGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="RendererNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="Framebuffer.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="RPass.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="RRenderer.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="RScene.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
     </ClInclude>
-    <ClInclude Include="RenderSceneGL.h">
-      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL</Filter>
+    <ClInclude Include="VertexBufferGL.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\GPURSC</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
+    </ClInclude>
+    <ClInclude Include="LightNode.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERSCENE</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderVariable.h">
+      <Filter>Header Files\CANVAS\CORE\RENDERSYSTEM\RENDERGL\RENDERER</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
